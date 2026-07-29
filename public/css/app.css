@@ -1,0 +1,779 @@
+/* ==========================================================================
+   🏢 TERRA-IQ GIS WORKSPACE - ENTERPRISE SAAS THEME (app.css)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+
+/* --------------------------------------------------------------------------
+   1. DESIGN TOKENS & SYSTEM VARIABLES
+   -------------------------------------------------------------------------- */
+:root {
+    /* Brand Colors */
+    --brand-navy-dark: #0B132B;
+    --brand-navy-main: #0F2D52;
+    --brand-navy-light: #1C2541;
+    --brand-gold: #D4A017;
+    --brand-gold-glow: rgba(212, 160, 23, 0.25);
+    --brand-cyan: #38BDF8;
+
+    /* UI Neutrals */
+    --bg-main: #F8FAFC;
+    --bg-surface: #FFFFFF;
+    --bg-alt: #F1F5F9;
+    --border-subtle: #E2E8F0;
+    --border-strong: #CBD5E1;
+
+    /* Text Colors */
+    --text-primary: #0F172A;
+    --text-secondary: #475569;
+    --text-muted: #64748B;
+    --text-inverse: #FFFFFF;
+
+    /* Functional States */
+    --status-success: #16A34A;
+    --status-success-bg: #DCFCE7;
+    --status-warning: #D4A017;
+    --status-warning-bg: #FEF3C7;
+    --status-danger: #DC2626;
+    --status-danger-bg: #FEE2E2;
+
+    /* Elevation & Glassmorphism */
+    --shadow-sm: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+    --shadow-md: 0 4px 12px -2px rgba(15, 23, 42, 0.08), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 12px 28px -4px rgba(15, 23, 42, 0.12), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+    --shadow-xl: 0 20px 35px -8px rgba(11, 19, 43, 0.25);
+
+    --glass-bg: rgba(255, 255, 255, 0.88);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --glass-blur: blur(12px);
+
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+}
+
+/* --------------------------------------------------------------------------
+   2. GLOBAL RESET & BASE TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+    width: 100vw;
+    height: 100vh;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+    overflow: hidden;
+}
+
+#app {
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Precision Thin Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   3. SIDEBAR CADASTRAL CONTROL PANEL
+   -------------------------------------------------------------------------- */
+#sidebar {
+    width: 380px;
+    min-width: 380px;
+    max-width: 380px;
+    height: 100vh;
+    overflow-y: auto;
+    background: var(--bg-surface);
+    border-right: 1px solid var(--border-subtle);
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.06);
+}
+
+/* Enterprise Header Block */
+#companyHeader {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 20px 22px;
+    background: linear-gradient(135deg, var(--brand-navy-dark) 0%, var(--brand-navy-main) 100%);
+    color: var(--text-inverse);
+    border-bottom: 3px solid var(--brand-gold);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+#logo {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+    padding: 4px;
+    object-fit: contain;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.brand-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand-title {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #FFFFFF;
+}
+
+.brand-title span {
+    color: var(--brand-cyan);
+}
+
+.brand-subtitle {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+}
+
+/* Section Containers */
+.section {
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--bg-alt);
+}
+
+.section.flex-grow {
+    flex: none;
+    display: block;
+}
+
+.section-title, .card-title, .sectionTitle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 10.5px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+}
+
+/* Form Controls & Select Inputs */
+.controlGroup {
+    margin-bottom: 14px;
+}
+
+.controlGroup label {
+    display: block;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+}
+
+#companySelect, #projectSelect, #search {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--bg-main);
+    color: var(--brand-navy-main);
+    outline: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+#companySelect:hover, #projectSelect:hover, #search:hover {
+    border-color: var(--border-strong);
+    background: #FFFFFF;
+}
+
+#companySelect:focus, #projectSelect:focus, #search:focus {
+    border-color: #2563EB;
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.search-input-wrapper {
+    position: relative;
+}
+
+/* Dashboard Metrics Grid */
+#activeProjectStats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-top: 14px;
+}
+
+.projectStat {
+    background: var(--bg-main);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    padding: 12px 8px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.projectStat:hover {
+    background: #FFFFFF;
+    border-color: var(--border-strong);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+.projectStatNumber {
+    display: block;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--brand-navy-main);
+}
+
+.projectStatLabel {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 2px;
+}
+
+/* Utility State Colors */
+.text-success { color: var(--status-success) !important; }
+.text-warning { color: var(--status-warning) !important; }
+.text-danger  { color: var(--status-danger) !important; }
+
+/* --------------------------------------------------------------------------
+   4. CADASTRAL INVENTORY EXPLORER CARDS
+   -------------------------------------------------------------------------- */
+#list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+    max-height: 420px;
+    overflow-y: auto !important;
+    padding-right: 4px;
+}
+
+.card {
+    background: #FFFFFF;
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-subtle);
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--border-strong);
+}
+
+.card.active, .card.selected {
+    border-color: #2563EB;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+    background: linear-gradient(180deg, #FFFFFF 0%, #EFF6FF 100%);
+}
+
+.card-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.card-parcel-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--brand-navy-main);
+}
+
+.card-price {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #2563EB;
+}
+
+.card-status-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-size: 9.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.badge-available { background-color: var(--status-success-bg); color: var(--status-success); }
+.badge-reserved  { background-color: var(--status-warning-bg); color: #B45309; }
+.badge-sold      { background-color: var(--status-danger-bg); color: var(--status-danger); }
+
+.small-card-text {
+    margin-top: 6px;
+    font-size: 11.5px;
+    color: var(--text-muted);
+    line-height: 1.45;
+}
+
+/* --------------------------------------------------------------------------
+   5. MAIN GIS MAP VIEWPORT & GLASS HUD OVERLAYS
+   -------------------------------------------------------------------------- */
+#mapContainer {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+    flex: 1;
+    z-index: 1;
+    background: #020617 !important;
+}
+
+/* Floating Navigation Bar Header */
+#mapHeader {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--glass-bg);
+    padding: 12px 20px;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
+
+.workspace-title h2 {
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: var(--brand-navy-main);
+}
+
+.workspace-title p {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    margin-top: 1px;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.headerSelect {
+    padding: 8px 14px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-md);
+    background: #FFFFFF;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--brand-navy-main);
+    outline: none;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.15s ease;
+}
+
+.headerSelect:hover {
+    border-color: var(--border-strong);
+}
+
+/* FLOATING VERTICAL TOOLBAR - RIGHT SIDE OF MAP */
+#gisToolbar, .gis-toolbar, #toolsContainer, .tools-container {
+    position: absolute !important;
+    top: 84px !important;
+    right: 16px !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    z-index: 1000 !important;
+    
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 6px !important;
+    
+    background: var(--glass-bg) !important;
+    padding: 8px !important;
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--glass-border) !important;
+    box-shadow: var(--shadow-lg) !important;
+    backdrop-filter: var(--glass-blur) !important;
+    -webkit-backdrop-filter: var(--glass-blur) !important;
+}
+
+#gisToolbar button, .gis-toolbar button, .gis-btn {
+    width: 38px !important;
+    height: 38px !important;
+    min-width: 38px !important;
+    min-height: 38px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 1px solid transparent !important;
+    border-radius: var(--radius-md) !important;
+    background: transparent !important;
+    color: var(--text-secondary) !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+#gisToolbar button:hover, .gis-toolbar button:hover, .gis-btn:hover {
+    background: #FFFFFF !important;
+    color: var(--brand-navy-main) !important;
+    border-color: var(--border-subtle) !important;
+    box-shadow: var(--shadow-sm) !important;
+    transform: translateY(-1px);
+}
+
+#gisToolbar button:active, #gisToolbar button.active, .gis-btn.active {
+    background: var(--brand-navy-main) !important;
+    color: #FFFFFF !important;
+    border-color: var(--brand-navy-main) !important;
+}
+
+/* --------------------------------------------------------------------------
+   6. HUD OVERLAYS & LEAFLET MAP CONTROLS
+   -------------------------------------------------------------------------- */
+
+/* Leaflet Zoom Control Position Shift */
+.leaflet-bottom.leaflet-left {
+    bottom: 50px !important;
+    left: 16px !important;
+    z-index: 1000 !important;
+}
+
+.leaflet-touch .leaflet-bar {
+    border: none !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-radius: var(--radius-md) !important;
+    overflow: hidden;
+}
+
+.leaflet-touch .leaflet-bar a {
+    background: var(--glass-bg) !important;
+    color: var(--brand-navy-main) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    backdrop-filter: var(--glass-blur);
+    width: 34px !important;
+    height: 34px !important;
+    line-height: 34px !important;
+    font-weight: 700;
+}
+
+/* Coordinate HUD (Bottom-Left) */
+#coordinateBox {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    z-index: 1000;
+    background: rgba(11, 19, 43, 0.9);
+    color: #FFFFFF;
+    padding: 6px 14px;
+    border-radius: var(--radius-md);
+    font-size: 11px;
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.03em;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#coords {
+    color: var(--brand-cyan);
+}
+
+/* Floating Status Legend (Bottom-Right) */
+#legend {
+    position: absolute;
+    bottom: 24px;
+    right: 16px;
+    z-index: 1001 !important;
+    background: var(--glass-bg);
+    padding: 10px 16px;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
+}
+
+#legend .item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10.5px;
+    font-weight: 800;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.dot.green  { background-color: var(--status-success); box-shadow: 0 0 8px rgba(22, 163, 74, 0.6); }
+.dot.orange { background-color: var(--status-warning); box-shadow: 0 0 8px rgba(212, 160, 23, 0.6); }
+.dot.red    { background-color: var(--status-danger);  box-shadow: 0 0 8px rgba(220, 38, 38, 0.6); }
+
+/* Minimalist Leaflet Attribution Bar */
+.leaflet-container .leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.8) !important;
+    font-size: 9px !important;
+    color: var(--text-muted) !important;
+    padding: 2px 8px !important;
+    backdrop-filter: blur(4px);
+    border-top-left-radius: 4px;
+}
+
+/* Map Hover Tooltips */
+.project-hover-tooltip, .marker-hover-tooltip {
+    background: #FFFFFF !important;
+    color: var(--brand-navy-main) !important;
+    border: 1px solid var(--border-subtle) !important;
+    box-shadow: var(--shadow-lg) !important;
+    border-radius: var(--radius-md) !important;
+    padding: 8px 12px !important;
+    font-size: 12px !important;
+    font-weight: 600;
+}
+
+.project-hover-tooltip::before, .marker-hover-tooltip::before {
+    border-top-color: #FFFFFF !important;
+} 
+
+/* --------------------------------------------------------------------------
+   7. LEAFLET LAYER CONTROL - TERRA-IQ STYLE
+   -------------------------------------------------------------------------- */
+.leaflet-top.leaflet-right {
+    top: 84px !important;
+    right: 70px !important; /* Offset left of vertical toolbar */
+    z-index: 1000 !important;
+}
+
+.leaflet-control-layers {
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius-lg) !important;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg) !important;
+    background: var(--glass-bg) !important;
+    backdrop-filter: var(--glass-blur);
+}
+
+.leaflet-control-layers-toggle {
+    width: 38px !important;
+    height: 38px !important;
+    background-size: 20px 20px !important;
+}
+
+.leaflet-control-layers-expanded {
+    padding: 16px;
+    width: 240px;
+    background: #FFFFFF;
+    color: var(--brand-navy-main);
+    border-radius: var(--radius-lg);
+}
+
+.leaflet-control-layers-base label,
+.leaflet-control-layers-overlays label {
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 6px 0;
+    color: var(--text-secondary);
+}
+
+.leaflet-control-layers-selector {
+    margin-right: 10px;
+    accent-color: var(--brand-navy-main);
+} 
+
+/* GIS Facility Labels */
+.facility-label {
+    background: var(--brand-navy-dark) !important;
+    color: #FFFFFF !important;
+    border: 1px solid rgba(255,255,255,0.3) !important;
+    border-radius: var(--radius-sm) !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    padding: 3px 8px !important;
+    box-shadow: var(--shadow-md) !important;
+}
+
+.hospital-label { border-left: 3px solid var(--status-danger) !important; }
+.school-label   { border-left: 3px solid #3B82F6 !important; } 
+
+/* Layer Manager Modal Popup */
+.gis-modal {
+    position: absolute;
+    top: 84px;
+    right: 70px;
+    z-index: 1002;
+    background: #FFFFFF;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    width: 240px;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+}
+
+.gis-modal.hidden {
+    display: none !important;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--bg-alt);
+    padding-bottom: 10px;
+    margin-bottom: 12px;
+}
+
+.modal-header h3 {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: var(--brand-navy-main);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.modal-header button {
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+
+.layer-toggle {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+/* Map Tile Loader */
+.map-loader {
+    position: absolute;
+    inset: 0;
+    background-color: var(--bg-main);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--brand-navy-main);
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+}
+
+.spinner {
+    width: 34px;
+    height: 34px;
+    border: 3px solid var(--border-subtle);
+    border-top-color: var(--brand-navy-main);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.map-loader.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+} 
+
+/* --------------------------------------------------------------------------
+   8. PRINT MEDIA QUERIES
+   -------------------------------------------------------------------------- */
+@media print {
+    #sidebar, 
+    #mapHeader, 
+    #gisToolbar, 
+    .gis-toolbar,
+    #coordinateBox, 
+    #legend,
+    .leaflet-control-zoom,
+    .leaflet-control-layers {
+        display: none !important;
+    }
+
+    #mapContainer, #map {
+        width: 100vw !important;
+        height: 100vh !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+    }
+}

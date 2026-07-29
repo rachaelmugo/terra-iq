@@ -1,0 +1,2613 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+<meta name="google" content="notranslate">
+  
+  <title>TerraIQ Platform | Smart Land Intelligence</title>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      display: flex;
+      background: #f4f6f9;
+    }
+
+    /* SIDEBAR */
+    #sidebar{
+
+width:380px;
+
+height:100vh;
+
+background:#F8FAFC;
+
+display:flex;
+
+flex-direction:column;
+
+overflow-y:auto;
+
+border-right:1px solid #E5E7EB;
+
+}
+
+.intel-row{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:10px 0;
+
+font-size:14px;
+
+color:white;
+
+border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+.intel-row:last-child{
+
+border-bottom:none;
+
+}
+
+#details input{
+
+width:100%;
+
+margin-top:12px;
+
+padding:12px 14px;
+
+border-radius:12px;
+
+border:none;
+
+background:#0F2D52;
+
+color:white;
+
+}
+
+#details input::placeholder{
+
+color:#94A3B8;
+
+}
+
+#details button{
+
+margin-top:18px;
+
+background:#D4A017;
+
+color:#0F2D52;
+
+font-weight:700;
+
+}
+
+#details button:hover{
+
+background:#E6B325;
+
+}
+#projectInfoCard{
+
+background:linear-gradient(
+135deg,
+#173A63,
+#0F2D52
+);
+
+padding:18px;
+
+border-radius:18px;
+
+border:1px solid rgba(255,255,255,.08);
+
+}
+
+#projectName{
+
+font-size:22px;
+
+font-weight:700;
+
+color:white;
+
+margin-bottom:8px;
+
+}
+
+#projectLocation{
+
+color:#D4A017;
+
+font-size:14px;
+
+margin-bottom:12px;
+
+font-weight:600;
+
+}
+
+#projectDescription{
+
+font-size:13px;
+
+line-height:1.6;
+
+color:#CBD5E1;
+
+margin-bottom:18px;
+
+}
+
+.project-badges{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:10px;
+
+}
+
+.project-badge{
+
+background:rgba(212,160,23,.15);
+
+color:#F4C542;
+
+padding:8px 14px;
+
+border-radius:30px;
+
+font-size:12px;
+
+font-weight:600;
+
+border:1px solid rgba(212,160,23,.25);
+
+}
+
+#companyHeader{
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+padding:24px;
+
+background:rgba(255,255,255,.04);
+
+backdrop-filter:blur(8px);
+
+border-bottom:2px solid rgba(212,160,23,.35);
+
+}
+
+#logo{
+
+width:72px;
+
+height:72px;
+
+border-radius:18px;
+
+background:white;
+
+padding:8px;
+
+object-fit:contain;
+
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+
+}
+
+#companyHeader h2{
+
+margin:0;
+
+font-size:22px;
+
+font-weight:700;
+
+color:white;
+
+letter-spacing:.5px;
+
+}
+
+#companyHeader{
+
+display:flex;
+
+align-items:flex-start;
+
+gap:18px;
+
+padding:28px;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.section{
+
+padding:12px 18px;
+
+margin:0;
+
+border-bottom:1px solid #EEF2F7;
+
+}
+
+.section label{
+
+display:block;
+
+font-size:12px;
+
+opacity:.7;
+
+margin-bottom:8px;
+
+}
+
+#projectSelect{
+
+width:100%;
+
+padding:15px;
+
+border-radius:14px;
+
+background:#173A63;
+
+border:1px solid rgba(255,255,255,.08);
+
+color:white;
+
+font-size:14px;
+
+cursor:pointer;
+
+}
+
+#search{
+
+width:100%;
+
+padding:15px 18px;
+
+border-radius:14px;
+
+border:1px solid rgba(255,255,255,.08);
+
+background:#173A63;
+
+color:white;
+
+font-size:14px;
+
+transition:.3s;
+
+} 
+#search:focus{
+
+outline:none;
+
+border-color:#D4A017;
+
+box-shadow:0 0 0 3px rgba(212,160,23,.18);
+
+}
+
+#projectName{
+
+margin:0;
+
+font-size:18px;
+
+}
+
+#projectLocation{
+
+opacity:.7;
+
+margin-top:5px;
+
+}
+
+#projectDescription{
+
+margin-top:10px;
+
+font-size:13px;
+
+line-height:1.6;
+
+opacity:.85;
+
+}
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.08);
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .stat p {
+      margin: 3px 0 0;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    #details {
+      background: rgba(255,255,255,0.06);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.06);
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .small {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    #mapContainer{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100vh;
+
+    min-width:0;
+
+}
+
+#map{
+
+    flex:1;
+
+    width:100%;
+
+} 
+#mapContainer{
+
+position:relative;
+
+flex:1;
+
+height:100vh;
+
+}
+
+#gisToolbar{
+
+position:absolute;
+
+top:20px;
+
+right:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+z-index:999;
+
+}
+
+#gisToolbar button{
+
+width:52px;
+
+height:52px;
+
+border:none;
+
+border-radius:14px;
+
+background:white;
+
+color:#0F2D52;
+
+font-size:22px;
+
+cursor:pointer;
+
+box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+transition:.25s;
+
+}
+
+#gisToolbar button:hover{
+
+background:#D4A017;
+
+color:white;
+
+transform:translateY(-2px);
+
+}
+    #mapHeader{
+
+    background:white;
+
+    color:#2563EB;
+
+    padding:18px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:4px solid #D4A017;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+
+}
+
+#mapHeader h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#2563EB;
+
+}
+
+#mapHeader{
+
+    background:white;
+
+    color:#2563EB;
+
+    padding:18px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:4px solid #D4A017;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+
+}
+
+#mapHeader h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#2563EB;
+
+}
+
+#mapHeader p{
+
+    margin:4px 0 0;
+
+    color:#64748B;
+
+    font-size:13px;
+
+} 
+
+#layerPanel{
+
+position:absolute;
+
+top:20px;
+
+right:90px;
+
+width:230px;
+
+background:white;
+
+border-radius:16px;
+
+box-shadow:0 12px 30px rgba(0,0,0,.18);
+
+padding:18px;
+
+display:none;
+
+z-index:999;
+
+}
+
+.layer-title{
+
+font-weight:700;
+
+font-size:16px;
+
+margin-bottom:15px;
+
+color:#0F2D52;
+
+border-bottom:1px solid #E5E7EB;
+
+padding-bottom:10px;
+
+}
+
+.layer-item{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:10px 0;
+
+font-size:14px;
+
+cursor:pointer;
+
+color:#374151;
+
+}
+
+.layer-item input{
+
+transform:scale(1.2);
+
+accent-color:#D4A017;
+
+}
+
+    /* LEGEND */
+    #legend {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      font-size: 13px;
+      z-index: 1000;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+.parcel-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: black;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+}
+
+    .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .green { background: green; }
+    .orange { background: orange; }
+    .red { background: red; } 
+
+    #mapActions{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.headerButton{
+
+    background:#2563EB;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.headerButton:hover{
+
+    background:#D4A017;
+
+    color:#111827;
+
+}
+
+.sectionTitle{
+
+margin:0 0 12px;
+
+font-size:15px;
+
+font-weight:700;
+ 
+color:#D4A017;
+
+letter-spacing:.4px;
+
+text-transform:uppercase;
+
+} 
+
+.section{
+
+padding:12px 18px;
+
+margin:0;
+
+border-bottom:1px solid #EEF2F7;
+
+}
+
+.card-title{
+
+font-size:12px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+color:#6B7280;
+
+margin-bottom:8px;
+
+}
+
+.small-card-text{
+
+margin-top:10px;
+
+font-size:12px;
+
+color:#94A3B8;
+
+line-height:1.5;
+
+}
+.dashboardCard{
+
+background:white;
+
+border-radius:14px;
+
+padding:16px;
+
+border:1px solid #E5E7EB;
+
+box-shadow:0 3px 10px rgba(0,0,0,.05);
+
+margin-top:8px;
+
+}
+
+.dashboardTitle{
+
+    color:#D4A017;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    margin-bottom:16px;
+
+}
+
+.dashboardGrid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+margin-top:14px;
+
+}
+
+.dashboardStat{
+
+    background:#111827;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    transition:.25s;
+
+}
+
+.dashboardStat:hover{
+
+    background:#2563EB;
+
+    transform:translateY(-2px);
+
+}
+
+.dashboardStat span{
+
+    color:#9CA3AF;
+
+    font-size:12px;
+
+}
+
+.dashboardStat h3{
+
+    margin-top:8px;
+
+    color:white;
+
+    font-size:18px;
+
+} 
+
+#details{
+
+background:#173A63;
+
+border-radius:18px;
+
+padding:18px;
+
+border:1px solid rgba(255,255,255,.08);
+
+min-height:240px;
+
+}
+
+.empty-state{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+height:180px;
+
+color:#94A3B8;
+
+font-size:14px;
+
+text-align:center;
+
+} 
+
+#coordinateBox{
+
+position:absolute;
+
+bottom:20px;
+
+left:20px;
+
+background:rgba(15,45,82,.95);
+
+color:white;
+
+padding:10px 16px;
+
+border-radius:10px;
+
+font-size:13px;
+
+font-weight:600;
+
+z-index:1000;
+
+box-shadow:0 6px 20px rgba(0,0,0,.25);
+
+backdrop-filter:blur(8px);
+
+}
+
+#coords{
+
+letter-spacing:.5px;
+
+} 
+
+#activeProjectCard{
+
+margin-top:12px;
+
+background:white;
+
+border-radius:14px;
+
+padding:16px;
+
+box-shadow:0 4px 14px rgba(0,0,0,.08);
+
+}
+
+#projectSelect{
+
+width:100%;
+
+padding:12px;
+
+border:2px solid #E5E7EB;
+
+border-radius:10px;
+
+font-size:14px;
+
+font-weight:600;
+
+background:#F8FAFC;
+
+color:#0F2D52;
+
+outline:none;
+
+cursor:pointer;
+
+}
+
+#projectSelect:focus{
+
+border-color:#D4A017;
+
+}
+
+#activeProjectStats{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-top:18px;
+
+}
+
+.projectStat{
+
+text-align:center;
+
+flex:1;
+
+}
+
+.projectStatNumber{
+
+display:block;
+
+font-size:22px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+}
+
+.projectStatLabel{
+
+font-size:12px;
+
+color:#6B7280;
+
+} 
+
+.companyName{
+
+background:#0F2D52;
+
+color:white;
+
+padding:12px;
+
+border-radius:10px;
+
+font-weight:600;
+
+text-align:center;
+
+margin-top:10px;
+
+margin-bottom:12px;
+
+letter-spacing:.5px;
+
+} 
+
+.card{
+
+background:white;
+
+border-radius:14px;
+
+padding:16px;
+
+box-shadow:0 4px 14px rgba(15,45,82,.08);
+
+border:1px solid #EEF2F7;
+
+margin-bottom:14px;
+
+transition:.25s;
+
+}
+
+.card:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 22px rgba(15,45,82,.12);
+
+} 
+
+.card-title{
+
+font-size:13px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+color:#0F2D52;
+
+margin-bottom:14px;
+
+}
+
+.sectionTitle{
+
+font-size:16px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+margin-bottom:12px;
+
+} 
+
+.projectHeading{
+
+margin-top:16px;
+
+font-size:22px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+}
+
+.projectSubheading{
+
+margin-top:6px;
+
+color:#6B7280;
+
+font-size:14px;
+
+}
+
+.projectSummary{
+
+margin-top:12px;
+
+line-height:1.6;
+
+font-size:13px;
+
+color:#4B5563;
+
+margin-bottom:18px;
+
+}
+
+#propertyCardSection{
+
+margin:18px 22px;
+
+animation:fadeSlide .25s ease;
+
+}
+
+.propertyCard{
+
+background:white;
+
+border-radius:16px;
+
+padding:18px;
+
+box-shadow:0 8px 28px rgba(15,45,82,.10);
+
+border:1px solid #E5E7EB;
+
+}
+
+@keyframes fadeSlide{
+
+from{
+
+opacity:0;
+
+transform:translateY(-12px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+} 
+
+.projectHeading{
+
+font-size:22px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+margin-top:6px;
+
+}
+
+.projectSubheading{
+
+font-size:14px;
+
+color:#64748B;
+
+margin-top:4px;
+
+}
+
+.projectTag{
+
+display:inline-block;
+
+margin-top:12px;
+
+padding:6px 12px;
+
+background:#EEF6FF;
+
+color:#0F2D52;
+
+border-radius:20px;
+
+font-size:12px;
+
+font-weight:600;
+
+} 
+
+.headerSelect{
+
+padding:10px 14px;
+
+border-radius:10px;
+
+border:1px solid #D1D5DB;
+
+background:white;
+
+font-size:14px;
+
+font-weight:600;
+
+color:#0F2D52;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.headerSelect:hover{
+
+border-color:#D4A017;
+
+}
+
+.headerSelect:focus{
+
+outline:none;
+
+border-color:#D4A017;
+
+}
+  </style>
+</head>
+
+<body>
+
+<div id="sidebar">
+
+<!-- COMPANY -->
+
+<div id="companyHeader">
+
+<img src="/logo.png" id="logo">
+
+<div style="flex:1;">
+
+<div style=" 
+font-size:40px;
+letter-spacing:2px;
+color:#ff7002;
+font-weight:600;
+text-transform:uppercase;
+">
+
+TERRA-IQ
+
+</div>
+
+<h2 style=" 
+margin-top:6px;
+font-size:24px;
+font-weight:700;
+color:rgb(7, 14, 109);
+">
+
+Smart Land Intelligence Platform 
+
+</h2>
+
+
+</div>
+
+</div>
+
+
+<!-- SEARCH -->
+
+<div class="section">
+
+<div class="card-title">
+
+🔎 Search
+
+</div>
+
+<input
+id="search"
+placeholder="Parcel • Property ID • Status">
+
+<div class="small-card-text">
+
+Search parcels instantly across the active project.
+
+</div>
+
+</div>
+
+
+<!-- PROJECT -->
+
+<div class="section">
+
+<div class="controlPanel"> 
+
+<div class="controlGroup">
+
+<label>Company</label>
+
+<select id="companySelect">
+
+<option selected>Kenmark Realtors</option>
+
+</select>
+
+</div>
+
+<div class="controlGroup">
+
+<label>Development</label>
+
+<select id="projectSelect"></select>
+
+</div>
+
+<div id="activeProjectStats">
+
+<div class="projectStat">
+
+<span class="projectStatNumber" id="parcelCount">0</span>
+
+<span class="projectStatLabel">Parcels</span>
+
+</div>
+
+<div class="projectStat">
+
+<span class="projectStatNumber" id="availableCount">0</span>
+
+<span class="projectStatLabel">Available</span>
+
+</div>
+
+<div class="projectStat">
+
+<span class="projectStatNumber" id="soldCount">0</span>
+
+<span class="projectStatLabel">Sold</span>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PARCEL INTELLIGENCE -->
+
+<div class="section">
+
+<div class="card-title">
+
+🧠 Parcel Intelligence
+
+</div>
+
+<div id="propertyCardSection" style="display:none;">
+
+<div class="card propertyCard">
+
+<div class="card-title">
+
+🏠 Property Intelligence
+
+</div>
+
+<div id="details"></div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- DASHBOARD -->
+
+<div class="section">
+    <div id="projectCard"></div>
+</div>
+
+<!-- SELECTED PARCEL -->
+
+<!-- PARCEL LIST -->
+
+<div class="section">
+
+<h4 class="sectionTitle">
+
+📋 Parcel Explorer
+
+</h4>
+
+<div id="list"></div>
+
+</div>
+
+</div>
+
+<div id="mapContainer">
+
+    <div id="mapHeader">
+
+    <div>
+
+        <h2>KENMARK GIS WORKSPACE</h2>
+
+        <p>Interactive Land Intelligence Viewer</p>
+
+    </div>
+
+    <div id="mapActions">
+
+        <select id="basemapSelect" class="headerSelect">
+
+<option value="satellite">🛰 Satellite</option>
+
+<option value="hybrid">🌍 Hybrid</option>
+
+<option value="street">🗺 Streets</option>
+
+<option value="terrain">🏔 Terrain</option>
+
+</select>
+
+    </div>
+
+</div>
+
+    <div id="mapContainer">
+
+    <div id="map"></div>
+
+    <div id="gisToolbar">
+
+        <button id="homeBtn" title="Home">
+            🏠
+        </button>
+
+        <button id="locateBtn" title="Locate Me">
+            📍
+        </button>
+
+        <button id="measureBtn" title="Measure Distance">
+            📏
+        </button>
+
+        <button id="areaBtn" title="Measure Area">
+            ⬜
+        </button>
+
+        <button id="layersBtn" title="Layers">
+            🗂
+        </button>
+
+        <button id="printBtn" title="Print">
+            🖨
+        </button>
+
+    </div> 
+
+    <div id="coordinateBox">
+
+    <span id="coords">
+
+        Lat: -- | Lng: --
+
+    </span>
+
+</div>
+
+    <div id="layerPanel">
+
+    <div class="layer-title">
+        🗂 GIS Layers
+    </div>
+
+    <label class="layer-item">
+        <input type="checkbox" id="toggleParcels" checked>
+        Parcels
+    </label>
+
+    <label class="layer-item">
+        <input type="checkbox" id="toggleRoads">
+        Roads
+    </label>
+
+    <label class="layer-item">
+        <input type="checkbox" id="toggleSchools">
+        Schools
+    </label>
+
+    <label class="layer-item">
+        <input type="checkbox" id="toggleHospitals">
+        Hospitals
+    </label>
+
+    <label class="layer-item">
+        <input type="checkbox" id="toggleShopping">
+        Shopping Centres
+    </label>
+
+    <label class="layer-item">
+        <input type="checkbox" id="toggleUtilities">
+        Utilities
+    </label>
+
+</div>
+
+</div>
+
+</div>
+
+<div id="legend">
+  <div class="item"><span class="dot green"></span> Available</div>
+  <div class="item"><span class="dot orange"></span> Reserved</div>
+  <div class="item"><span class="dot red"></span> Sold</div>
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+/* =========================
+   🛰️ ESRI BASEMAP
+   ========================= */
+const imagery = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    {
+        attribution: 'Tiles © Esri',
+        maxNativeZoom: 19,
+        maxZoom: 25
+    }
+);
+
+const labels = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+    {
+        attribution: 'Labels © Esri',
+        maxNativeZoom: 19,
+        maxZoom: 25
+    }
+);
+
+const streets = L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{
+    maxZoom:22,
+    attribution:'© OpenStreetMap'
+}
+);
+
+const terrain = L.tileLayer(
+'https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png',
+{
+    maxZoom:17,
+    attribution:'© OpenTopoMap'
+}
+);
+
+const hybrid = L.layerGroup([
+    imagery,
+    labels
+]); 
+
+const map = L.map('map', {
+    center: [-1.4691, 36.9399],
+    zoom: 18,
+    minZoom: 3,
+    maxZoom: 22,
+    layers: [imagery, labels]
+}); 
+
+document.getElementById("basemapSelect").onchange = function(){
+
+    // Remove all basemaps
+
+    map.removeLayer(imagery);
+
+    map.removeLayer(labels);
+
+    map.removeLayer(streets);
+
+    map.removeLayer(terrain);
+
+    map.removeLayer(hybrid);
+
+    switch(this.value){
+
+    case "satellite":
+
+        imagery.addTo(map);
+        labels.addTo(map);
+
+        break;
+
+    case "hybrid":
+
+        imagery.addTo(map);
+        labels.addTo(map);
+
+        break;
+
+    case "street":
+
+        streets.addTo(map);
+
+        break;
+
+    case "terrain":
+
+        terrain.addTo(map);
+
+        break;
+
+}
+
+};
+
+let allFeatures = [];
+
+let selectedParcelId = null;
+
+let geoLayer;
+
+let roadsLayer = null;
+
+let hoverLayer = null; 
+let measuring = false;
+
+let measurePoints = [];
+
+let measureLayer = null;
+
+/* LOAD DATA */
+let currentProject = 1;
+
+loadProjects();
+loadProject(currentProject);
+
+async function loadProjects() {
+
+    const response = await fetch('http://localhost:3000/projects');
+    const projects = await response.json();
+
+    const select = document.getElementById("projectSelect");
+
+select.innerHTML = `
+<option value="all">🌍 All Projects</option>
+`;
+
+    projects.forEach(project => {
+
+        const option = document.createElement("option");
+
+        option.value = project.id;
+
+        option.textContent =
+            `${project.project_code} • ${project.project_name}`;
+
+        select.appendChild(option);
+
+    });
+
+    select.onchange = function () {
+
+    currentProject = this.value;
+
+    if(currentProject === "all"){
+
+        loadAllProjects();
+
+    }else{
+
+        loadProject(currentProject);
+
+    }
+
+};
+
+}
+async function loadProject(projectId) {
+
+  const projectResponse =
+    await fetch(`http://localhost:3000/projects/${projectId}`);
+
+  const project = await projectResponse.json();
+
+  // document.getElementById('projectName').textContent =
+//     project.project_name;
+
+// document.getElementById('projectLocation').textContent =
+//     project.location;
+
+// document.getElementById('projectDescription').textContent =
+//     project.description || ''; 
+
+  document.getElementById("projectCard").innerHTML = `
+
+<div class="dashboardCard">
+
+    <div class="dashboardTitle">
+
+📊 Development Overview
+
+</div>
+
+<div class="projectHeading">
+
+${project.project_name || project.name}
+
+</div>
+
+<div class="projectSubheading">
+
+📍 ${project.location || "-"}
+
+</div>
+
+<div class="projectTag">
+
+${project.title_status || "Ready Titles"}
+
+</div>
+
+    <div class="dashboardGrid">
+
+        <div class="dashboardStat">
+
+            <span>💰 Price From</span>
+
+            <h3>KSh ${Number(project.price_from || 0).toLocaleString()}</h3>
+
+        </div>
+
+        <div class="dashboardStat">
+
+            <span>📐 Plot Size</span>
+
+            <h3>${project.plot_size || "-"}</h3>
+
+        </div>
+
+        <div class="dashboardStat">
+
+            <span>🟢 Available</span>
+
+            <h3>${project.available || "-"}</h3>
+
+        </div>
+
+        <div class="dashboardStat">
+
+            <span>🔴 Sold</span>
+
+            <h3>${project.sold || "-"}</h3>
+
+        </div>
+
+    </div>
+
+</div>
+
+`;
+
+  const parcelsResponse =
+    await fetch(`http://localhost:3000/projects/${projectId}/parcels`);
+
+  const geojson = await parcelsResponse.json();
+
+  allFeatures = geojson.features; 
+
+  document.getElementById("parcelCount").textContent =
+allFeatures.length;
+
+document.getElementById("availableCount").textContent =
+allFeatures.filter(f =>
+f.properties.status.toLowerCase().includes("available")
+).length;
+
+document.getElementById("soldCount").textContent =
+allFeatures.filter(f =>
+f.properties.status.toLowerCase().includes("sold")
+).length;
+
+  renderList(allFeatures);
+  drawMap(allFeatures);
+
+  if (geoLayer) {
+    map.fitBounds(geoLayer.getBounds());
+  }
+
+} 
+
+async function loadAllProjects(){
+
+    // Load all parcels
+
+    const response = await fetch("http://localhost:3000/parcels");
+
+    const geojson = await response.json();
+
+    allFeatures = geojson.features;
+
+    // Update parcel explorer
+
+    renderList(allFeatures);
+
+    // Draw everything
+
+    drawMap(allFeatures);
+
+    // Zoom to everything
+
+    if(geoLayer){
+
+        map.fitBounds(geoLayer.getBounds());
+
+    }
+
+    // Hide Property Intelligence
+
+    document.getElementById("propertyCardSection").style.display="none";
+
+    document.getElementById("details").innerHTML="";
+
+}
+
+/* MAP */
+function drawMap(features) {
+
+  if (geoLayer) geoLayer.remove();
+
+  geoLayer = L.geoJSON(features, {
+
+    style: function(feature) {
+
+      const status = feature.properties.status
+        ? feature.properties.status.toLowerCase()
+        : "";
+
+      let fillColor = "#22c55e";
+
+      if (status.includes("sold")) fillColor = "#ef4444";
+      else if (status.includes("reserved")) fillColor = "#facc15";
+
+      // 🔥 CHECK IF SELECTED
+      const isSelected =
+    selectedParcelId === feature.properties.parcel_no;
+
+return {
+    color: isSelected ? "#00b7ff" : "#333333",
+    weight: isSelected ? 5 : 2,
+    opacity: 1,
+    fillColor: fillColor,
+    fillOpacity: isSelected ? 0.7 : 0.45
+};
+    },
+
+    onEachFeature: (feature, layer) => {
+
+     layer.bindTooltip(String(feature.properties.parcel_no), {
+  permanent: false,
+  direction: 'center',
+  className: 'parcel-label'
+});
+
+
+// 👉 ARC GIS STYLE HOVER CARD
+layer.on('mouseover', (e) => {
+
+  const p = feature.properties;
+
+  if (hoverLayer) map.removeLayer(hoverLayer);
+
+  hoverLayer = L.popup({
+    closeButton: false,
+    offset: [0, -8],
+    className: "hover-popup",
+    autoPan: false
+  })
+  .setLatLng(e.latlng)   // ✅ THIS IS THE KEY FIX (ArcGIS feel)
+  .setContent(`
+    <div style="
+      font-size:13px;
+      font-weight:600;
+      color:#111;
+      line-height:1.4;
+    ">
+      <div style="font-size:12px; opacity:0.7;">Parcel</div>
+      <div style="font-size:15px; font-weight:700;">
+        ${p.parcel_no}
+      </div>
+
+      <div style="margin-top:6px; font-size:11px;">
+        ${p.status}
+      </div>
+
+      <div style="margin-top:4px; font-size:12px; color:#1d4ed8;">
+        KSh ${Number(p.price).toLocaleString()}
+      </div>
+    </div>
+  `)
+  .openOn(map);
+});
+
+layer.on('mouseout', () => {
+  if (hoverLayer) {
+    map.closePopup(hoverLayer);
+    hoverLayer = null;
+  }
+});
+
+/* 🔥 CLICK SELECT */
+layer.on('click', () => {
+
+  selectedParcelId = feature.properties.parcel_no;
+
+  showDetails(feature.properties);
+
+  drawMap(allFeatures);
+
+  map.flyToBounds(layer.getBounds(), {
+    duration: 0.8
+  });
+
+});
+
+}
+
+  }).addTo(map); 
+
+  // Show labels immediately if already zoomed in
+  const zoom = map.getZoom();
+
+geoLayer.eachLayer(layer => {
+    if (zoom >= 18)
+        layer.openTooltip();
+});
+} 
+
+map.on("zoomend", function () {
+
+    if (!geoLayer) return;
+
+    const zoom = map.getZoom();
+
+    geoLayer.eachLayer(layer => {
+
+        if (zoom >= 18)
+            layer.openTooltip();
+        else
+            layer.closeTooltip();
+
+    });
+
+});
+
+/* DETAILS */
+function showDetails(p) {
+
+    console.log(p);
+
+    let statusColor = "#16a34a";
+
+    if (p.status.toLowerCase().includes("sold"))
+        statusColor = "#ef4444";
+
+    if (p.status.toLowerCase().includes("reserved"))
+        statusColor = "#D4A017"; 
+
+        document.getElementById("propertyCardSection").style.display = "block";
+
+    document.getElementById("details").innerHTML = `
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
+    <div>
+
+        <div style="
+            font-size:22px;
+            font-weight:700;
+            color:#0F2D52;
+        ">
+            📍 Parcel ${p.parcel_no}
+        </div>
+
+        <div style="
+            font-size:13px;
+            color:#6B7280;
+            margin-top:4px;
+        ">
+            Property ID: ${p.property_id || "N/A"}
+        </div>
+
+    </div>
+
+    <div style="
+        background:${statusColor};
+        color:white;
+        padding:8px 14px;
+        border-radius:25px;
+        font-weight:bold;
+        font-size:13px;
+    ">
+        ${p.status}
+    </div>
+
+</div>
+
+<hr style="margin:18px 0;border:none;border-top:1px solid #E5E7EB;">
+
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+">
+
+<div style="
+background:#ffffff;
+padding:14px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+">
+
+<div style="font-size:12px;color:#6B7280;">
+💰 Price
+</div>
+
+<div style="
+font-size:18px;
+font-weight:bold;
+color:#0F2D52;
+margin-top:5px;
+">
+KSh ${Number(p.price).toLocaleString()}
+</div>
+
+</div>
+
+<div style="
+background:#ffffff;
+padding:14px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+">
+
+<div style="font-size:12px;color:#6B7280;">
+📐 Size
+</div>
+
+<div style="
+font-size:18px;
+font-weight:bold;
+color:#0F2D52;
+margin-top:5px;
+">
+${p.size}
+</div>
+
+</div>
+
+<div style="
+background:#ffffff;
+padding:14px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+">
+
+<div style="font-size:12px;color:#6B7280;">
+🗺 Area
+</div>
+
+<div style="
+font-size:18px;
+font-weight:bold;
+color:#0F2D52;
+margin-top:5px;
+">
+${p.area} m²
+</div>
+
+</div>
+
+<div style="
+background:#ffffff;
+padding:14px;
+border-radius:12px;
+box-shadow:0 2px 10px rgba(0,0,0,.08);
+">
+
+<div style="font-size:12px;color:#6B7280;">
+📄 Title
+</div>
+
+<div style="
+font-size:18px;
+font-weight:bold;
+color:#0F2D52;
+margin-top:5px;
+">
+Ready
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:20px;
+padding:18px;
+border-radius:14px;
+background:linear-gradient(135deg,#0F2D52,#1E4E8C);
+color:white;
+">
+
+<div style="
+font-size:18px;
+font-weight:bold;
+margin-bottom:15px;
+">
+
+⭐ Property Intelligence
+
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+<span>Investment Score</span>
+<strong style="color:#FFD54A;">92 /100</strong>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+<span>Road Access</span>
+<strong>★★★★★</strong>
+</div>
+
+<div style="display:flex;justify-content:space-between;margin-bottom:10px;">
+<span>Development Potential</span>
+<strong>★★★★☆</strong>
+</div>
+
+<div style="display:flex;justify-content:space-between;">
+<span>Utilities</span>
+<strong>Available</strong>
+</div>
+
+</div>
+
+<h3 style="
+margin-top:25px;
+color:#0F2D52;
+">
+
+Reserve Parcel
+
+</h3>
+
+<button
+id="openReservationForm"
+style="
+width:100%;
+background:#D4A017;
+color:white;
+border:none;
+padding:14px;
+border-radius:12px;
+font-weight:bold;
+cursor:pointer;
+">
+
+Reserve Now
+
+</button>
+
+<div
+id="reservationForm"
+style="
+display:none;
+margin-top:18px;
+">
+
+<input id="customerName" placeholder="Customer Name">
+
+<input id="customerPhone" placeholder="Phone Number">
+
+<input id="customerEmail" placeholder="Email Address">
+
+<input id="customerID" placeholder="National ID">
+
+<button onclick="reserveParcel(${p.id})">
+
+Confirm Reservation
+
+</button>
+
+</div>
+
+<div style="
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin-top:15px;
+">
+
+<button style="
+background:#0F2D52;
+color:white;
+border:none;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+">
+
+📄 Documents
+
+</button>
+
+<button style="
+background:#D4A017;
+color:white;
+border:none;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+">
+
+🧭 Navigate
+
+</button>
+
+</div>
+
+`; 
+
+document
+.getElementById("openReservationForm")
+.onclick = function(){
+
+document
+.getElementById("reservationForm")
+.style.display = "block";
+
+this.style.display = "none";
+
+};
+
+}
+
+/* SEARCH */
+document.getElementById('search').addEventListener('input', e => {
+
+  const v = e.target.value.toLowerCase();
+
+  const filtered = allFeatures.filter(f => {
+    const p = f.properties;
+    return (
+      String(p.parcel_no).includes(v) ||
+      String(p.price).includes(v) ||
+      String(p.size).toLowerCase().includes(v) ||
+      String(p.status).toLowerCase().includes(v)
+    );
+  });
+
+  renderList(filtered);
+  drawMap(filtered);
+});
+
+/* LIST */
+function renderList(features) {
+  const list = document.getElementById('list');
+  list.innerHTML = "";
+
+  features.forEach(f => {
+    const p = f.properties;
+
+    const div = document.createElement('div');
+    let color = "#16a34a";
+
+if (p.status.toLowerCase().includes("sold"))
+  color = "#ef4444";
+
+if (p.status.toLowerCase().includes("reserved"))
+  color = "#facc15";
+
+div.className = "card";
+
+div.style.borderLeft =
+  `6px solid ${color}`;
+
+    div.innerHTML = `
+      <b>Parcel ${p.parcel_no}</b><br>
+      <span class="small">KSh ${p.price}</span><br>
+      <span class="small">${p.status}</span>
+    `;
+
+    div.onclick = () => {
+      map.fitBounds(L.geoJSON(f).getBounds());
+      showDetails(p);
+    };
+
+    list.appendChild(div);
+  });
+
+  async function reserveParcel(parcelId){
+
+    const customer_name =
+        document.getElementById("customerName").value;
+
+    const phone =
+        document.getElementById("customerPhone").value;
+
+    const email =
+        document.getElementById("customerEmail").value;
+
+    const national_id =
+        document.getElementById("customerID").value;
+
+    if(!customer_name || !phone){
+
+        alert("Please enter customer name and phone.");
+
+        return;
+
+    }
+
+    const response = await fetch(
+        "http://localhost:3000/reserve",
+        {
+
+            method:"POST",
+
+            headers:{
+                "Content-Type":"application/json"
+            },
+
+            body:JSON.stringify({
+
+                parcel_id:parcelId,
+
+                customer_name,
+
+                phone,
+
+                email,
+
+                national_id
+
+            })
+
+        }
+
+    );
+
+    const result = await response.json();
+
+    if(result.success){
+
+        alert(
+
+"Reservation Successful!\n\nReservation No: " +
+result.reservationNo
+
+);
+
+        loadProject(currentProject);
+
+    }
+
+}
+}
+
+document.getElementById("homeBtn").onclick = function () {
+
+    // Zoom back to all parcels
+    if (geoLayer) {
+        map.fitBounds(geoLayer.getBounds());
+    }
+
+    // Hide the Property Intelligence card
+    document.getElementById("propertyCardSection").style.display = "none";
+
+    // Clear parcel information
+    document.getElementById("details").innerHTML = "";
+
+};
+
+document.getElementById("locateBtn").onclick = function(){
+
+    if(!navigator.geolocation){
+
+        alert("Geolocation is not supported.");
+
+        return;
+
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        function(position){
+
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            map.flyTo([lat,lng],18);
+
+            L.marker([lat,lng],{
+
+                title:"Your Location"
+
+            })
+
+            .addTo(map)
+
+            .bindPopup("📍 You are here")
+
+            .openPopup();
+
+        },
+
+        function(){
+
+            alert("Unable to retrieve your location.");
+
+        }
+
+    );
+
+};
+
+const layerPanel = document.getElementById("layerPanel");
+
+document.getElementById("layersBtn").onclick = function(){
+
+    if(layerPanel.style.display==="block"){
+
+        layerPanel.style.display="none";
+
+    }else{
+
+        layerPanel.style.display="block";
+
+    }
+
+}; 
+
+document.getElementById("toggleParcels").addEventListener("change", function(){
+
+    if(this.checked){
+
+        map.addLayer(geoLayer);
+
+    }else{
+
+
+    }
+
+}); 
+
+document.getElementById("measureBtn").onclick = function(){
+
+    measuring = !measuring;
+
+    measurePoints = [];
+
+    if(measureLayer){
+
+        map.removeLayer(measureLayer);
+
+        measureLayer = null;
+
+    }
+
+    if(measuring){
+
+        this.style.background = "#D4A017";
+
+        this.style.color = "white";
+
+        alert("Measure Tool Activated.\n\nClick two points on the map.");
+
+    }else{
+
+        this.style.background = "white";
+
+        this.style.color = "#0F2D52";
+
+    }
+
+}; 
+
+map.on("click", function(e){
+
+    if(!measuring) return;
+
+    measurePoints.push(e.latlng);
+
+    if(measurePoints.length === 2){
+
+        if(measureLayer){
+
+            map.removeLayer(measureLayer);
+
+        }
+
+        measureLayer = L.polyline(measurePoints,{
+
+            color:"#D4A017",
+
+            weight:4,
+
+            dashArray:"8,8"
+
+        }).addTo(map);
+
+        const distance =
+            measurePoints[0].distanceTo(measurePoints[1]);
+
+        const midpoint = L.latLng(
+
+            (measurePoints[0].lat + measurePoints[1].lat)/2,
+
+            (measurePoints[0].lng + measurePoints[1].lng)/2
+
+        );
+
+        L.popup({
+
+            closeButton:false
+
+        })
+
+        .setLatLng(midpoint)
+
+        const displayDistance =
+
+distance >= 1000
+
+?
+
+(distance/1000).toFixed(2) + " km"
+
+:
+
+distance.toFixed(1) + " m";
+
+L.popup({
+
+    closeButton:false
+
+})
+
+.setLatLng(midpoint)
+
+.setContent(
+
+    "<div style='text-align:center;'>"
+
+    +
+
+    "<b style='font-size:15px;'>📏 Distance</b><br>"
+
+    +
+
+    "<span style='font-size:18px;color:#0F2D52;font-weight:bold;'>"
+
+    +
+
+    displayDistance
+
+    +
+
+    "</span></div>"
+
+)
+
+        .openOn(map);
+
+        measuring = false;
+
+        document.getElementById("measureBtn").style.background = "white";
+
+        document.getElementById("measureBtn").style.color = "#0F2D52";
+
+        measurePoints = [];
+
+    }
+
+}); 
+
+map.on("mousemove", function(e){
+
+    document.getElementById("coords").innerHTML =
+
+    "Lat: "
+
+    +
+
+    e.latlng.lat.toFixed(6)
+
+    +
+
+    " | Lng: "
+
+    +
+
+    e.latlng.lng.toFixed(6);
+
+});
+</script>
+
+</body>
+</html>

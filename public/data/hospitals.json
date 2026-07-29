@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Nairobi Hospital", "type": "Level 6 Hospital" },
+      "geometry": { "type": "Point", "coordinates": [36.8048, -1.2936] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kenyatta National Hospital", "type": "National Referral" },
+      "geometry": { "type": "Point", "coordinates": [36.8080, -1.3013] }
+    }
+  ]
+}

@@ -1,0 +1,363 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Nairobi", "type": "Capital City", "region": "Nairobi Metropolitan" },
+      "geometry": { "type": "Point", "coordinates": [36.8219, -1.2921] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Syokimau", "type": "Suburban Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [36.9312, -1.3533] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mlolongo", "type": "Commercial Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [36.9450, -1.3850] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Athi River (Mavoko)", "type": "Industrial Municipality", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [36.9830, -1.4500] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lukenya", "type": "Education & Residential Hub", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.0520, -1.4890] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Daystar", "type": "University Settlement", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.0750, -1.5120] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Machakos Junction", "type": "Highway Junction Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.1080, -1.5540] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Konza Town", "type": "Railway & Market Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.1328, -1.6032] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Konza Technopolis", "type": "Smart City / Tech Hub", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.1812, -1.7050] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Malili", "type": "Highway Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.1511, -1.6842] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sultan Hamud", "type": "Highway Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.3750, -2.0180] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Emali", "type": "Commercial Junction Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.4640, -2.0780] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kibwezi", "type": "Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.9650, -2.4110] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mtito Andei", "type": "Transit Town", "region": "Mombasa Road Corridor" },
+      "geometry": { "type": "Point", "coordinates": [38.1670, -2.6900] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Voi", "type": "Municipality", "region": "Mombasa Road / Taita Taveta" },
+      "geometry": { "type": "Point", "coordinates": [38.5561, -3.3960] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Kitengela", "type": "Commercial Municipality", "region": "Nairobi-Namanga Highway" },
+      "geometry": { "type": "Point", "coordinates": [36.9605, -1.4812] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kisaju", "type": "Town Center", "region": "Nairobi-Namanga Highway" },
+      "geometry": { "type": "Point", "coordinates": [36.9150, -1.5833] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Isinya", "type": "Sub-County Capital", "region": "Nairobi-Namanga Highway" },
+      "geometry": { "type": "Point", "coordinates": [36.8524, -1.6811] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kajiado", "type": "County Capital", "region": "Nairobi-Namanga Highway" },
+      "geometry": { "type": "Point", "coordinates": [36.7820, -1.8530] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Namanga", "type": "Border Town", "region": "Nairobi-Namanga Highway" },
+      "geometry": { "type": "Point", "coordinates": [36.7912, -2.5447] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Kiambu", "type": "County Capital", "region": "Central Kenya" },
+      "geometry": { "type": "Point", "coordinates": [36.8275, -1.1714] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ruiru", "type": "Municipality", "region": "Thika Superhighway Corridor" },
+      "geometry": { "type": "Point", "coordinates": [36.9608, -1.1460] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Juja", "type": "University Town", "region": "Thika Superhighway Corridor" },
+      "geometry": { "type": "Point", "coordinates": [37.0116, -1.1026] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Thika", "type": "Industrial Municipality", "region": "Central Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.0693, -1.0396] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Murang'a", "type": "County Capital", "region": "Central Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.1500, -0.7210] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Nyeri", "type": "County Capital", "region": "Central Kenya" },
+      "geometry": { "type": "Point", "coordinates": [36.9510, -0.4201] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Karatina", "type": "Commercial Hub", "region": "Central Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.1250, -0.4810] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Othaya", "type": "Town", "region": "Central Kenya" },
+      "geometry": { "type": "Point", "coordinates": [36.9480, -0.5430] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Machakos", "type": "County Capital", "region": "Eastern Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.2634, -1.5177] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kitui", "type": "County Capital", "region": "Eastern Kenya" },
+      "geometry": { "type": "Point", "coordinates": [38.0106, -1.3670] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Embu", "type": "County Capital", "region": "Eastern / Mt. Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.4580, -0.5310] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chuka", "type": "County Capital", "region": "Tharaka Nithi" },
+      "geometry": { "type": "Point", "coordinates": [37.6470, -0.3330] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Meru", "type": "County Capital", "region": "Eastern / Mt. Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.6559, 0.0463] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Maua", "type": "Commercial Town", "region": "Meru North" },
+      "geometry": { "type": "Point", "coordinates": [37.9400, 0.2330] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Nanyuki", "type": "Municipality", "region": "Laikipia" },
+      "geometry": { "type": "Point", "coordinates": [37.0728, 0.0167] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Timau", "type": "Town", "region": "Meru / Laikipia Border" },
+      "geometry": { "type": "Point", "coordinates": [37.2389, 0.0811] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Burguret", "type": "Settlement", "region": "Laikipia / Mt. Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.0160, -0.0900] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Naromoru", "type": "Town", "region": "Nyeri / Mt. Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.0225, -0.1583] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Naivasha", "type": "Municipality", "region": "Rift Valley" },
+      "geometry": { "type": "Point", "coordinates": [36.4350, -0.7170] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Nakuru", "type": "City", "region": "Rift Valley" },
+      "geometry": { "type": "Point", "coordinates": [36.0663, -0.3031] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Eldoret", "type": "City", "region": "North Rift" },
+      "geometry": { "type": "Point", "coordinates": [35.2698, 0.5143] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kitale", "type": "County Capital", "region": "Trans Nzoia" },
+      "geometry": { "type": "Point", "coordinates": [35.0062, 1.0157] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kericho", "type": "County Capital", "region": "South Rift" },
+      "geometry": { "type": "Point", "coordinates": [35.2863, -0.3689] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bomet", "type": "County Capital", "region": "South Rift" },
+      "geometry": { "type": "Point", "coordinates": [35.3416, -0.7813] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Narok", "type": "County Capital", "region": "Rift Valley" },
+      "geometry": { "type": "Point", "coordinates": [35.8601, -1.0833] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kapenguria", "type": "County Capital", "region": "West Pokot" },
+      "geometry": { "type": "Point", "coordinates": [35.1111, 1.2389] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Kisumu", "type": "City", "region": "Lake Victoria Basin" },
+      "geometry": { "type": "Point", "coordinates": [34.7680, -0.0917] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Maseno", "type": "University Town", "region": "Kisumu West" },
+      "geometry": { "type": "Point", "coordinates": [34.6000, -0.0031] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ahero", "type": "Agricultural Town", "region": "Kisumu East" },
+      "geometry": { "type": "Point", "coordinates": [34.9220, -0.1760] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kakamega", "type": "County Capital", "region": "Western Kenya" },
+      "geometry": { "type": "Point", "coordinates": [34.7519, 0.2827] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bungoma", "type": "County Capital", "region": "Western Kenya" },
+      "geometry": { "type": "Point", "coordinates": [34.5606, 0.5635] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Busia", "type": "Border Town", "region": "Western Kenya" },
+      "geometry": { "type": "Point", "coordinates": [34.1115, 0.4608] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kisii", "type": "County Capital", "region": "Nyanza Highlands" },
+      "geometry": { "type": "Point", "coordinates": [34.7667, -0.6817] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Homa Bay", "type": "County Capital", "region": "Lake Victoria Coast" },
+      "geometry": { "type": "Point", "coordinates": [34.4571, -0.5273] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Mombasa", "type": "Coastal City", "region": "Coast Region" },
+      "geometry": { "type": "Point", "coordinates": [39.6682, -4.0435] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Diani / Ukunda", "type": "Resort Town", "region": "South Coast" },
+      "geometry": { "type": "Point", "coordinates": [39.5810, -4.2840] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kilifi", "type": "County Capital", "region": "North Coast" },
+      "geometry": { "type": "Point", "coordinates": [39.8499, -3.6307] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Watamu", "type": "Beach Town", "region": "Kilifi North" },
+      "geometry": { "type": "Point", "coordinates": [40.0183, -3.3542] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Malindi", "type": "Coastal Resort Town", "region": "Kilifi Coast" },
+      "geometry": { "type": "Point", "coordinates": [40.1169, -3.2192] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sabaki", "type": "Coastal Settlement", "region": "Malindi Area" },
+      "geometry": { "type": "Point", "coordinates": [40.1341, -3.1530] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mambrui (Malaika Beach)", "type": "Coastal Town", "region": "Malindi North" },
+      "geometry": { "type": "Point", "coordinates": [40.1582, -3.0945] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lamu", "type": "Island City & UNESCO Heritage", "region": "Lamu Archipelago" },
+      "geometry": { "type": "Point", "coordinates": [40.9020, -2.2686] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Taveta", "type": "Border Town", "region": "Taita Taveta" },
+      "geometry": { "type": "Point", "coordinates": [37.6833, -3.3980] }
+    },
+
+    {
+      "type": "Feature",
+      "properties": { "name": "Isiolo", "type": "County Capital & LAPSSET Hub", "region": "Upper Eastern" },
+      "geometry": { "type": "Point", "coordinates": [37.5822, 0.3542] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Maralal", "type": "County Capital", "region": "Samburu County" },
+      "geometry": { "type": "Point", "coordinates": [36.6980, 1.0967] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Garissa", "type": "County Capital", "region": "Garissa / North Eastern" },
+      "geometry": { "type": "Point", "coordinates": [39.6460, -0.4532] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Marsabit", "type": "County Capital", "region": "Upper Northern Kenya" },
+      "geometry": { "type": "Point", "coordinates": [37.9780, 2.3280] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Wajir", "type": "County Capital", "region": "North Eastern" },
+      "geometry": { "type": "Point", "coordinates": [40.0573, 1.7471] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mandera", "type": "County Capital", "region": "North Eastern Border" },
+      "geometry": { "type": "Point", "coordinates": [41.8569, 3.9373] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lodwar", "type": "County Capital", "region": "Turkana / North West" },
+      "geometry": { "type": "Point", "coordinates": [35.5973, 3.1191] }
+    }
+  ]
+}

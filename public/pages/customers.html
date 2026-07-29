@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>Customers</title>
+
+<style>
+
+body{
+
+font-family:Segoe UI;
+
+background:#f4f6f9;
+
+padding:40px;
+
+}
+
+h2{
+
+margin-bottom:20px;
+
+}
+
+#search{
+
+width:350px;
+
+padding:12px;
+
+margin-bottom:20px;
+
+font-size:15px;
+
+}
+
+table{
+
+width:100%;
+
+border-collapse:collapse;
+
+background:white;
+
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+
+}
+
+th{
+
+background:#111827;
+
+color:white;
+
+padding:14px;
+
+text-align:left;
+
+}
+
+td{
+
+padding:14px;
+
+border-bottom:1px solid #eee;
+
+}
+
+tr:hover{
+
+background:#f8f8f8;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h2>Customer Database</h2>
+
+<input
+id="search"
+placeholder="Search customer..."
+>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Phone</th>
+
+<th>Email</th>
+
+<th>ID</th>
+
+<th>Reservations</th>
+
+<th>Total Value</th>
+
+</tr>
+
+</thead>
+
+<tbody id="tableBody">
+
+</tbody>
+
+</table>
+
+<script>
+
+let customers=[];
+
+loadCustomers();
+
+async function loadCustomers(){
+
+const response=
+await fetch("http://localhost:3000/customers");
+
+customers=
+await response.json();
+
+render(customers);
+
+}
+
+function render(data){
+
+const table=
+document.getElementById("tableBody");
+
+table.innerHTML="";
+
+data.forEach(c=>{
+
+table.innerHTML+=`
+
+<tr>
+
+<td>${c.customer_name}</td>
+
+<td>${c.phone}</td>
+
+<td>${c.email || "-"}</td>
+
+<td>${c.national_id || "-"}</td>
+
+<td>${c.reservations}</td>
+
+<td>KSh ${Number(c.total_value).toLocaleString()}</td>
+
+</tr>
+
+`;
+
+});
+
+}
+
+document.getElementById("search")
+.addEventListener("input",e=>{
+
+const v=
+e.target.value.toLowerCase();
+
+render(
+
+customers.filter(c=>
+
+c.customer_name.toLowerCase().includes(v)
+
+)
+
+);
+
+});
+
+</script>
+
+</body>
+
+</html>

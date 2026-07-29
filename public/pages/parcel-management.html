@@ -1,0 +1,1433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Kenmark | Parcel Management</title>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Poppins,sans-serif;
+}
+
+body{
+
+background:#eef3f9;
+padding:35px;
+color:#1f2937;
+
+}
+
+h1{
+
+font-size:34px;
+font-weight:700;
+color:#0f172a;
+
+}
+
+button{
+
+cursor:pointer;
+border:none;
+transition:.25s;
+
+}
+
+.primary-btn{
+
+background:#2563eb;
+color:white;
+padding:12px 22px;
+border-radius:10px;
+font-weight:600;
+
+}
+
+.primary-btn:hover{
+
+background:#1d4ed8;
+
+}
+
+.secondary-btn{
+
+background:white;
+border:1px solid #d1d5db;
+padding:12px 22px;
+border-radius:10px;
+
+}
+
+.page-header{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:30px;
+
+} 
+
+#systemTitle{
+
+font-size:36px;
+
+font-weight:700;
+
+color:#0f172a;
+
+margin-bottom:6px;
+
+}
+
+#systemSubtitle{
+
+font-size:16px;
+
+color:#64748b;
+
+font-weight:500;
+
+}
+
+.project-card{
+
+background:white;
+padding:25px;
+border-radius:20px;
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+margin-bottom:25px;
+
+}
+
+.project-title{
+
+font-size:28px;
+font-weight:700;
+margin-bottom:8px;
+
+}
+
+.project-summary{
+
+color:#64748b;
+
+}
+
+.stats{
+
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:20px;
+margin:30px 0;
+
+}
+
+.stat-card{
+
+background:white;
+
+padding:28px;
+
+border-radius:20px;
+
+box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+transition:.3s;
+
+position:relative;
+
+overflow:hidden;
+
+} 
+
+.stat-card:hover{
+
+transform:translateY(-6px);
+
+box-shadow:0 20px 45px rgba(0,0,0,.15);
+
+} 
+
+.stat-icon{
+
+font-size:28px;
+
+margin-bottom:15px;
+
+}
+
+.stat-card h3{
+
+font-size:15px;
+
+font-weight:600;
+
+color:#374151;
+
+margin-bottom:6px;
+
+}
+
+.stat-card p{
+
+font-size:13px;
+
+color:#94a3b8;
+
+}
+
+.stat-card h2{
+
+font-size:42px;
+
+font-weight:700;
+
+margin-bottom:8px;
+
+color:#111827;
+
+}
+
+.available{
+
+border-left:6px solid #22c55e;
+
+}
+
+.reserved{
+
+border-left:6px solid #f59e0b;
+
+}
+
+.sold{
+
+border-left:6px solid #ef4444;
+
+}
+
+.total{
+
+border-left:6px solid #2563eb;
+
+} 
+
+.value{
+
+border-left:6px solid #14b8a6;
+
+}
+
+#miniMap{
+
+height:400px;
+width:50%;
+border-radius:18px;
+overflow:hidden;
+margin-bottom:30px;
+box-shadow:0 12px 30px rgba(0,0,0,.12);
+
+}
+
+.toolbar{
+
+display:flex;
+gap:20px;
+margin-bottom:25px;
+flex-wrap:wrap;
+
+}
+
+.toolbar input{
+
+flex:1;
+padding:14px;
+border-radius:10px;
+border:1px solid #d1d5db;
+font-size:15px;
+
+}
+
+.toolbar select{
+
+padding:14px;
+border-radius:10px;
+border:1px solid #d1d5db;
+width:220px;
+
+}
+
+.table-card{
+
+background:white;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 15px 40px rgba(15,23,42,.08);
+border:1px solid #e5e7eb;
+
+}
+
+table{
+
+width:100%;
+border-collapse:collapse;
+
+}
+
+thead{
+
+background:linear-gradient(135deg,#1e293b,#0f172a);
+color:white;
+position:sticky;
+top:0;
+z-index:10;
+
+}
+
+th{
+
+padding:18px;
+text-align:left;
+font-weight:600;
+
+}
+
+td{
+
+padding:18px;
+border-bottom:1px solid #edf2f7;
+
+}
+
+tbody tr{
+
+transition:all .25s ease;
+cursor:pointer;
+
+}
+
+tbody tr:hover{
+
+background:#eff6ff;
+transform:scale(1.002);
+
+}
+
+.badge{
+
+padding:7px 14px;
+border-radius:30px;
+font-size:13px;
+font-weight:600;
+
+}
+
+.badge.available{
+
+background:#dcfce7;
+color:#166534;
+
+}
+
+.badge.reserved{
+
+background:#fef3c7;
+color:#92400e;
+
+}
+
+.badge.sold{
+
+background:#fee2e2;
+color:#991b1b;
+
+}
+
+.edit-btn{
+
+background:linear-gradient(135deg,#2563eb,#3b82f6);
+color:white;
+padding:10px 18px;
+border-radius:10px;
+font-weight:600;
+font-size:14px;
+box-shadow:0 4px 12px rgba(37,99,235,.25);
+
+}
+
+.edit-btn:hover{
+
+transform:translateY(-2px);
+box-shadow:0 8px 20px rgba(37,99,235,.35);
+
+}
+
+.modal{
+
+display:none;
+position:fixed;
+left:0;
+top:0;
+width:100%;
+height:100%;
+
+background:rgba(15,23,42,.65);
+
+justify-content:center;
+align-items:center;
+
+z-index:99999;
+
+backdrop-filter:blur(5px);
+
+}
+
+.modal-content{
+
+background:white;
+width:470px;
+max-width:90%;
+
+border-radius:20px;
+padding:30px;
+
+position:relative;
+
+z-index:100000;
+
+box-shadow:0 30px 80px rgba(0,0,0,.35);
+
+animation:popup .25s ease;
+
+}
+
+@keyframes popup{
+
+    from{
+
+        transform:translateY(25px) scale(.95);
+        opacity:0;
+
+    }
+
+    to{
+
+        transform:translateY(0) scale(1);
+        opacity:1;
+
+    }
+
+}
+
+.modal-content h2{
+
+    font-size:28px;
+    color:#2563eb;
+    margin-bottom:25px;
+
+}
+
+.modal-content input,
+.modal-content select{
+
+    margin-top:8px;
+    margin-bottom:18px;
+    padding:14px;
+    border-radius:12px;
+    border:1px solid #d1d5db;
+    font-size:15px;
+
+}
+
+.modal-content input:focus,
+.modal-content select:focus{
+
+    border-color:#2563eb;
+    outline:none;
+
+}
+
+.modal-buttons{
+
+    display:flex;
+    justify-content:flex-end;
+    gap:15px;
+    margin-top:25px;
+
+}
+
+.loading{
+
+display:flex;
+justify-content:center;
+align-items:center;
+padding:80px;
+font-size:18px;
+color:#64748b;
+
+}
+
+@media(max-width:900px){
+
+.stats{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:700px){
+
+.stats{
+
+grid-template-columns:1fr;
+
+}
+
+.toolbar{
+
+flex-direction:column;
+
+}
+
+.toolbar select{
+
+width:100%;
+
+}
+
+} 
+
+.leaflet-container{
+
+z-index:1 !important;
+
+}
+
+#miniMap{
+
+z-index:1;
+
+}
+
+@keyframes popup{
+
+from{
+
+opacity:0;
+transform:translateY(20px) scale(.95);
+
+}
+
+to{
+
+opacity:1;
+transform:translateY(0) scale(1);
+
+}
+
+} 
+
+.parcel-label{
+
+background:transparent;
+border:none;
+
+}
+
+.parcel-label div{
+
+    background:rgba(255,255,255,.75);
+
+    padding:2px 5px;
+
+    border-radius:4px;
+
+    font-size:10px;
+
+    font-weight:600;
+
+    color:#111827;
+
+    border:none;
+
+    box-shadow:none;
+
+    white-space:nowrap;
+
+    pointer-events:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page-header">
+
+    <div>
+
+        <h1 id="systemTitle">
+            Kenmark Land Management System
+        </h1>
+
+        <p id="systemSubtitle">
+            Loading project...
+        </p>
+
+    </div>
+
+    <button
+        class="secondary-btn"
+        onclick="history.back()">
+
+        ← Projects
+
+    </button>
+
+</div>
+
+<div class="project-card">
+
+<h2 id="selectedProject"
+class="project-title">
+
+Loading...
+
+</h2>
+
+<p
+id="parcelSummary"
+class="project-summary">
+
+Loading parcel statistics...
+
+</p>
+
+</div>
+
+<div class="stats">
+
+<div class="stat-card total">
+
+    <div class="stat-icon">📦</div>
+
+    <h2 id="totalParcels">0</h2>
+
+    <h3>Total Parcels</h3>
+
+    <p>Total inventory</p>
+
+</div>
+
+<div class="stat-card available">
+
+<div class="stat-icon">🟢</div>
+
+<h2 id="availableCount">0</h2>
+
+<h3>Available Parcels</h3>
+
+<p id="availablePercent">0% of inventory</p>
+
+</div>
+
+<div class="stat-card reserved">
+
+    <div class="stat-icon">🟡</div>
+
+    <h2 id="reservedCount">0</h2>
+
+    <h3>Reserved Parcels</h3>
+
+    <p id="reservedPercent">0% of inventory</p>
+
+</div>
+
+<div class="stat-card sold">
+
+    <div class="stat-icon">🔴</div>
+
+    <h2 id="soldCount">0</h2>
+
+    <h3>Sold Parcels</h3>
+
+    <p id="soldPercent">0% of inventory</p>
+
+</div>
+
+<div class="stat-card value">
+
+    <div class="stat-icon">💰</div>
+
+    <h2 id="inventoryValue">KSh 0</h2>
+
+    <h3>Total Inventory Value</h3>
+
+    <p>Current market value</p>
+
+</div>
+</div>
+
+<div class="map-card">
+
+    <div class="map-header">
+
+        <div>
+
+            <h2>📍 Parcel Location Preview</h2>
+
+            <p>
+                Quickly verify parcel locations before making updates.
+            </p>
+
+        </div>
+
+        <button
+            class="primary-btn"
+            onclick="openGISViewer()">
+
+            🌍 Open Full GIS Viewer
+
+        </button>
+
+    </div>
+
+    <div id="miniMap"></div>
+
+</div>
+
+<div class="toolbar">
+
+<input
+id="searchParcel"
+type="text"
+placeholder="Search Parcel Number or Property ID">
+
+<select id="statusFilter">
+
+<option value="">All Status</option>
+
+<option value="AVAILABLE">Available</option>
+
+<option value="RESERVED">Reserved</option>
+
+<option value="SOLD">Sold</option>
+
+</select>
+
+</div>
+
+<div class="table-card">
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Parcel</th>
+
+<th>Property ID</th>
+
+<th>Price</th>
+
+<th>Status</th>
+
+<th>Size</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="parcelTable">
+
+<tr>
+
+<td colspan="6" class="loading">
+
+Loading parcels...
+
+</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+<div class="modal"
+id="editModal">
+
+<div class="modal-content">
+
+<h2>Edit Parcel</h2>
+
+<label>Price</label>
+
+<input
+id="editPrice"
+type="number">
+
+<label>Status</label>
+
+<select id="editStatus">
+
+<option>AVAILABLE</option>
+
+<option>RESERVED</option>
+
+<option>SOLD</option>
+
+</select>
+
+<label>Size</label>
+
+<input
+id="editSize"
+type="text">
+
+<label>Area</label>
+
+<input
+id="editArea"
+type="number">
+
+<div class="modal-buttons">
+
+<button
+class="secondary-btn"
+onclick="closeModal()">
+
+Cancel
+
+</button>
+
+<button
+class="primary-btn"
+onclick="saveParcel()">
+
+Save Changes
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
+
+<script>
+
+const API = "http://localhost:3000";
+
+const params = new URLSearchParams(window.location.search);
+const projectId = params.get("id");
+
+let allParcels = [];
+let miniMap = null;
+let parcelLayer = null;
+let currentParcel = null;
+
+window.onload = () => {
+    initialisePage();
+};
+
+async function initialisePage(){
+
+    document.getElementById("searchParcel")
+        .addEventListener("input",filterParcels);
+
+    document.getElementById("statusFilter")
+        .addEventListener("change",filterParcels);
+
+    await loadParcels();
+
+}
+
+async function loadParcels(){
+
+    try{
+
+        const response = await fetch(
+            `${API}/projects/${projectId}/parcel-list`
+        );
+
+        allParcels = await response.json();
+
+        renderDashboard();
+
+        renderTable(allParcels);
+
+        await drawMiniMap();
+
+    }
+
+    catch(err){
+
+        console.error(err);
+
+        alert("Failed to load parcels.");
+
+    }
+
+}
+
+function renderDashboard(){
+
+    if(allParcels.length===0) return;
+
+    document.getElementById("selectedProject").textContent =
+        allParcels[0].project_name; 
+
+        document.getElementById("systemSubtitle").textContent =
+    allParcels[0].project_name;
+
+    const available =
+        allParcels.filter(p=>p.status==="AVAILABLE").length;
+
+    const reserved =
+        allParcels.filter(p=>p.status==="RESERVED").length;
+
+    const sold =
+        allParcels.filter(p=>p.status==="SOLD").length; 
+
+        const inventoryValue = allParcels.reduce((sum, parcel) => {
+    return sum + Number(parcel.price || 0);
+}, 0);
+
+    document.getElementById("parcelSummary").innerHTML =
+
+        `${allParcels.length} Parcels •
+        ${available} Available •
+        ${reserved} Reserved •
+        ${sold} Sold`;
+
+    document.getElementById("totalParcels").textContent =
+        allParcels.length;
+
+    document.getElementById("availableCount").textContent =
+        available; 
+
+        document.getElementById("availablePercent").textContent =
+    `${Math.round((available/allParcels.length)*100)}% of inventory`;
+
+    document.getElementById("reservedCount").textContent =
+        reserved; 
+
+        document.getElementById("reservedPercent").textContent =
+`${Math.round((reserved/allParcels.length)*100)}% of inventory`;
+
+    document.getElementById("soldCount").textContent =
+        sold; 
+
+        document.getElementById("inventoryValue").textContent =
+    "KSh " + inventoryValue.toLocaleString();
+    
+        document.getElementById("soldPercent").textContent =
+`${Math.round((sold/allParcels.length)*100)}% of inventory`;
+
+}
+
+function renderTable(parcels){
+
+    const table = document.getElementById("parcelTable");
+
+    table.innerHTML = "";
+
+    if(parcels.length === 0){
+
+        table.innerHTML = `
+        <tr>
+            <td colspan="6" style="padding:60px;text-align:center;color:#64748b;">
+                🔍 No parcels found.
+            </td>
+        </tr>
+        `;
+
+        return;
+    }
+
+    parcels.forEach(parcel=>{
+
+        let badge = "";
+
+        if(parcel.status==="AVAILABLE"){
+            badge=`<span class="badge available">🟢 Available</span>`;
+        }
+        else if(parcel.status==="RESERVED"){
+            badge=`<span class="badge reserved">🟡 Reserved</span>`;
+        }
+        else{
+            badge=`<span class="badge sold">🔴 Sold</span>`;
+        }
+
+        table.innerHTML += `
+        <tr onclick="zoomToParcel('${parcel.parcel_no}')">
+
+            <td>
+                <strong>${parcel.parcel_no}</strong>
+            </td>
+
+            <td>
+                ${parcel.property_id}
+            </td>
+
+            <td>
+    <strong style="color:#16a34a;">
+        KSh ${Number(parcel.price).toLocaleString()}
+    </strong>
+</td>
+
+            <td>
+                ${badge}
+            </td>
+
+            <td>
+                ${parcel.size}
+            </td>
+
+            <td>
+
+                <button
+                    class="edit-btn"
+                    onclick="event.stopPropagation(); editParcel(${parcel.id})">
+
+                    ✏ Edit
+
+                </button>
+
+            </td>
+
+        </tr>
+        `;
+
+    });
+
+}
+
+function filterParcels(){
+
+    const search = document
+        .getElementById("searchParcel")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const status = document
+        .getElementById("statusFilter")
+        .value
+        .trim()
+        .toUpperCase();
+
+    const filtered = allParcels.filter(parcel => {
+
+        const parcelNo = String(parcel.parcel_no || "")
+            .trim()
+            .toLowerCase();
+
+        const propertyId = String(parcel.property_id || "")
+            .trim()
+            .toLowerCase();
+
+        const parcelStatus = String(parcel.status || "")
+            .trim()
+            .toUpperCase();
+
+        const matchesSearch =
+            parcelNo.includes(search) ||
+            propertyId.includes(search);
+
+        const matchesStatus =
+            status === "" ||
+            parcelStatus === status;
+
+        return matchesSearch && matchesStatus;
+
+    });
+
+    renderTable(filtered);
+
+} 
+
+async function drawMiniMap(){
+
+    const response = await fetch(
+
+        `${API}/projects/${projectId}/parcels`
+
+    );
+
+    const geojson = await response.json();
+
+    if(miniMap){
+
+        miniMap.remove();
+
+    }
+
+    miniMap = L.map("miniMap");
+
+const satellite = L.tileLayer(
+    "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    {
+        maxZoom:22,
+        attribution:"Esri"
+    }
+);
+
+const labels = L.tileLayer(
+    "https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}",
+    {
+        maxZoom:22
+    }
+);
+
+satellite.addTo(miniMap);
+labels.addTo(miniMap);
+
+    parcelLayer = L.geoJSON(geojson,{
+
+        style:function(feature){
+
+            switch(feature.properties.status){
+
+                case "AVAILABLE":
+
+                    return{
+
+    color:"#111827",
+
+    weight:1,
+
+    fillColor:"#22c55e",
+
+    fillOpacity:0.55
+
+};
+
+                case "RESERVED":
+
+                    return{
+
+    color:"#111827",
+
+    weight:1,
+
+    fillColor:"#f59e0b",
+
+    fillOpacity:0.55
+
+};
+
+                case "SOLD":
+
+                    return{
+
+    color:"#111827",
+
+    weight:1,
+
+    fillColor:"#ef4444",
+
+    fillOpacity:0.55
+
+};
+
+                default:
+
+                    return{
+
+    color:"#111827",
+
+    weight:1,
+
+    fillColor:"#3b82f6",
+
+    fillOpacity:0.55
+
+};
+
+            }
+
+        },
+
+        onEachFeature:function(feature,layer){
+
+            layer.bindPopup(`
+
+<div style="min-width:220px">
+
+<h3 style="color:#2563eb;margin-bottom:10px;">
+Parcel ${feature.properties.parcel_no}
+</h3>
+
+<b>Property ID</b><br>
+${feature.properties.property_id}
+
+<hr>
+
+<b>Price</b><br>
+KSh ${Number(feature.properties.price).toLocaleString()}
+
+<br><br>
+
+<b>Status</b><br>
+${feature.properties.status}
+
+<br><br>
+
+<b>Size</b><br>
+${feature.properties.size}
+
+</div>
+
+`);
+
+// Permanent parcel label
+
+const center = layer.getBounds().getCenter();
+
+const label = L.marker(center,{
+    interactive:false,
+    icon:L.divIcon({
+        className:"parcel-label",
+        html:`<div>${feature.properties.parcel_no}</div>`
+    })
+});
+
+label.addTo(miniMap);
+
+layer.parcelLabel = label;
+
+layer.on({
+
+mouseover:function(e){
+
+e.target.setStyle({
+
+weight:5,
+fillOpacity:0.75
+
+});
+
+},
+
+mouseout:function(e){
+
+parcelLayer.resetStyle(e.target);
+
+}
+
+});
+
+        }
+
+    }).addTo(miniMap);
+
+    miniMap.fitBounds(parcelLayer.getBounds()); 
+
+    miniMap.on("zoomend", function(){
+
+    const zoom = miniMap.getZoom();
+
+    parcelLayer.eachLayer(function(layer){
+
+        if(layer.parcelLabel){
+
+            if(zoom >= 19){
+
+                layer.parcelLabel.addTo(miniMap);
+
+            }else{
+
+                miniMap.removeLayer(layer.parcelLabel);
+
+            }
+
+        }
+
+    });
+
+});
+
+// Run once immediately
+miniMap.fire("zoomend");
+
+    const legend=L.control({position:"bottomright"});
+
+legend.onAdd=function(){
+
+const div=L.DomUtil.create("div");
+
+div.style.background="white";
+div.style.padding="10px";
+div.style.borderRadius="10px";
+div.style.boxShadow="0 6px 18px rgba(0,0,0,.15)";
+
+div.innerHTML=`
+<b>Legend</b><br><br>
+
+🟩 Available<br>
+
+🟨 Reserved<br>
+
+🟥 Sold
+`;
+
+return div;
+
+};
+
+legend.addTo(miniMap);
+
+}
+
+function zoomToParcel(parcelNo){
+
+parcelLayer.eachLayer(function(layer){
+
+if(layer.feature.properties.parcel_no===parcelNo){
+
+miniMap.fitBounds(layer.getBounds());
+
+layer.openPopup();
+
+}
+
+});
+
+}
+
+async function editParcel(id){
+
+    currentParcel=id;
+
+    const response = await fetch(
+
+        `${API}/parcels/${id}`
+
+    );
+
+    const parcel = await response.json();
+
+    document.getElementById("editPrice").value =
+        parcel.price;
+
+    document.getElementById("editStatus").value =
+        parcel.status;
+
+    document.getElementById("editSize").value =
+        parcel.size;
+
+    document.getElementById("editArea").value =
+        parcel.area;
+
+    document.getElementById("editModal").style.display="flex";
+
+}
+
+function closeModal(){
+
+    document.getElementById("editModal").style.display="none";
+
+}
+
+async function saveParcel(){
+
+    await fetch(
+
+        `${API}/parcels/${currentParcel}`,
+
+        {
+
+            method:"PUT",
+
+            headers:{
+
+                "Content-Type":"application/json"
+
+            },
+
+            body:JSON.stringify({
+
+                price:document.getElementById("editPrice").value,
+
+                status:document.getElementById("editStatus").value,
+
+                size:document.getElementById("editSize").value,
+
+                area:document.getElementById("editArea").value
+
+            })
+
+        }
+
+    );
+
+    closeModal();
+
+    await loadParcels();
+
+showToast("Parcel updated successfully.");
+
+} 
+
+function showToast(message){
+
+const toast=document.createElement("div");
+
+toast.innerHTML=message;
+
+toast.style.position="fixed";
+toast.style.right="30px";
+toast.style.bottom="30px";
+toast.style.background="#16a34a";
+toast.style.color="white";
+toast.style.padding="15px 25px";
+toast.style.borderRadius="10px";
+toast.style.boxShadow="0 8px 20px rgba(0,0,0,.25)";
+toast.style.zIndex=9999;
+
+document.body.appendChild(toast);
+
+setTimeout(()=>{
+
+toast.remove();
+
+},3000);
+
+}
+
+function openGISViewer(){
+
+    window.location.href = `map.html?id=${projectId}`;
+
+}
+</script>
+
+
+</body>
+</html>

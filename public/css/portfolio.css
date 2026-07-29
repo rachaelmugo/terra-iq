@@ -1,0 +1,1212 @@
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, sans-serif;
+      display: flex;
+      background: #f4f6f9;
+    }
+
+    /* SIDEBAR */
+    #sidebar{
+
+width:380px;
+
+height:100vh;
+
+background:#F8FAFC;
+
+display:flex;
+
+flex-direction:column;
+
+overflow-y:auto;
+
+border-right:1px solid #E5E7EB;
+
+}
+
+.intel-row{
+
+display:flex;
+
+justify-content:space-between;
+
+align-items:center;
+
+padding:10px 0;
+
+font-size:14px;
+
+color:white;
+
+border-bottom:1px solid rgba(255,255,255,.05);
+
+}
+
+.intel-row:last-child{
+
+border-bottom:none;
+
+}
+
+#details input{
+
+width:100%;
+
+margin-top:12px;
+
+padding:12px 14px;
+
+border-radius:12px;
+
+border:none;
+
+background:#0F2D52;
+
+color:white;
+
+}
+
+#details input::placeholder{
+
+color:#94A3B8;
+
+}
+
+#details button{
+
+margin-top:18px;
+
+background:#D4A017;
+
+color:#0F2D52;
+
+font-weight:700;
+
+}
+
+#details button:hover{
+
+background:#E6B325;
+
+}
+#projectInfoCard{
+
+background:linear-gradient(
+135deg,
+#173A63,
+#0F2D52
+);
+
+padding:18px;
+
+border-radius:18px;
+
+border:1px solid rgba(255,255,255,.08);
+
+}
+
+#projectName{
+
+font-size:22px;
+
+font-weight:700;
+
+color:white;
+
+margin-bottom:8px;
+
+}
+
+#projectLocation{
+
+color:#D4A017;
+
+font-size:14px;
+
+margin-bottom:12px;
+
+font-weight:600;
+
+}
+
+#projectDescription{
+
+font-size:13px;
+
+line-height:1.6;
+
+color:#CBD5E1;
+
+margin-bottom:18px;
+
+}
+
+.project-badges{
+
+display:flex;
+
+flex-wrap:wrap;
+
+gap:10px;
+
+}
+
+.project-badge{
+
+background:rgba(212,160,23,.15);
+
+color:#F4C542;
+
+padding:8px 14px;
+
+border-radius:30px;
+
+font-size:12px;
+
+font-weight:600;
+
+border:1px solid rgba(212,160,23,.25);
+
+}
+
+#companyHeader{
+
+display:flex;
+
+align-items:center;
+
+gap:16px;
+
+padding:24px;
+
+background:rgba(255,255,255,.04);
+
+backdrop-filter:blur(8px);
+
+border-bottom:2px solid rgba(212,160,23,.35);
+
+}
+
+#logo{
+
+width:72px;
+
+height:72px;
+
+border-radius:18px;
+
+background:white;
+
+padding:8px;
+
+object-fit:contain;
+
+box-shadow:0 12px 30px rgba(0,0,0,.25);
+
+}
+
+#companyHeader h2{
+
+margin:0;
+
+font-size:22px;
+
+font-weight:700;
+
+color:white;
+
+letter-spacing:.5px;
+
+}
+
+#companyHeader{
+
+display:flex;
+
+align-items:flex-start;
+
+gap:18px;
+
+padding:28px;
+
+border-bottom:1px solid rgba(255,255,255,.08);
+
+}
+
+.section{
+
+padding:12px 18px;
+
+margin:0;
+
+border-bottom:1px solid #EEF2F7;
+
+}
+
+.section label{
+
+display:block;
+
+font-size:12px;
+
+opacity:.7;
+
+margin-bottom:8px;
+
+}
+
+#projectSelect{
+
+width:100%;
+
+padding:15px;
+
+border-radius:14px;
+
+background:#173A63;
+
+border:1px solid rgba(255,255,255,.08);
+
+color:white;
+
+font-size:14px;
+
+cursor:pointer;
+
+}
+
+#search{
+
+width:100%;
+
+padding:15px 18px;
+
+border-radius:14px;
+
+border:1px solid rgba(255,255,255,.08);
+
+background:#173A63;
+
+color:white;
+
+font-size:14px;
+
+transition:.3s;
+
+} 
+#search:focus{
+
+outline:none;
+
+border-color:#D4A017;
+
+box-shadow:0 0 0 3px rgba(212,160,23,.18);
+
+}
+
+#projectName{
+
+margin:0;
+
+font-size:18px;
+
+}
+
+#projectLocation{
+
+opacity:.7;
+
+margin-top:5px;
+
+}
+
+#projectDescription{
+
+margin-top:10px;
+
+font-size:13px;
+
+line-height:1.6;
+
+opacity:.85;
+
+}
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 10px 0;
+    }
+
+    .stat {
+      background: rgba(255,255,255,0.08);
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .stat h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .stat p {
+      margin: 3px 0 0;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    #details {
+      background: rgba(255,255,255,0.06);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      border: none;
+      background: #22c55e;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      background: #16a34a;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.06);
+      padding: 10px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .card:hover {
+      background: rgba(255,255,255,0.12);
+    }
+
+    .small {
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    #mapContainer{
+
+    flex:1;
+
+    display:flex;
+
+    flex-direction:column;
+
+    height:100vh;
+
+    min-width:0;
+
+}
+
+#map{
+
+    flex:1;
+
+    width:100%;
+
+} 
+#mapContainer{
+
+position:relative;
+
+flex:1;
+
+height:100vh;
+
+}
+
+#gisToolbar{
+
+position:absolute;
+
+top:20px;
+
+right:20px;
+
+display:flex;
+
+flex-direction:column;
+
+gap:12px;
+
+z-index:999;
+
+}
+
+#gisToolbar button{
+
+width:52px;
+
+height:52px;
+
+border:none;
+
+border-radius:14px;
+
+background:white;
+
+color:#0F2D52;
+
+font-size:22px;
+
+cursor:pointer;
+
+box-shadow:0 10px 25px rgba(0,0,0,.18);
+
+transition:.25s;
+
+}
+
+#gisToolbar button:hover{
+
+background:#D4A017;
+
+color:white;
+
+transform:translateY(-2px);
+
+}
+    #mapHeader{
+
+    background:white;
+
+    color:#2563EB;
+
+    padding:18px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:4px solid #D4A017;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+
+}
+
+#mapHeader h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#2563EB;
+
+}
+
+#mapHeader{
+
+    background:white;
+
+    color:#2563EB;
+
+    padding:18px 28px;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    border-bottom:4px solid #D4A017;
+
+    box-shadow:0 2px 12px rgba(0,0,0,.08);
+
+}
+
+#mapHeader h2{
+
+    margin:0;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    color:#2563EB;
+
+}
+
+#mapHeader p{
+
+    margin:4px 0 0;
+
+    color:#64748B;
+
+    font-size:13px;
+
+} 
+
+#layerPanel{
+
+position:absolute;
+
+top:20px;
+
+right:90px;
+
+width:230px;
+
+background:white;
+
+border-radius:16px;
+
+box-shadow:0 12px 30px rgba(0,0,0,.18);
+
+padding:18px;
+
+display:none;
+
+z-index:999;
+
+}
+
+.layer-title{
+
+font-weight:700;
+
+font-size:16px;
+
+margin-bottom:15px;
+
+color:#0F2D52;
+
+border-bottom:1px solid #E5E7EB;
+
+padding-bottom:10px;
+
+}
+
+.layer-item{
+
+display:flex;
+
+align-items:center;
+
+gap:10px;
+
+padding:10px 0;
+
+font-size:14px;
+
+cursor:pointer;
+
+color:#374151;
+
+}
+
+.layer-item input{
+
+transform:scale(1.2);
+
+accent-color:#D4A017;
+
+}
+
+    /* LEGEND */
+    #legend {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background: white;
+      padding: 12px;
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+      font-size: 13px;
+      z-index: 1000;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+      margin-right: 8px;
+    }
+
+.parcel-label {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: black;
+  font-size: 12px;
+  font-weight: 700;
+  text-shadow:
+    -1px -1px 0 #fff,
+     1px -1px 0 #fff,
+    -1px  1px 0 #fff,
+     1px  1px 0 #fff;
+}
+
+    .item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .green { background: green; }
+    .orange { background: orange; }
+    .red { background: red; } 
+
+    #mapActions{
+
+    display:flex;
+
+    gap:12px;
+
+}
+
+.headerButton{
+
+    background:#2563EB;
+
+    color:white;
+
+    border:none;
+
+    border-radius:10px;
+
+    padding:10px 18px;
+
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:.25s;
+
+}
+
+.headerButton:hover{
+
+    background:#D4A017;
+
+    color:#111827;
+
+}
+
+.sectionTitle{
+
+margin:0 0 12px;
+
+font-size:15px;
+
+font-weight:700;
+ 
+color:#D4A017;
+
+letter-spacing:.4px;
+
+text-transform:uppercase;
+
+} 
+
+.section{
+
+padding:12px 18px;
+
+margin:0;
+
+border-bottom:1px solid #EEF2F7;
+
+}
+
+.card-title{
+
+font-size:12px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+color:#6B7280;
+
+margin-bottom:8px;
+
+}
+
+.small-card-text{
+
+margin-top:10px;
+
+font-size:12px;
+
+color:#94A3B8;
+
+line-height:1.5;
+
+}
+.dashboardCard{
+
+background:white;
+
+border-radius:14px;
+
+padding:16px;
+
+border:1px solid #E5E7EB;
+
+box-shadow:0 3px 10px rgba(0,0,0,.05);
+
+margin-top:8px;
+
+}
+
+.dashboardTitle{
+
+    color:#D4A017;
+
+    font-size:15px;
+
+    font-weight:700;
+
+    margin-bottom:16px;
+
+}
+
+.dashboardGrid{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:10px;
+
+margin-top:14px;
+
+}
+
+.dashboardStat{
+
+    background:#111827;
+
+    border-radius:12px;
+
+    padding:14px;
+
+    transition:.25s;
+
+}
+
+.dashboardStat:hover{
+
+    background:#2563EB;
+
+    transform:translateY(-2px);
+
+}
+
+.dashboardStat span{
+
+    color:#9CA3AF;
+
+    font-size:12px;
+
+}
+
+.dashboardStat h3{
+
+    margin-top:8px;
+
+    color:white;
+
+    font-size:18px;
+
+} 
+
+#details{
+
+background:#173A63;
+
+border-radius:18px;
+
+padding:18px;
+
+border:1px solid rgba(255,255,255,.08);
+
+min-height:240px;
+
+}
+
+.empty-state{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+height:180px;
+
+color:#94A3B8;
+
+font-size:14px;
+
+text-align:center;
+
+} 
+
+#coordinateBox{
+
+position:absolute;
+
+bottom:20px;
+
+left:20px;
+
+background:rgba(15,45,82,.95);
+
+color:white;
+
+padding:10px 16px;
+
+border-radius:10px;
+
+font-size:13px;
+
+font-weight:600;
+
+z-index:1000;
+
+box-shadow:0 6px 20px rgba(0,0,0,.25);
+
+backdrop-filter:blur(8px);
+
+}
+
+#coords{
+
+letter-spacing:.5px;
+
+} 
+
+#activeProjectCard{
+
+margin-top:12px;
+
+background:white;
+
+border-radius:14px;
+
+padding:16px;
+
+box-shadow:0 4px 14px rgba(0,0,0,.08);
+
+}
+
+#projectSelect{
+
+width:100%;
+
+padding:12px;
+
+border:2px solid #E5E7EB;
+
+border-radius:10px;
+
+font-size:14px;
+
+font-weight:600;
+
+background:#F8FAFC;
+
+color:#0F2D52;
+
+outline:none;
+
+cursor:pointer;
+
+}
+
+#projectSelect:focus{
+
+border-color:#D4A017;
+
+}
+
+#activeProjectStats{
+
+display:flex;
+
+justify-content:space-between;
+
+margin-top:18px;
+
+}
+
+.projectStat{
+
+text-align:center;
+
+flex:1;
+
+}
+
+.projectStatNumber{
+
+display:block;
+
+font-size:22px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+}
+
+.projectStatLabel{
+
+font-size:12px;
+
+color:#6B7280;
+
+} 
+
+.companyName{
+
+background:#0F2D52;
+
+color:white;
+
+padding:12px;
+
+border-radius:10px;
+
+font-weight:600;
+
+text-align:center;
+
+margin-top:10px;
+
+margin-bottom:12px;
+
+letter-spacing:.5px;
+
+} 
+
+.card{
+
+background:white;
+
+border-radius:14px;
+
+padding:16px;
+
+box-shadow:0 4px 14px rgba(15,45,82,.08);
+
+border:1px solid #EEF2F7;
+
+margin-bottom:14px;
+
+transition:.25s;
+
+}
+
+.card:hover{
+
+transform:translateY(-2px);
+
+box-shadow:0 8px 22px rgba(15,45,82,.12);
+
+} 
+
+.card-title{
+
+font-size:13px;
+
+font-weight:700;
+
+letter-spacing:1px;
+
+text-transform:uppercase;
+
+color:#0F2D52;
+
+margin-bottom:14px;
+
+}
+
+.sectionTitle{
+
+font-size:16px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+margin-bottom:12px;
+
+} 
+
+.projectHeading{
+
+margin-top:16px;
+
+font-size:22px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+}
+
+.projectSubheading{
+
+margin-top:6px;
+
+color:#6B7280;
+
+font-size:14px;
+
+}
+
+.projectSummary{
+
+margin-top:12px;
+
+line-height:1.6;
+
+font-size:13px;
+
+color:#4B5563;
+
+margin-bottom:18px;
+
+}
+
+#propertyCardSection{
+
+margin:18px 22px;
+
+animation:fadeSlide .25s ease;
+
+}
+
+.propertyCard{
+
+background:white;
+
+border-radius:16px;
+
+padding:18px;
+
+box-shadow:0 8px 28px rgba(15,45,82,.10);
+
+border:1px solid #E5E7EB;
+
+}
+
+@keyframes fadeSlide{
+
+from{
+
+opacity:0;
+
+transform:translateY(-12px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateY(0);
+
+}
+
+} 
+
+.projectHeading{
+
+font-size:22px;
+
+font-weight:700;
+
+color:#0F2D52;
+
+margin-top:6px;
+
+}
+
+.projectSubheading{
+
+font-size:14px;
+
+color:#64748B;
+
+margin-top:4px;
+
+}
+
+.projectTag{
+
+display:inline-block;
+
+margin-top:12px;
+
+padding:6px 12px;
+
+background:#EEF6FF;
+
+color:#0F2D52;
+
+border-radius:20px;
+
+font-size:12px;
+
+font-weight:600;
+
+} 
+
+.headerSelect{
+
+padding:10px 14px;
+
+border-radius:10px;
+
+border:1px solid #D1D5DB;
+
+background:white;
+
+font-size:14px;
+
+font-weight:600;
+
+color:#0F2D52;
+
+cursor:pointer;
+
+transition:.2s;
+
+}
+
+.headerSelect:hover{
+
+border-color:#D4A017;
+
+}
+
+.headerSelect:focus{
+
+outline:none;
+
+border-color:#D4A017;
+
+}

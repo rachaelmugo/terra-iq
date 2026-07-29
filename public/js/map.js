@@ -1,0 +1,1168 @@
+/* ==========================================================================
+   🗺️ TERRA-IQ MAP MODULE (map.js)
+   ========================================================================== */
+
+/* =========================
+   🛰️ BASEMAPS & MAP INIT
+   ========================= */
+const imagery = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Tiles © Esri', maxNativeZoom: 19, maxZoom: 19 }
+);
+
+const labels = L.tileLayer(
+    'https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}',
+    { attribution: 'Labels © Esri', maxNativeZoom: 19, maxZoom: 25 }
+);
+
+const streets = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 22,
+    attribution: '© OpenStreetMap'
+});
+
+const terrain = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17,
+    attribution: '© OpenTopoMap'
+});
+
+// Initialize Map centered on Kenya
+const map = L.map("map", {
+    center: [0.0236, 37.9062],
+    zoom: 6,
+    zoomControl: false
+});
+
+imagery.addTo(map);
+labels.addTo(map); 
+
+/* ======================================
+   ⏳ HIDE MAP LOADER OVERLAY
+====================================== */
+imagery.once('load', () => {
+    const loader = document.getElementById('mapLoader');
+    if (loader) loader.classList.add('hidden');
+});
+
+setTimeout(() => {
+    const loader = document.getElementById('mapLoader');
+    if (loader) loader.classList.add('hidden');
+}, 3500);
+
+L.control.zoom({ position: 'bottomleft' }).addTo(map); 
+setTimeout(() => { map.invalidateSize(); }, 250);
+
+const basemapSelect = document.getElementById("basemapSelect");
+if (basemapSelect) {
+    basemapSelect.onchange = function() {
+        const loader = document.getElementById('mapLoader');
+        if (loader) loader.classList.remove('hidden');
+
+        map.removeLayer(imagery);
+        map.removeLayer(labels);
+        map.removeLayer(streets);
+        map.removeLayer(terrain);
+
+        switch(this.value) {
+            case "satellite":
+            case "hybrid":
+                imagery.addTo(map);
+                labels.addTo(map);
+                imagery.once('load', () => loader && loader.classList.add('hidden'));
+                break;
+            case "street":
+                streets.addTo(map);
+                streets.once('load', () => loader && loader.classList.add('hidden'));
+                break;
+            case "terrain":
+                terrain.addTo(map);
+                terrain.once('load', () => loader && loader.classList.add('hidden'));
+                break;
+        }
+        setTimeout(() => { if (loader) loader.classList.add('hidden'); }, 3000);
+    };
+}
+
+/* ======================================
+   🏥 INFRASTRUCTURE LAYERS & ICONS
+====================================== */
+let layerControl = null;
+
+const hospitalsLayer = L.layerGroup();
+const schoolsLayer = L.layerGroup();
+const roadsLayer = L.layerGroup();
+const townsLayer = L.layerGroup();
+const ketracoLayer = L.layerGroup();
+
+const hospitalIcon = L.divIcon({
+    className: 'gis-marker-hospital',
+    html: `<div style="background:#EF4444;color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.3);font-size:14px;border:2px solid #FFFFFF;">🏥</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+});
+
+const schoolIcon = L.divIcon({
+    className: 'gis-marker-school',
+    html: `<div style="background:#3B82F6;color:white;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.3);font-size:14px;border:2px solid #FFFFFF;">🏫</div>`,
+    iconSize: [28, 28],
+    iconAnchor: [14, 14]
+});
+
+async function initInfrastructureLayers() {
+    if (layerControl) {
+        try { map.removeControl(layerControl); } catch(e) {}
+    }
+
+    await Promise.all([
+        loadHospitalsData(),
+        loadSchoolsData(),
+        loadRoadsData(),
+        loadTownsData(),
+        loadKetracoData()
+    ]);
+
+    townsLayer.addTo(map);
+}
+
+async function loadHospitalsData() {
+    try {
+        const res = await fetch("data/hospitals.json");
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        hospitalsLayer.clearLayers();
+        L.geoJSON(data, {
+            pointToLayer: (feature, latlng) => {
+                const marker = L.marker(latlng, { icon: hospitalIcon });
+                const name = feature.properties.name || "Hospital";
+                marker.bindTooltip("🏥 " + name, {
+                    permanent: true,
+                    direction: "right",
+                    offset: [12, 0],
+                    className: "facility-label hospital-label"
+                });
+                return marker;
+            },
+            onEachFeature: (feature, layer) => {
+                const p = feature.properties;
+                layer.bindPopup("<b>🏥 " + (p.name || 'Hospital') + "</b><br><small>" + (p.type || 'Healthcare Facility') + "</small>");
+            }
+        }).addTo(hospitalsLayer);
+    } catch (err) {
+        console.warn("Hospitals dataset issue:", err);
+    }
+}
+
+async function loadSchoolsData() {
+    try {
+        const res = await fetch("data/schools.json");
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        schoolsLayer.clearLayers();
+        L.geoJSON(data, {
+            pointToLayer: (feature, latlng) => {
+                const marker = L.marker(latlng, { icon: schoolIcon });
+                const name = feature.properties.name || "School";
+                marker.bindTooltip("🏫 " + name, {
+                    permanent: true,
+                    direction: "right",
+                    offset: [12, 0],
+                    className: "facility-label school-label"
+                });
+                return marker;
+            },
+            onEachFeature: (feature, layer) => {
+                const p = feature.properties;
+                layer.bindPopup("<b>🏫 " + (p.name || 'School') + "</b><br><small>" + (p.type || 'Educational Institution') + "</small>");
+            }
+        }).addTo(schoolsLayer);
+    } catch (err) {
+        console.warn("Schools dataset issue:", err);
+    }
+}
+
+async function loadRoadsData() {
+    try {
+        const res = await fetch("data/roads.json");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        roadsLayer.clearLayers();
+        L.geoJSON(data, {
+            style: (feature) => {
+                const p = feature.properties || {};
+                const name = (p.name || "").toLowerCase();
+                const ref = (p.ref || "").toUpperCase();
+                const type = (p.type || p.highway || "").toLowerCase();
+
+                const isMajorHighway = 
+                    type.includes("motorway") || 
+                    type.includes("trunk") || 
+                    ref.startsWith("A") || 
+                    name.includes("mombasa") || 
+                    name.includes("nakuru") || 
+                    name.includes("kisumu") || 
+                    name.includes("highway") || 
+                    name.includes("expressway") || 
+                    name.includes("bypass");
+
+                const isSubMajorRoad = 
+                    type.includes("primary") || 
+                    type.includes("secondary") || 
+                    ref.startsWith("B") || 
+                    ref.startsWith("C") || 
+                    name.includes("road") || 
+                    name.includes("way");
+
+                if (isMajorHighway) {
+                    return { color: "#DC2626", weight: 6, opacity: 0.95, lineCap: "round", lineJoin: "round" };
+                } else if (isSubMajorRoad) {
+                    return { color: "#2563EB", weight: 4, opacity: 0.85, lineCap: "round", lineJoin: "round" };
+                } else {
+                    return { color: "#64748B", weight: 2, opacity: 0.7, dashArray: "4, 4" };
+                }
+            },
+            onEachFeature: (feature, layer) => {
+                const p = feature.properties || {};
+                const roadName = p.name || p.ref || 'Connecting Road';
+                const roadType = p.type || p.highway || 'Transport Corridor';
+                
+                layer.bindTooltip(`🛣️ <b>${roadName}</b>`, {
+                    permanent: false,
+                    direction: "center",
+                    className: "facility-label road-label"
+                });
+
+                layer.bindPopup(`
+                    <div style="padding: 2px 4px; text-align: left;">
+                        <b style="font-size:14px; color:#0F2D52;">🛣️ ${roadName}</b><br>
+                        <small style="color:#64748B; text-transform:capitalize;">Classification: ${roadType}</small>
+                    </div>
+                `);
+            }
+        }).addTo(roadsLayer);
+
+        console.log("Roads network layer updated successfully.");
+    } catch (err) {
+        console.warn("Roads dataset issue:", err);
+    }
+}
+
+async function loadTownsData() {
+    try {
+        const res = await fetch("data/towns.json");
+        if (!res.ok) return;
+        const data = await res.json();
+        
+        townsLayer.clearLayers();
+
+        L.geoJSON(data, {
+            pointToLayer: (feature, latlng) => {
+                const name = feature.properties.name || "Town";
+                const smallLocationIcon = L.divIcon({
+                    className: 'gis-marker-small-town-pin',
+                    html: `
+                        <div style="position: relative; width: 20px; height: 20px; background: #EF4444; border: 2px solid #FFFFFF; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 2px 6px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                            <div style="width: 6px; height: 6px; background: #FFFFFF; border-radius: 50%;"></div>
+                        </div>`,
+                    iconSize: [20, 20],
+                    iconAnchor: [10, 20],
+                    popupAnchor: [0, -20]
+                });
+
+                const marker = L.marker(latlng, { icon: smallLocationIcon });
+                marker.bindTooltip(`<b>📍 ${name}</b>`, {
+                    permanent: false,
+                    direction: 'top',
+                    offset: [0, -18],
+                    className: 'town-hover-tooltip'
+                });
+
+                return marker;
+            },
+            onEachFeature: (feature, layer) => {
+                const p = feature.properties;
+                layer.bindPopup(`
+                    <div style="text-align:center; padding:4px;">
+                        <b style="font-size:14px; color:#0F2D52;">📍 ${p.name}</b><br>
+                        <small style="color:#64748B;">${p.type || 'Urban Center'}</small><br>
+                        ${p.population ? `<span style="font-size:11px; color:#EF4444; font-weight:700;">Pop: ${Number(p.population).toLocaleString()}</span>` : ''}
+                    </div>
+                `);
+            }
+        }).addTo(townsLayer);
+    } catch (err) {
+        console.error("Towns dataset error:", err);
+    }
+}
+
+async function loadKetracoData() {
+    try {
+        const res = await fetch("data/ketraco_powerlines.json");
+        if (!res.ok) return;
+        const data = await res.json();
+
+        ketracoLayer.clearLayers();
+        L.geoJSON(data, {
+            style: {
+                color: "#EAB308", // Yellow Line
+                weight: 3,
+                dashArray: "6, 6",
+                opacity: 0.9
+            },
+            onEachFeature: (feature, layer) => {
+                const p = feature.properties || {};
+                layer.bindPopup(`⚡ <b>KETRACO Power Line</b><br><small>Voltage: ${p.voltage || '132kV/220kV'}</small>`);
+            }
+        }).addTo(ketracoLayer);
+    } catch (err) {
+        console.warn("KETRACO powerline dataset issue:", err);
+    }
+} 
+
+/* ======================================
+   📍 PROJECT PLACEMARKERS (ALL & SINGLE)
+====================================== */
+let projectMarkersGroup = L.layerGroup();
+let singleMarkerGroup = L.layerGroup();
+
+const projectIcon = L.divIcon({
+    className: 'custom-project-pin',
+    html: `
+        <div style="position: relative; width: 36px; height: 36px; background: #0F2D52; border: 3px solid #FFFFFF; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 4px 10px rgba(0,0,0,0.4); display: flex; align-items: center; justify-content: center;">
+            <div style="width: 14px; height: 14px; background: #D4A017; border-radius: 50%; transform: rotate(45deg);"></div>
+        </div>`,
+    iconSize: [36, 36],
+    iconAnchor: [18, 36],
+    popupAnchor: [0, -36]
+});
+
+function drawProjectMarkers(projects) {
+    if (typeof geoLayer !== "undefined" && geoLayer) map.removeLayer(geoLayer);
+    if (typeof singleMarkerGroup !== "undefined" && singleMarkerGroup) singleMarkerGroup.clearLayers();
+    projectMarkersGroup.clearLayers();
+
+    if (!projects || projects.length === 0) return;
+
+    const bounds = L.latLngBounds();
+
+    projects.forEach(project => {
+        const lat = parseFloat(project.latitude) || 1.3733; 
+        const lng = parseFloat(project.longitude) || 32.2903;
+
+        const marker = L.marker([lat, lng], { icon: projectIcon });
+
+        marker.bindTooltip(`
+            <div style="font-family: inherit; font-size: 13px; font-weight: 700; color: #0F2D52; padding: 2px 4px;">
+                ${project.project_name}
+            </div>
+        `, {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -34],
+            className: 'project-hover-tooltip'
+        });
+
+        marker.on('click', () => {
+            selectProjectFromMap(project.id);
+        });
+
+        projectMarkersGroup.addLayer(marker);
+        bounds.extend([lat, lng]);
+    });
+
+    projectMarkersGroup.addTo(map);
+
+    if (bounds.isValid()) {
+        map.fitBounds(bounds, { padding: [80, 80] });
+    }
+}
+
+function drawSingleProjectMarker(project) {
+    if (typeof projectMarkersGroup !== "undefined" && projectMarkersGroup) {
+        projectMarkersGroup.clearLayers();
+    }
+    if (typeof singleMarkerGroup !== "undefined" && singleMarkerGroup) {
+        singleMarkerGroup.clearLayers();
+    }
+
+    if (!project) return;
+
+    const lat = parseFloat(project.latitude);
+    const lng = parseFloat(project.longitude);
+
+    if (isNaN(lat) || isNaN(lng)) return;
+
+    const marker = L.marker([lat, lng], { icon: projectIcon });
+
+    marker.bindTooltip(`
+        <div style="font-family: inherit; font-size: 12px; font-weight: 600; color: #0F2D52; padding: 2px 4px;">
+            ${project.project_name}<br>
+            <span style="color: #2563eb; font-weight: 500;">💡 Click to zoom to parcels</span>
+        </div>
+    `, {
+        permanent: false,
+        direction: 'top',
+        offset: [0, -32],
+        className: 'marker-hover-tooltip'
+    });
+
+    marker.on('click', () => {
+        singleMarkerGroup.clearLayers();
+
+        if (typeof geoLayer !== "undefined" && geoLayer && geoLayer.getBounds().isValid()) {
+            map.flyToBounds(geoLayer.getBounds(), { padding: [50, 50], duration: 1.5 });
+        } else {
+            map.flyTo([lat, lng], 18, { duration: 1.2 });
+        }
+    });
+
+    singleMarkerGroup.addLayer(marker);
+    singleMarkerGroup.addTo(map);
+
+    map.panTo([lat, lng]);
+}
+
+function selectProjectFromMap(projectId) {
+    const select = document.getElementById("projectSelect");
+    if (select) {
+        select.value = projectId;
+        select.dispatchEvent(new Event("change"));
+    }
+}
+
+/* ==========================================================================
+   🗺️ TURF.JS SPATIAL ANALYSIS & DYNAMIC PARCEL SCORING SYSTEM
+   ========================================================================== */
+
+function formatDistance(meters) {
+    if (meters === null || isNaN(meters)) return "N/A";
+    if (meters >= 1000) {
+        return (meters / 1000).toFixed(2) + " km";
+    }
+    return Math.round(meters) + " m";
+}
+
+/**
+ * Calculates dynamic spatial scores (Total: 100 Points)
+ * - Accessibility & Road Network: 35 Points
+ * - Infrastructure & Amenity Proximity: 25 Points
+ * - Environmental & Wayleave Safety (Riparian/Power/Road Reserve): 40 Points
+ */
+function calculateComprehensiveScore(roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist) {
+    let score = 100;
+    let riskFlags = [];
+    let breakdown = {
+        roadScore: 35,
+        amenityScore: 25,
+        safetyScore: 40
+    };
+
+    // --- 1. ROAD ACCESSIBILITY (Max 35 Points) ---
+    if (roadDist !== null) {
+        if (roadDist <= 200) breakdown.roadScore = 35;
+        else if (roadDist <= 500) breakdown.roadScore = 30;
+        else if (roadDist <= 1500) breakdown.roadScore = 22;
+        else if (roadDist <= 5000) breakdown.roadScore = 12;
+        else {
+            breakdown.roadScore = 5;
+            riskFlags.push(`Remote access (${formatDistance(roadDist)} from major road network)`);
+        }
+    }
+
+    // --- 2. AMENITIES PROXIMITY - Hospitals/Schools (Max 25 Points) ---
+    if (amenityDist !== null) {
+        if (amenityDist <= 1000) breakdown.amenityScore = 25;
+        else if (amenityDist <= 3000) breakdown.amenityScore = 20;
+        else if (amenityDist <= 7000) breakdown.amenityScore = 12;
+        else breakdown.amenityScore = 5;
+    }
+
+    // --- 3. SAFETY & ENVIRONMENTAL BUFFER CHECKS (Max 40 Points) ---
+    // A. Riparian Reserve Buffer (< 30m is high risk)
+    if (riparianDist !== null && riparianDist < 30) {
+        breakdown.safetyScore -= 20;
+        riskFlags.push(`Inside 30m Riparian Reserve (${formatDistance(riparianDist)})`);
+    }
+
+    // B. KeNHA Road Wayleave Reserve (< 30m)
+    if (kenhaDist !== null && kenhaDist < 30) {
+        breakdown.safetyScore -= 15;
+        riskFlags.push(`Encroaching KeNHA Road Reserve (${formatDistance(kenhaDist)})`);
+    }
+
+    // C. KETRACO Power Line Wayleave Corridor (< 20m)
+    if (ketracoDist !== null && ketracoDist < 20) {
+        breakdown.safetyScore -= 20;
+        riskFlags.push(`Inside High Voltage Wayleave Corridor (${formatDistance(ketracoDist)})`);
+    }
+
+    breakdown.safetyScore = Math.max(0, breakdown.safetyScore);
+
+    // Compute Total Score
+    const totalScore = breakdown.roadScore + breakdown.amenityScore + breakdown.safetyScore;
+
+    // Road Stars calculation
+    let stars = "★☆☆☆☆";
+    if (breakdown.roadScore >= 30) stars = "★★★★★";
+    else if (breakdown.roadScore >= 20) stars = "★★★★☆";
+    else if (breakdown.roadScore >= 12) stars = "★★★☆☆";
+    else if (breakdown.roadScore >= 5) stars = "★★☆☆☆";
+
+    return {
+        totalScore: Math.min(100, Math.max(0, totalScore)),
+        breakdown,
+        stars,
+        status: totalScore >= 80 ? 'EXCELLENT' : totalScore >= 55 ? 'MODERATE' : 'HIGH RISK',
+        colorClass: totalScore >= 80 ? '#16a34a' : totalScore >= 55 ? '#d97706' : '#dc2626',
+        riskFlags
+    };
+}
+
+function updateParcelIntelligenceCard(parcelData, roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist) {
+    const analysis = calculateComprehensiveScore(roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist);
+
+    const titleBox = document.getElementById("intelParcelTitle");
+    const scoreBox = document.getElementById("intelScore");
+    const roadStarsEl = document.getElementById("roadAccessStars");
+    const highwayDistLabel = document.getElementById("intelHighwayDist");
+    const amenityDistLabel = document.getElementById("intelAmenityDist");
+    const riparianDistLabel = document.getElementById("intelRiparianStatus");
+    const statusBadge = document.getElementById("intelRiskBadge");
+    const recommendationEl = document.getElementById("intelRecommendation");
+
+    if (titleBox && parcelData) {
+        titleBox.textContent = `Plot #${parcelData.parcel_no || 'Selected'} Analysis`;
+    }
+
+    if (scoreBox) {
+        scoreBox.textContent = `${analysis.totalScore} /100`;
+        scoreBox.style.color = analysis.colorClass;
+    }
+
+    if (statusBadge) {
+        statusBadge.textContent = analysis.status;
+        statusBadge.style.backgroundColor = analysis.colorClass;
+    }
+
+    if (roadStarsEl) {
+        roadStarsEl.textContent = analysis.stars;
+    }
+
+    if (highwayDistLabel) {
+        highwayDistLabel.innerHTML = `🛣️ Highway Access: <b>${formatDistance(roadDist)}</b> (${analysis.breakdown.roadScore}/35 pts)`;
+    }
+
+    if (amenityDistLabel) {
+        amenityDistLabel.innerHTML = `🏥 Nearby Amenities: <b>${formatDistance(amenityDist)}</b> (${analysis.breakdown.amenityScore}/25 pts)`;
+    }
+
+    if (riparianDistLabel) {
+        const riparianText = riparianDist !== null ? formatDistance(riparianDist) : "Clear (>30m)";
+        riparianDistLabel.innerHTML = `🌊 Riparian Buffer: <b>${riparianText}</b>`;
+    }
+
+    if (recommendationEl) {
+        if (analysis.riskFlags.length > 0) {
+            recommendationEl.innerHTML = `<b>⚠️ Risk Flags:</b> ${analysis.riskFlags.join(' • ')}`;
+            recommendationEl.style.borderLeftColor = "#ef4444";
+            recommendationEl.style.backgroundColor = "#fef2f2";
+            recommendationEl.style.color = "#991b1b";
+        } else {
+            recommendationEl.innerHTML = `<b>✅ Excellent Investment:</b> Optimal access to major roads and clear of riparian or infrastructure wayleaves.`;
+            recommendationEl.style.borderLeftColor = "#16a34a";
+            recommendationEl.style.backgroundColor = "#f0fdf4";
+            recommendationEl.style.color = "#166534";
+        }
+    }
+}
+
+/* =========================
+   MAP PARCEL DRAWING LOGIC
+   ========================= */
+let geoLayer = null;
+let hoverLayer = null;
+
+function drawMap(features, shouldZoom = false) {
+    if (typeof map !== "undefined" && map.invalidateSize) {
+        map.invalidateSize();
+    }
+
+    if (typeof projectMarkersGroup !== "undefined" && projectMarkersGroup) {
+        projectMarkersGroup.clearLayers();
+    }
+
+    if (geoLayer) geoLayer.remove();
+    if (!features || features.length === 0) return;
+
+    geoLayer = L.geoJSON(features, {
+        style: function(feature) {
+            const status = feature.properties.status ? feature.properties.status.toLowerCase() : "";
+            let fillColor = "#22c55e";
+
+            if (status.includes("sold")) fillColor = "#ef4444";
+            else if (status.includes("reserved")) fillColor = "#facc15";
+
+            const isSelected = window.selectedParcelId === feature.properties.parcel_no;
+
+            return {
+                color: isSelected ? "#00b7ff" : "#333333",
+                weight: isSelected ? 5 : 2,
+                opacity: 1,
+                fillColor: fillColor,
+                fillOpacity: isSelected ? 0.7 : 0.45
+            };
+        },
+
+        onEachFeature: (feature, layer) => {
+            layer.bindTooltip(String(feature.properties.parcel_no), {
+                permanent: false,
+                direction: 'center',
+                className: 'parcel-label'
+            });
+
+            layer.on('mouseover', (e) => {
+                const p = feature.properties;
+                if (hoverLayer) map.removeLayer(hoverLayer);
+
+                hoverLayer = L.popup({
+                    closeButton: false,
+                    offset: [0, -8],
+                    className: "hover-popup",
+                    autoPan: false
+                })
+                .setLatLng(e.latlng)
+                .setContent(`
+                    <div style="font-size:13px; font-weight:600; color:#111; line-height:1.4;">
+                        <div style="font-size:12px; opacity:0.7;">Parcel</div>
+                        <div style="font-size:15px; font-weight:700;">${p.parcel_no}</div>
+                        <div style="margin-top:6px; font-size:11px;">${p.status}</div>
+                        <div style="margin-top:4px; font-size:12px; color:#1d4ed8;">
+                            KSh ${Number(p.price || 0).toLocaleString()}
+                        </div>
+                    </div>
+                `)
+                .openOn(map);
+            });
+
+            layer.on('mouseout', () => {
+                if (hoverLayer) {
+                    map.closePopup(hoverLayer);
+                    hoverLayer = null;
+                }
+            });
+
+            layer.on('click', () => {
+                window.selectedParcelId = feature.properties.parcel_no;
+                
+                // 1. Render UI detail panel structure
+                if (typeof showDetails === "function") showDetails(feature.properties);
+
+                let roadDist = null;
+                let amenityDist = null;
+                let riparianDist = null;
+                let kenhaDist = null;
+                let ketracoDist = null;
+
+                if (typeof turf !== "undefined" && feature) {
+                    try {
+                        const parcelCentroid = turf.centroid(feature);
+
+                        // A. Distance to Nearest Road
+                        if (roadsLayer && typeof roadsLayer.toGeoJSON === "function") {
+                            const roadsGeo = roadsLayer.toGeoJSON();
+                            if (roadsGeo && roadsGeo.features && roadsGeo.features.length > 0) {
+                                const nearestRoad = turf.nearestPointOnLine(roadsGeo, parcelCentroid);
+                                roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
+                                kenhaDist = roadDist;
+                            }
+                        }
+
+                        // B. Distance to Nearest Amenity
+                        let combinedAmenities = [];
+                        if (hospitalsLayer && hospitalsLayer.toGeoJSON) {
+                            const hGeo = hospitalsLayer.toGeoJSON();
+                            if (hGeo.features) combinedAmenities.push(...hGeo.features);
+                        }
+                        if (schoolsLayer && schoolsLayer.toGeoJSON) {
+                            const sGeo = schoolsLayer.toGeoJSON();
+                            if (sGeo.features) combinedAmenities.push(...sGeo.features);
+                        }
+
+                        if (combinedAmenities.length > 0) {
+                            const amenityFC = turf.featureCollection(combinedAmenities);
+                            const nearestAmenity = turf.nearestPoint(parcelCentroid, amenityFC);
+                            amenityDist = Math.round(turf.distance(parcelCentroid, nearestAmenity, { units: 'kilometers' }) * 1000);
+                        }
+
+                        // C. Distance to KETRACO Power Lines
+                        if (ketracoLayer && typeof ketracoLayer.toGeoJSON === "function") {
+                            const ketracoGeo = ketracoLayer.toGeoJSON();
+                            if (ketracoGeo && ketracoGeo.features && ketracoGeo.features.length > 0) {
+                                const nearestPowerLine = turf.nearestPointOnLine(ketracoGeo, parcelCentroid);
+                                ketracoDist = Math.round(turf.distance(parcelCentroid, nearestPowerLine, { units: 'kilometers' }) * 1000);
+                            }
+                        }
+
+                        // D. Distance to Riparian / Water Reserve Feature Check
+                        if (feature.properties && feature.properties.riparian_distance !== undefined) {
+                            riparianDist = parseFloat(feature.properties.riparian_distance);
+                        }
+                    } catch (e) {
+                        console.warn("Turf spatial calculation error:", e);
+                    }
+                } else if (typeof turf === "undefined") {
+                    console.error("Turf.js is not loaded. Please include Turf.js CDN in your HTML.");
+                }
+
+                // 2. Trigger dynamic score calculation & update DOM
+                updateParcelIntelligenceCard(feature.properties, roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist);
+
+                if (window.allFeatures) {
+                    drawMap(window.allFeatures, false);
+                }
+                map.flyToBounds(layer.getBounds(), { duration: 0.8 });
+            });
+        }
+    }).addTo(map);
+
+    if (shouldZoom && geoLayer.getBounds().isValid()) {
+        map.fitBounds(geoLayer.getBounds(), { padding: [50, 50] });
+    }
+
+    const zoom = map.getZoom();
+    geoLayer.eachLayer(layer => {
+        if (zoom >= 18) layer.openTooltip();
+    });
+} 
+
+map.on("zoomend", function () {
+    const zoom = map.getZoom();
+
+    if (geoLayer) {
+        geoLayer.eachLayer(layer => {
+            if (zoom >= 18) layer.openTooltip();
+            else layer.closeTooltip();
+        });
+    }
+
+    if (typeof singleMarkerGroup !== "undefined" && singleMarkerGroup) {
+        if (zoom >= 16) {
+            if (map.hasLayer(singleMarkerGroup)) map.removeLayer(singleMarkerGroup);
+        } else {
+            if (!map.hasLayer(singleMarkerGroup) && singleMarkerGroup.getLayers().length > 0) {
+                map.addLayer(singleMarkerGroup);
+            }
+        }
+    }
+});
+
+/* ======================================
+   🏠 HOME BUTTON & DISCARD OVERLAYS
+====================================== */
+function handleHomeClick() {
+    discardAllOverlays();
+
+    const projectSelect = document.getElementById("projectSelect");
+    if (projectSelect) {
+        projectSelect.value = "all";
+        projectSelect.dispatchEvent(new Event("change"));
+    } else if (typeof loadAllProjects === "function") {
+        loadAllProjects();
+    }
+}
+
+/* ======================================
+   📍 LOCATE ME
+====================================== */
+let userLocationMarker = null;
+let userAccuracyCircle = null;
+
+function handleLocateMe() {
+    if (userLocationMarker || userAccuracyCircle) {
+        discardLocationOverlay();
+        return;
+    }
+
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+
+            discardLocationOverlay();
+
+            userAccuracyCircle = L.circle([lat, lng], {
+                radius: accuracy,
+                color: "#ef4444",
+                fillColor: "#ef4444",
+                fillOpacity: 0.1,
+                weight: 1
+            }).addTo(map);
+
+            const redLocationIcon = L.divIcon({
+                className: 'red-user-pin',
+                html: `
+                    <div style="position: relative; width: 30px; height: 30px; background: #ef4444; border: 3px solid #ffffff; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); box-shadow: 0 4px 10px rgba(239,68,68,0.5); display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 10px; height: 10px; background: #ffffff; border-radius: 50%;"></div>
+                    </div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+                popupAnchor: [0, -30]
+            });
+
+            userLocationMarker = L.marker([lat, lng], { icon: redLocationIcon })
+                .bindPopup("<b style='color:#ef4444;'>📍 Your Location</b><br>Accuracy: " + Math.round(accuracy) + " m")
+                .addTo(map);
+
+            map.flyTo([lat, lng], 16, { duration: 1.5 });
+        },
+        (error) => {
+            console.error("Geolocation error:", error);
+            alert("Unable to retrieve location.");
+        },
+        { enableHighAccuracy: true }
+    );
+}
+
+function discardLocationOverlay() {
+    if (userLocationMarker) map.removeLayer(userLocationMarker);
+    if (userAccuracyCircle) map.removeLayer(userAccuracyCircle);
+    userLocationMarker = null;
+    userAccuracyCircle = null;
+}
+
+/* ======================================
+   📏 DUAL MEASUREMENT TOOLS
+====================================== */
+let activeTool = null;
+let measurePath = [];
+let measurePolyline = null;
+let measurePolygon = null;
+let measureMarkers = [];
+let measurePopup = null;
+
+function calculatePolygonArea(latlngs) {
+    if (latlngs.length < 3) return 0;
+    let area = 0;
+    const RADIUS = 6378137;
+
+    for (let i = 0; i < latlngs.length; i++) {
+        const p1 = latlngs[i];
+        const p2 = latlngs[(i + 1) % latlngs.length];
+
+        const radLat1 = (p1.lat * Math.PI) / 180;
+        const radLat2 = (p2.lat * Math.PI) / 180;
+        const radLng1 = (p1.lng * Math.PI) / 180;
+        const radLng2 = (p2.lng * Math.PI) / 180;
+
+        area += (radLng2 - radLng1) * (2 + Math.sin(radLat1) + Math.sin(radLat2));
+    }
+
+    area = (area * RADIUS * RADIUS) / 2;
+    return Math.abs(area);
+}
+
+function toggleDistanceTool() {
+    if (activeTool === 'distance') {
+        stopMeasurement();
+        clearMeasurementLayers();
+        return;
+    }
+    startMeasurement('distance');
+}
+
+function toggleAreaTool() {
+    if (activeTool === 'area') {
+        stopMeasurement();
+        clearMeasurementLayers();
+        return;
+    }
+    startMeasurement('area');
+}
+
+function startMeasurement(toolType) {
+    clearMeasurementLayers();
+    activeTool = toolType;
+
+    const distBtn = document.getElementById("measureBtn") || document.getElementById("measureDistanceBtn");
+    const areaBtn = document.getElementById("measureAreaBtn");
+
+    if (distBtn) {
+        distBtn.style.background = toolType === 'distance' ? "#0F2D52" : "white";
+        distBtn.style.color = toolType === 'distance' ? "#ffffff" : "#0F2D52";
+    }
+    if (areaBtn) {
+        areaBtn.style.background = toolType === 'area' ? "#0F2D52" : "white";
+        areaBtn.style.color = toolType === 'area' ? "#ffffff" : "#0F2D52";
+    }
+
+    map.getContainer().style.cursor = "crosshair";
+    map.doubleClickZoom.disable();
+}
+
+function clearMeasurementLayers() {
+    if (measurePolyline) {
+        map.removeLayer(measurePolyline);
+        measurePolyline = null;
+    }
+    if (measurePolygon) {
+        map.removeLayer(measurePolygon);
+        measurePolygon = null;
+    }
+
+    measureMarkers.forEach(marker => map.removeLayer(marker));
+    measureMarkers = [];
+
+    if (measurePopup) {
+        map.removeLayer(measurePopup);
+        measurePopup = null;
+    }
+
+    measurePath = [];
+}
+
+function stopMeasurement() {
+    activeTool = null;
+
+    const distBtn = document.getElementById("measureBtn") || document.getElementById("measureDistanceBtn");
+    const areaBtn = document.getElementById("measureAreaBtn");
+
+    if (distBtn) {
+        distBtn.style.background = "white";
+        distBtn.style.color = "#0F2D52";
+    }
+    if (areaBtn) {
+        areaBtn.style.background = "white";
+        areaBtn.style.color = "#0F2D52";
+    }
+
+    if (map) {
+        map.getContainer().style.cursor = "";
+        map.doubleClickZoom.enable();
+    }
+}
+
+function discardAllOverlays() {
+    discardLocationOverlay();
+    clearMeasurementLayers();
+    stopMeasurement();
+}
+
+map.on("click", function (e) {
+    if (typeof layerControl !== 'undefined' && layerControl && layerControl.collapse) {
+        layerControl.collapse();
+    }
+
+    if (!activeTool) return;
+
+    measurePath.push(e.latlng);
+
+    const pointMarker = L.circleMarker(e.latlng, {
+        radius: 5,
+        color: "#0F2D52",
+        fillColor: "#FFFFFF",
+        fillOpacity: 1,
+        weight: 2
+    }).addTo(map);
+    measureMarkers.push(pointMarker);
+
+    let popupHTML = "";
+
+    if (activeTool === 'distance') {
+        if (measurePath.length >= 2) {
+            if (!measurePolyline) {
+                measurePolyline = L.polyline(measurePath, {
+                    color: "#2563eb",
+                    weight: 4,
+                    dashArray: "6,6"
+                }).addTo(map);
+            } else {
+                measurePolyline.setLatLngs(measurePath);
+            }
+        }
+
+        let totalDistance = 0;
+        for (let i = 0; i < measurePath.length - 1; i++) {
+            totalDistance += measurePath[i].distanceTo(measurePath[i + 1]);
+        }
+
+        const displayDistance = totalDistance >= 1000 
+            ? (totalDistance / 1000).toFixed(2) + " km" 
+            : totalDistance.toFixed(1) + " m";
+
+        popupHTML = `
+            <div style="font-size:11px; color:#64748B; font-weight:600;">📏 Distance</div>
+            <div style="font-size:16px; color:#0F2D52; font-weight:bold; margin-top:2px;">
+                ${displayDistance}
+            </div>
+            <div style="font-size:10px; color:#94A3B8; margin-top:2px;">Points: ${measurePath.length}</div>
+        `;
+
+    } else if (activeTool === 'area') {
+        if (measurePath.length === 2) {
+            if (!measurePolyline) {
+                measurePolyline = L.polyline(measurePath, {
+                    color: "#0F2D52",
+                    weight: 3,
+                    dashArray: "6,6"
+                }).addTo(map);
+            } else {
+                measurePolyline.setLatLngs(measurePath);
+            }
+        } else if (measurePath.length >= 3) {
+            if (measurePolyline) {
+                map.removeLayer(measurePolyline);
+                measurePolyline = null;
+            }
+
+            if (!measurePolygon) {
+                measurePolygon = L.polygon(measurePath, {
+                    color: "#0F2D52",
+                    weight: 3,
+                    dashArray: "6,6",
+                    fillColor: "#2563eb",
+                    fillOpacity: 0.25
+                }).addTo(map);
+            } else {
+                measurePolygon.setLatLngs(measurePath);
+            }
+        }
+
+        let totalPerimeter = 0;
+        for (let i = 0; i < measurePath.length - 1; i++) {
+            totalPerimeter += measurePath[i].distanceTo(measurePath[i + 1]);
+        }
+        if (measurePath.length >= 3) {
+            totalPerimeter += measurePath[measurePath.length - 1].distanceTo(measurePath[0]);
+        }
+
+        const displayPerimeter = totalPerimeter >= 1000 
+            ? (totalPerimeter / 1000).toFixed(2) + " km" 
+            : totalPerimeter.toFixed(1) + " m";
+
+        let areaDisplay = "Click 3+ points for Area";
+        if (measurePath.length >= 3) {
+            const areaSqM = calculatePolygonArea(measurePath);
+            areaDisplay = areaSqM >= 10000 
+                ? (areaSqM / 10000).toFixed(2) + " ha" 
+                : areaSqM.toFixed(1) + " m²";
+        }
+
+        popupHTML = `
+            <div style="font-size:11px; color:#64748B; font-weight:600;">📐 Area</div>
+            <div style="font-size:15px; color:#2563eb; font-weight:bold; margin-top:2px;">${areaDisplay}</div>
+            <div style="font-size:11px; color:#64748B; font-weight:600; margin-top:4px;">🔄 Perimeter</div>
+            <div style="font-size:13px; color:#0F2D52; font-weight:bold;">${displayPerimeter}</div>
+        `;
+    }
+
+    const popupContent = document.createElement("div");
+    popupContent.style.textAlign = "center";
+    popupContent.style.padding = "4px 6px";
+    popupContent.style.fontFamily = "inherit";
+
+    popupContent.innerHTML = `
+        ${popupHTML}
+        <div style="margin-top:8px; display:flex; gap:6px; justify-content:center;">
+            <button id="finishMeasureBtn" style="background: #10B981; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">Done ✔</button>
+            <button id="resetMeasureBtn" style="background: #EF4444; color: white; border: none; padding: 4px 10px; border-radius: 4px; font-size: 11px; cursor: pointer; font-weight: 600;">Reset 🗑️</button>
+        </div>
+    `;
+
+    const finishBtn = popupContent.querySelector("#finishMeasureBtn");
+    const resetBtn = popupContent.querySelector("#resetMeasureBtn");
+
+    if (finishBtn) {
+        finishBtn.onclick = function (event) {
+            event.stopPropagation();
+            stopMeasurement();
+            if (measurePopup) map.closePopup(measurePopup);
+        };
+    }
+
+    if (resetBtn) {
+        resetBtn.onclick = function (event) {
+            event.stopPropagation();
+            clearMeasurementLayers();
+            stopMeasurement();
+        };
+    }
+
+    if (measurePopup) map.removeLayer(measurePopup);
+
+    measurePopup = L.popup({ closeButton: false, offset: [0, -10] })
+        .setLatLng(e.latlng)
+        .setContent(popupContent)
+        .openOn(map);
+});
+
+map.on("dblclick contextmenu", function (e) {
+    if (activeTool) {
+        L.DomEvent.stopPropagation(e);
+        stopMeasurement();
+        clearMeasurementLayers();
+    }
+});
+
+/* ======================================
+   🖱️ MOUSE MOVE COORDINATES
+====================================== */
+map.on("mousemove", function(e) {
+    const coordsEl = document.getElementById("coords");
+    if (coordsEl) {
+        coordsEl.innerHTML = `Lat: ${e.latlng.lat.toFixed(6)} | Lng: ${e.latlng.lng.toFixed(6)} | Zoom: ${map.getZoom()}`;
+    }
+});
+
+/* ======================================
+   🔗 INITIALIZE TOOLBAR & LAYERS
+====================================== */
+document.addEventListener("DOMContentLoaded", () => {
+    const homeBtn = document.getElementById("homeBtn");
+    if (homeBtn) homeBtn.onclick = handleHomeClick;
+
+    const locateBtn = document.getElementById("locateBtn");
+    if (locateBtn) locateBtn.onclick = handleLocateMe;
+
+    const measureDistBtn = document.getElementById("measureBtn") || document.getElementById("measureDistanceBtn");
+    if (measureDistBtn) measureDistBtn.onclick = toggleDistanceTool;
+
+    const measureAreaBtn = document.getElementById("measureAreaBtn");
+    if (measureAreaBtn) measureAreaBtn.onclick = toggleAreaTool;
+
+    const printBtn = document.getElementById("printBtn");
+    if (printBtn) {
+        printBtn.onclick = function () {
+            window.print();
+        };
+    }
+
+    initInfrastructureLayers();
+
+    const setupLayerToggle = (elementId, layer) => {
+        const checkbox = document.getElementById(elementId);
+        if (checkbox) {
+            checkbox.onchange = function() {
+                if (this.checked) {
+                    layer.addTo(map);
+                } else {
+                    map.removeLayer(layer);
+                }
+            };
+        }
+    };
+
+    setupLayerToggle("roadsLayer", roadsLayer);
+    setupLayerToggle("schoolsLayer", schoolsLayer);
+    setupLayerToggle("hospitalsLayer", hospitalsLayer);
+    setupLayerToggle("ketracoLayer", ketracoLayer);
+    setupLayerToggle("imageryLayer", imagery);
+    setupLayerToggle("labelsLayer", labels);
+    setupLayerToggle("chkTowns", townsLayer);
+});

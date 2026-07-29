@@ -1,0 +1,800 @@
+{
+  "type": "FeatureCollection",
+  "generator": "overpass-turbo",
+  "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL.",
+  "timestamp": "2026-07-24T12:08:06Z",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/665058430",
+        "addr:city": "Athi River",
+        "addr:street": "Njuguine Road",
+        "amenity": "school",
+        "name": "DEB KMC Mixed Day & Boarding Primary School"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              36.9900518,
+              -1.4549918
+            ],
+            [
+              36.9897724,
+              -1.4554415
+            ],
+            [
+              36.9898577,
+              -1.4554944
+            ],
+            [
+              36.9901296,
+              -1.4550568
+            ],
+            [
+              36.9903866,
+              -1.4552165
+            ],
+            [
+              36.9900864,
+              -1.4556996
+            ],
+            [
+              36.9901677,
+              -1.45575
+            ],
+            [
+              36.9904779,
+              -1.4552508
+            ],
+            [
+              36.9903873,
+              -1.4551946
+            ],
+            [
+              36.9904298,
+              -1.4551261
+            ],
+            [
+              36.9901708,
+              -1.4549653
+            ],
+            [
+              36.9901258,
+              -1.4550378
+            ],
+            [
+              36.9900518,
+              -1.4549918
+            ]
+          ]
+        ]
+      },
+      "id": "way/665058430"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1090956042",
+        "amenity": "school"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              36.9914018,
+              -1.4736775
+            ],
+            [
+              36.9915916,
+              -1.4731861
+            ],
+            [
+              36.9913385,
+              -1.4730675
+            ],
+            [
+              36.9911408,
+              -1.4735827
+            ],
+            [
+              36.9914018,
+              -1.4736775
+            ]
+          ]
+        ]
+      },
+      "id": "way/1090956042"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1090956047",
+        "amenity": "school"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              36.992125,
+              -1.4728932
+            ],
+            [
+              36.9922966,
+              -1.4729624
+            ],
+            [
+              36.9923727,
+              -1.4726609
+            ],
+            [
+              36.9922274,
+              -1.4726235
+            ],
+            [
+              36.992125,
+              -1.4728932
+            ]
+          ]
+        ]
+      },
+      "id": "way/1090956047"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1090962449",
+        "amenity": "school"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              36.9884094,
+              -1.4763368
+            ],
+            [
+              36.9885024,
+              -1.4761008
+            ],
+            [
+              36.9883665,
+              -1.4760579
+            ],
+            [
+              36.988298,
+              -1.4762934
+            ],
+            [
+              36.9884094,
+              -1.4763368
+            ]
+          ]
+        ]
+      },
+      "id": "way/1090962449"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1090962450",
+        "amenity": "school"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              36.9886276,
+              -1.4771912
+            ],
+            [
+              36.9886776,
+              -1.4770482
+            ],
+            [
+              36.9886025,
+              -1.4770089
+            ],
+            [
+              36.9886669,
+              -1.4768552
+            ],
+            [
+              36.9885131,
+              -1.4767801
+            ],
+            [
+              36.9883844,
+              -1.4771019
+            ],
+            [
+              36.9886276,
+              -1.4771912
+            ]
+          ]
+        ]
+      },
+      "id": "way/1090962450"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "way/1311029884",
+        "amenity": "school",
+        "name": "Acacia Crest Academy",
+        "website": "https://www.facebook.com/AcaciaCrestAcademy/"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [
+              36.9224922,
+              -1.5253596
+            ],
+            [
+              36.9233525,
+              -1.525242
+            ],
+            [
+              36.9234141,
+              -1.5252332
+            ],
+            [
+              36.9233847,
+              -1.5247542
+            ],
+            [
+              36.9232983,
+              -1.523373
+            ],
+            [
+              36.9224069,
+              -1.5235536
+            ],
+            [
+              36.9224922,
+              -1.5253596
+            ]
+          ]
+        ]
+      },
+      "id": "way/1311029884"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3591934497",
+        "amenity": "school",
+        "name": "Ideal School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9488804,
+          -1.5124884
+        ]
+      },
+      "id": "node/3591934497"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/3599603176",
+        "addr:city": "Kitengela ward",
+        "addr:street": "Old Namanga Road",
+        "amenity": "school",
+        "name": "Kitengela international School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9313945,
+          -1.5171379
+        ]
+      },
+      "id": "node/3599603176"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/7483014645",
+        "addr:street": "Old Namanga Road",
+        "amenity": "school",
+        "name": "The Orchard School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9303404,
+          -1.5086493
+        ]
+      },
+      "id": "node/7483014645"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12776240993",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Settled Area",
+        "amenity": "school",
+        "isced:level": "2",
+        "name": "Embakasi Girls Secondary School",
+        "note:code": "Secondary School",
+        "operator": "public"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9720157,
+          -1.4549025
+        ]
+      },
+      "id": "node/12776240993"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12776240994",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Settled Area",
+        "addr:postcode": "561 Athi River",
+        "amenity": "school",
+        "contact:phone": "0734-252746",
+        "description": "general_education",
+        "isced:level": "2",
+        "name": "Mavoko Secondary School",
+        "note:code": "Secondary School",
+        "operator": "public",
+        "operator:type": "central_government_deb",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9844172,
+          -1.4532752
+        ]
+      },
+      "id": "node/12776240994"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12776341117",
+        "addr:constituency": "Kajiado North",
+        "addr:district": "Kajiado",
+        "addr:division": "Isinya",
+        "addr:location": "Kitenkela",
+        "addr:postcode": "53497-00200",
+        "amenity": "school",
+        "capacity": "346",
+        "contact:phone": "045-22029",
+        "description": "general_education",
+        "isced:level": "2",
+        "name": "Noonkopir Girls Secondary School",
+        "note:code": "Secondary School",
+        "operator": "public",
+        "operator:type": "central_government_deb",
+        "school:gender": "female"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9471071,
+          -1.4637567
+        ]
+      },
+      "id": "node/12776341117"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778231581",
+        "addr:constituency": "Kajiado North",
+        "addr:district": "Kajiado",
+        "addr:division": "Isinya",
+        "addr:location": "Kitenkela",
+        "addr:postcode": "447 Kitengela",
+        "amenity": "kindergarten",
+        "description": "general_education",
+        "isced:level": "0",
+        "name": "Kitengela Boarding School- ECDE",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public",
+        "operator:type": "community",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.8912095,
+          -1.481322
+        ]
+      },
+      "id": "node/12778231581"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778231582",
+        "addr:constituency": "Kajiado North",
+        "addr:district": "Kajiado",
+        "addr:division": "Isinya",
+        "addr:location": "Kitenkela",
+        "addr:postcode": "488-00242 Kitengela",
+        "amenity": "kindergarten",
+        "description": "general_education",
+        "isced:level": "0",
+        "name": "Athi River Gk PrimarysonECDE",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public",
+        "operator:type": "community",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9438311,
+          -1.4764791
+        ]
+      },
+      "id": "node/12778231582"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778568068",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Settled Area",
+        "addr:postcode": "11 Athi River",
+        "amenity": "kindergarten",
+        "description": "general_education",
+        "isced:level": "0",
+        "name": "Imani",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public",
+        "operator:type": "local_government_authority",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9737062,
+          -1.455839
+        ]
+      },
+      "id": "node/12778568068"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778568069",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Settled Area",
+        "amenity": "kindergarten",
+        "isced:level": "0",
+        "name": "Embakasi School ECDE",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9737296,
+          -1.4567177
+        ]
+      },
+      "id": "node/12778568069"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778568070",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Athiriver",
+        "addr:postcode": "11 Athiriver",
+        "amenity": "kindergarten",
+        "description": "general_education",
+        "isced:level": "0",
+        "name": "Mavoko Pre-School",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public",
+        "operator:type": "local_government_authority",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9782434,
+          -1.4567309
+        ]
+      },
+      "id": "node/12778568070"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778568071",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Settled Area",
+        "amenity": "kindergarten",
+        "description": "general_education",
+        "isced:level": "0",
+        "name": "Kanaani Primary School ECDE",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public",
+        "operator:type": "central_government_deb",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9842148,
+          -1.4610248
+        ]
+      },
+      "id": "node/12778568071"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12778568072",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Athiriver",
+        "addr:postcode": "114 Athi River",
+        "amenity": "kindergarten",
+        "description": "general_education",
+        "isced:level": "0",
+        "name": "Deb Kmc Primary School ECDE",
+        "note:code": "Early Childhood Development and Education",
+        "operator": "public",
+        "operator:type": "community",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9895103,
+          -1.4558137
+        ]
+      },
+      "id": "node/12778568072"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12797327231",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Athiriver",
+        "addr:postcode": "42 Athiriver",
+        "amenity": "school",
+        "capacity": "350",
+        "description": "general_education",
+        "isced:level": "4",
+        "name": "Technology Developmalet Centre",
+        "note:code": "Youth Polytechnic",
+        "operator": "public",
+        "operator:type": "central_government_deb",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9592334,
+          -1.4643016
+        ]
+      },
+      "id": "node/12797327231"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12804029727",
+        "addr:constituency": "Kajiado North",
+        "addr:district": "Kajiado",
+        "addr:division": "Isinya",
+        "addr:location": "Kitenkela",
+        "addr:postcode": "447 Kitengela",
+        "amenity": "school",
+        "capacity": "349",
+        "description": "general_education",
+        "gender": "mixed",
+        "isced:level": "1",
+        "name": "Kitengela Boarding School-Primary",
+        "note:code": "Primary School",
+        "operator": "public",
+        "operator:type": "central_government_deb"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.8914992,
+          -1.4816196
+        ]
+      },
+      "id": "node/12804029727"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12804029728",
+        "addr:constituency": "Kajiado North",
+        "addr:district": "Kajiado",
+        "addr:division": "Isinya",
+        "addr:location": "Kitenkela",
+        "addr:postcode": "488-00242 Kitengela",
+        "amenity": "school",
+        "capacity": "987",
+        "description": "general_education",
+        "gender": "mixed",
+        "isced:level": "1",
+        "name": "Athi River Gk Primaryson Primary School",
+        "note:code": "Primary School",
+        "operator": "public",
+        "operator:type": "central_government_deb"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9440456,
+          -1.476699
+        ]
+      },
+      "id": "node/12804029728"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12804029729",
+        "addr:constituency": "Kajiado North",
+        "addr:district": "Kajiado",
+        "addr:division": "Isinya",
+        "addr:location": "Kitenkela",
+        "addr:postcode": "214-00242 Kitengela",
+        "amenity": "school",
+        "capacity": "190",
+        "description": "general_education",
+        "gender": "mixed",
+        "isced:level": "1",
+        "name": "Noonkopir Township Primary School",
+        "note:code": "Primary School",
+        "operator": "public",
+        "operator:type": "central_government_deb"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.94717,
+          -1.46421
+        ]
+      },
+      "id": "node/12804029729"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12816643200",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Athiriver",
+        "addr:postcode": "26 Athi River",
+        "amenity": "school",
+        "capacity": "1581",
+        "description": "general_education",
+        "isced:level": "1",
+        "name": "Athi River Primary School",
+        "note:code": "Primary School",
+        "operator": "public",
+        "operator:type": "religious_organization",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.97314,
+          -1.458099
+        ]
+      },
+      "id": "node/12816643200"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12816699801",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Athiriver",
+        "addr:postcode": "87 Athi River",
+        "amenity": "school",
+        "capacity": "1285",
+        "description": "general_education",
+        "isced:level": "1",
+        "name": "St Pauls Primary School",
+        "note:code": "Primary School",
+        "operator": "public",
+        "operator:type": "religious_organization",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.982203,
+          -1.4526686
+        ]
+      },
+      "id": "node/12816699801"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12816699802",
+        "addr:constituency": "Kathiani",
+        "addr:district": "Machakos",
+        "addr:division": "Mavoko",
+        "addr:location": "Athiriver",
+        "addr:postcode": "114 Athi River",
+        "amenity": "school",
+        "capacity": "923",
+        "description": "general_education",
+        "isced:level": "1",
+        "name": "Deb Kmc Primary School",
+        "note:code": "Primary School",
+        "operator": "public",
+        "operator:type": "central_government_deb",
+        "school:gender": "mixed"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9892421,
+          -1.4561998
+        ]
+      },
+      "id": "node/12816699802"
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "@id": "node/12886221883",
+        "addr:county": "Machakos",
+        "addr:location": "Wanda School",
+        "amenity": "school",
+        "name": "Wanda School"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          36.9822411,
+          -1.4513112
+        ]
+      },
+      "id": "node/12886221883"
+    }
+  ]
+}
