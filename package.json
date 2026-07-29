@@ -1,15 +1,33 @@
 {
-  "name": "kenmark_land_system",
+  "name": "terra-iq",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "description": "Enterprise GIS platform for land intelligence, parcel management and real estate analytics.",
+  "main": "server.js",
   "type": "commonjs",
+
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+
+  "author": "Rachael Mugo",
+  "license": "MIT",
+
+  "engines": {
+    "node": ">=20"
+  },
+
+  "keywords": [
+    "gis",
+    "postgis",
+    "leaflet",
+    "real-estate",
+    "land-management",
+    "spatial-analysis",
+    "parcel-intelligence",
+    "terra-iq"
+  ],
+
   "dependencies": {
     "axios": "^1.18.1",
     "cors": "^2.8.6",
