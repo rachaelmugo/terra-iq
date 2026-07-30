@@ -99,18 +99,30 @@ html, body {
    3. SIDEBAR CADASTRAL CONTROL PANEL
    -------------------------------------------------------------------------- */
 #sidebar {
-    width: 380px;
-    min-width: 380px;
-    max-width: 380px;
+    width: clamp(280px, 25vw, 420px);
+    min-width: 280px;
+    max-width: 420px;
+
     height: 100vh;
     overflow-y: auto;
+
     background: var(--bg-surface);
+
     border-right: 1px solid var(--border-subtle);
-    flex-shrink: 0;
+
+    flex-shrink: 1;
+
     display: flex;
     flex-direction: column;
+
     z-index: 10;
-    box-shadow: 4px 0 24px rgba(15, 23, 42, 0.06);
+
+    box-shadow:
+        6px 0 25px rgba(15, 23, 42, 0.08);
+
+    transition:
+        width 0.3s ease,
+        transform 0.3s ease;
 }
 
 /* Enterprise Header Block */
@@ -287,21 +299,40 @@ html, body {
 }
 
 .card {
-    background: #FFFFFF;
-    border-radius: var(--radius-md);
-    padding: 14px 16px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--border-subtle);
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+    background:#FFFFFF;
+
+    border-radius:16px;
+
+    padding:16px;
+
+    box-shadow:
+        0 4px 20px rgba(15,23,42,0.06);
+
+    border:
+        1px solid rgba(148,163,184,0.18);
+
+    cursor:pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease;
+
 }
+
 
 .card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--border-strong);
-}
 
+    transform:translateY(-2px);
+
+    box-shadow:
+        0 12px 30px rgba(15,23,42,0.12);
+
+    border-color:
+        rgba(34,197,94,0.4);
+
+}
 .card.active, .card.selected {
     border-color: #2563EB;
     box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
@@ -353,21 +384,39 @@ html, body {
    5. MAIN GIS MAP VIEWPORT & GLASS HUD OVERLAYS
    -------------------------------------------------------------------------- */
 #mapContainer {
+
     flex: 1;
+
     min-width: 0;
+
     display: flex;
+
     flex-direction: column;
+
     position: relative;
-    height: 100%;
+
+    height: 100vh;
+
     overflow: hidden;
+
+    transition: width 0.3s ease;
+
 }
 
 #map {
-    width: 100%;
-    height: 100%;
-    flex: 1;
-    z-index: 1;
-    background: #020617 !important;
+
+    flex:1;
+
+    width:100%;
+
+    height:100%;
+
+    min-height:300px;
+
+    z-index:1;
+
+    background:#020617 !important;
+
 }
 
 /* Floating Navigation Bar Header */
@@ -776,4 +825,26 @@ html, body {
         top: 0 !important;
         left: 0 !important;
     }
+} 
+
+@media(max-width:1200px){
+
+    #sidebar {
+
+        width:320px;
+        min-width:320px;
+
+    }
+
+} 
+
+@media(max-width:900px){
+
+    #sidebar {
+
+        width:280px;
+        min-width:280px;
+
+    }
+
 }
