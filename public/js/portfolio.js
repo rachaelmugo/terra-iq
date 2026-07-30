@@ -6,6 +6,8 @@ window.allFeatures = window.allFeatures || [];
 window.selectedParcelId = window.selectedParcelId || null;
 window.currentProject = window.currentProject || "all";
 
+const API_BASE = window.location.origin;
+
 document.addEventListener("DOMContentLoaded", () => {
     initPortfolioModule();
 });
@@ -42,7 +44,7 @@ function setupSearchListener() {
 // Fetch projects and populate select dropdown
 async function loadProjects() {
     try {
-        const response = await fetch("http://localhost:3000/projects");
+        const response = await fetch(`${API_BASE}/projects`)
         const projects = await response.json();
 
         const select = document.getElementById("projectSelect");
@@ -83,14 +85,14 @@ async function loadProjects() {
 // Load individual project data
 async function loadProject(projectId) {
     try {
-        const projectResp = await fetch(`http://localhost:3000/projects/${projectId}`);
+        const projectResp = await fetch(`${API_BASE}/projects/${projectId}`)
         const project = await projectResp.json();
 
         if (typeof drawSingleProjectMarker === "function") {
             drawSingleProjectMarker(project);
         }
 
-        const parcelsResponse = await fetch(`http://localhost:3000/projects/${projectId}/parcels`);
+        const parcelsResponse = await fetch(`${API_BASE}/projects/${projectId}/parcels`)
         const geojson = await parcelsResponse.json();
 
         window.allFeatures = geojson.features || [];
@@ -114,7 +116,7 @@ async function loadAllProjects() {
             singleMarkerGroup.clearLayers();
         }
 
-        const response = await fetch("http://localhost:3000/parcels/geojson");
+        const response = await fetch(`${API_BASE}/parcels/geojson`)
         const geojson = await response.json();
 
         window.allFeatures = geojson.features || [];
@@ -122,7 +124,7 @@ async function loadAllProjects() {
 
         if (typeof renderList === "function") renderList(window.allFeatures);
 
-        const projectsResp = await fetch("http://localhost:3000/projects");
+        const projectsResp = await fetch(`${API_BASE}/projects`);
         const projects = await projectsResp.json();
 
         if (typeof drawProjectMarkers === "function") {
