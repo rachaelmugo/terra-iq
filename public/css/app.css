@@ -1250,4 +1250,49 @@ display:none;
         z-index: 10000;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
+}  
+
+/* ==========================================================================
+   📱 MOBILE ICON & TOOLTIP RESPONSIVE RESIZING
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Scale down custom project pins on mobile */
+    .custom-project-pin {
+        transform: scale(0.75); /* Makes pins 25% smaller on mobile */
+    }
+
+    /* Keep Leaflet popups responsive and touch-friendly */
+    .leaflet-popup-content-wrapper {
+        border-radius: 8px !important;
+        padding: 4px !important;
+    }
+
+    .leaflet-popup-content {
+        margin: 8px 10px !important;
+        font-size: 12px !important;
+    }
 } 
+
+/* Hide mobile close button header on desktop */
+.mobile-drawer-header {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .mobile-drawer-header {
+        display: flex;
+        justify-content: flex-end;
+        padding: 8px 12px 0 0;
+    }
+
+    #closeMobileSidebar {
+        background: transparent;
+        border: none;
+        color: #FFFFFF;
+        font-size: 28px;
+        font-weight: bold;
+        line-height: 1;
+        cursor: pointer;
+        padding: 4px 8px;
+    }
+}

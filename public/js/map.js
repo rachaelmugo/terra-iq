@@ -145,8 +145,9 @@ async function loadHospitalsData() {
             pointToLayer: (feature, latlng) => {
                 const marker = L.marker(latlng, { icon: hospitalIcon });
                 const name = feature.properties.name || "Hospital";
+                // Set permanent: false so mobile screens don't get cluttered with text labels
                 marker.bindTooltip("🏥 " + name, {
-                    permanent: true,
+                    permanent: false,
                     direction: "right",
                     offset: [12, 0],
                     className: "facility-label hospital-label"
@@ -155,7 +156,12 @@ async function loadHospitalsData() {
             },
             onEachFeature: (feature, layer) => {
                 const p = feature.properties;
-                layer.bindPopup("<b>🏥 " + (p.name || 'Hospital') + "</b><br><small>" + (p.type || 'Healthcare Facility') + "</small>");
+                layer.bindPopup(`
+                    <div style="text-align: center; padding: 4px;">
+                        <b style="font-size: 13px; color: #0F2D52;">🏥 ${p.name || 'Hospital'}</b><br>
+                        <small style="color: #64748B;">${p.type || 'Healthcare Facility'}</small>
+                    </div>
+                `);
             }
         }).addTo(hospitalsLayer);
     } catch (err) {
@@ -174,8 +180,9 @@ async function loadSchoolsData() {
             pointToLayer: (feature, latlng) => {
                 const marker = L.marker(latlng, { icon: schoolIcon });
                 const name = feature.properties.name || "School";
+                // Set permanent: false so mobile screens don't get cluttered with text labels
                 marker.bindTooltip("🏫 " + name, {
-                    permanent: true,
+                    permanent: false,
                     direction: "right",
                     offset: [12, 0],
                     className: "facility-label school-label"
@@ -184,7 +191,12 @@ async function loadSchoolsData() {
             },
             onEachFeature: (feature, layer) => {
                 const p = feature.properties;
-                layer.bindPopup("<b>🏫 " + (p.name || 'School') + "</b><br><small>" + (p.type || 'Educational Institution') + "</small>");
+                layer.bindPopup(`
+                    <div style="text-align: center; padding: 4px;">
+                        <b style="font-size: 13px; color: #0F2D52;">🏫 ${p.name || 'School'}</b><br>
+                        <small style="color: #64748B;">${p.type || 'Educational Institution'}</small>
+                    </div>
+                `);
             }
         }).addTo(schoolsLayer);
     } catch (err) {
@@ -363,6 +375,18 @@ function drawProjectMarkers(projects) {
 
         const marker = L.marker([lat, lng], { icon: projectIcon });
 
+        // Show information popup on tap/click
+        marker.bindPopup(`
+            <div style="font-family: inherit; font-size: 13px; font-weight: 700; color: #0F2D52; text-align: center; padding: 4px;">
+                ${project.project_name}
+                <div style="margin-top: 6px;">
+                    <button onclick="selectProjectFromMap('${project.id}')" style="background:#0F2D52; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:11px; cursor:pointer;">
+                        View Project Parcels
+                    </button>
+                </div>
+            </div>
+        `);
+
         marker.bindTooltip(`
             <div style="font-family: inherit; font-size: 13px; font-weight: 700; color: #0F2D52; padding: 2px 4px;">
                 ${project.project_name}
@@ -406,6 +430,13 @@ function drawSingleProjectMarker(project) {
 
     const marker = L.marker([lat, lng], { icon: projectIcon });
 
+    marker.bindPopup(`
+        <div style="font-size:13px; text-align:center; padding:4px;">
+            <b style="color:#0F2D52;">${project.project_name}</b><br>
+            <small style="color:#2563eb;">Selected Project</small>
+        </div>
+    `);
+
     marker.bindTooltip(`
         <div style="font-family: inherit; font-size: 12px; font-weight: 600; color: #0F2D52; padding: 2px 4px;">
             ${project.project_name}<br>
@@ -440,6 +471,17 @@ function selectProjectFromMap(projectId) {
         select.value = projectId;
         select.dispatchEvent(new Event("change"));
     }
+
+    // 📱 Open sidebar drawer and show overlay on mobile marker selection
+    const sidebar = document.getElementById("sidebar");
+    const overlay = document.querySelector(".mobile-overlay");
+    
+    if (sidebar) sidebar.classList.add("mobile-open");
+    if (overlay) overlay.classList.remove("hidden");
+
+    setTimeout(() => {
+        if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
+    }, 300);
 }
 
 /* ==========================================================================
@@ -1176,50 +1218,64 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-    // =========================================================
-    // 📱 ADD NEW MOBILE MENU DRAWER LOGIC HERE
+// =========================================================
+    // 📱 FIXED MOBILE MENU DRAWER LOGIC
     // =========================================================
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const closeMobileSidebarBtn = document.getElementById("closeMobileSidebar"); // 👈 Added selector
     const sidebar = document.getElementById("sidebar");
 
-    // Create backdrop overlay
-    const overlay = document.createElement("div");
-    overlay.className = "mobile-overlay hidden";
-    document.body.appendChild(overlay);
+    // Create backdrop overlay safely
+    let overlay = document.querySelector(".mobile-overlay");
+    if (!overlay) {
+        overlay = document.createElement("div");
+        overlay.className = "mobile-overlay hidden";
+        document.body.appendChild(overlay);
+    }
 
-    function toggleMobileMenu() {
-        if (!sidebar) return;
-        const isOpen = sidebar.classList.toggle("mobile-open");
+    function openMobileMenu(e) {
+        if (e) e.stopPropagation();
+        sidebar?.classList.add("mobile-open");
+        overlay.classList.remove("hidden");
         
-        if (isOpen) {
-            overlay.classList.remove("hidden");
-        } else {
-            overlay.classList.add("hidden");
-        }
-
-        // Recalculate Leaflet map size when drawer toggles
         setTimeout(() => {
-            if (typeof map !== "undefined" && map.invalidateSize) {
-                map.invalidateSize();
-            }
+            if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
+        }, 300);
+    }
+
+    function closeMobileMenu(e) {
+        if (e) e.stopPropagation();
+        sidebar?.classList.remove("mobile-open");
+        overlay.classList.add("hidden");
+
+        setTimeout(() => {
+            if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
         }, 300);
     }
 
     if (mobileMenuBtn) {
-        mobileMenuBtn.onclick = toggleMobileMenu;
+        // Tapping the hamburger button ONLY opens the menu
+        mobileMenuBtn.onclick = openMobileMenu;
     }
 
-    overlay.onclick = toggleMobileMenu;
+    // 👈 ❌ Add this line to handle the 'x' close button inside the sidebar
+    if (closeMobileSidebarBtn) {
+        closeMobileSidebarBtn.onclick = closeMobileMenu;
+    }
 
-    // Close mobile drawer when selecting a parcel/project from list
+    // Tapping outside ONLY closes the menu
+    overlay.onclick = closeMobileMenu;
+
+    // Prevent clicks inside the sidebar from bubbling up to map/overlay
+    if (sidebar) {
+        sidebar.onclick = (e) => e.stopPropagation();
+    }
+
+    // Close mobile drawer when clicking item in list
     const parcelList = document.getElementById("list");
     if (parcelList) {
-        parcelList.addEventListener("click", () => {
-            if (window.innerWidth <= 768 && sidebar?.classList.contains("mobile-open")) {
-                toggleMobileMenu();
-            }
-        });
-    }
+        parcelList.addEventListener("click", closeMobileMenu);
+    } 
 
     // --- INITIALIZATION ---
     initInfrastructureLayers();
