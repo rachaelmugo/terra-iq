@@ -73,4 +73,28 @@ document.addEventListener("DOMContentLoaded", () => {
         sidebar.classList.toggle("open");
     });
 
-});
+}); 
+
+const layersBtn = document.getElementById("layersBtn");
+const layerPanel = document.getElementById("layerPanel");
+const closeLayersBtn = document.getElementById("closeLayersBtn");
+
+if (layersBtn && layerPanel) {
+
+    layersBtn.addEventListener("click", () => {
+
+        layerPanel.classList.toggle("hidden");
+
+    });
+
+}
+
+if (closeLayersBtn) {
+
+    closeLayersBtn.addEventListener("click", () => {
+
+        layerPanel.classList.add("hidden");
+
+    });
+
+}
