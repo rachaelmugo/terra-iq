@@ -1107,4 +1107,147 @@ display:none;
     width: 16px;
     height: 16px;
     cursor: pointer;
+} 
+
+/* ==========================================================================
+   📱 MOBILE RESPONSIVE DRAWER & MAP-FIRST LAYOUT
+   ========================================================================== */
+
+/* Show Mobile Hamburger Button by Default on Small Screens */
+#mobileMenuBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0F2D52;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 20px;
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    margin-right: 10px;
 }
+
+@media (max-width: 768px) {
+    /* Main Layout: Full screen map container */
+    #app {
+        display: block;
+        position: relative;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+    }
+
+    #mapContainer {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 1;
+    }
+
+    /* Convert Sidebar into a Mobile Drawer */
+    #sidebar {
+        position: fixed;
+        top: 0;
+        left: -100%; /* Hidden off-screen by default */
+        width: 85vw;
+        max-width: 360px;
+        height: 100vh;
+        background: #ffffff;
+        z-index: 9999;
+        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
+        transition: left 0.3s ease-in-out;
+        overflow-y: auto;
+        padding-bottom: 20px;
+    }
+
+    /* Active state to slide in drawer */
+    #sidebar.mobile-open {
+        left: 0;
+    }
+
+    /* Mobile Header Simplification */
+    #mapHeader {
+        padding: 8px 12px;
+        gap: 8px;
+        flex-wrap: nowrap;
+    }
+
+    .workspace-title {
+        display: none; /* Hide dense title on small screens */
+    }
+
+    .mobileBrand {
+        display: block;
+    }
+
+    .mobileBrand h2 {
+        font-size: 14px;
+        font-weight: 800;
+        color: #0F2D52;
+        margin: 0;
+    }
+
+    .mobileBrand p {
+        font-size: 10px;
+        color: #64748B;
+        margin: 0;
+    }
+
+    /* Streamline Toolbar for Touch Screens */
+    .gis-toolbar {
+        gap: 4px;
+        overflow-x: auto;
+        max-width: 100%;
+    }
+
+    .gis-btn {
+        width: 34px;
+        height: 34px;
+        padding: 6px;
+    }
+
+    /* Full-width Modal Panels on Mobile */
+    #layerPanel.gis-modal {
+        width: 90vw;
+        max-width: 320px;
+        top: 60px;
+        right: 5vw;
+        left: auto;
+    }
+
+    /* Backdrop Overlay when Sidebar is open */
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0,0,0,0.4);
+        z-index: 9998;
+    }
+}
+
+/* Hide Mobile Elements on Desktop Screens */
+@media (min-width: 769px) {
+    #mobileMenuBtn, .mobileBrand {
+        display: none !important;
+    }
+} 
+
+@media (max-width: 768px) {
+    /* Center the Layer Manager modal properly on mobile screens */
+    #layerPanel.gis-modal {
+        position: fixed;
+        top: 70px;
+        left: 50% !important;
+        transform: translateX(-50%);
+        width: 88vw;
+        max-width: 320px;
+        z-index: 10000;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+} 

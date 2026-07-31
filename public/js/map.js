@@ -1152,7 +1152,7 @@ document.addEventListener("DOMContentLoaded", () => {
         printBtn.onclick = function () {
             window.print();
         };
-    } // <--- Added closing brace for "if (printBtn)" here
+    }
 
     // --- 🗺️ LAYER MANAGER MODAL CONTROLS ---
     const layersBtn = document.getElementById("layersBtn");
@@ -1176,9 +1176,55 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
+    // =========================================================
+    // 📱 ADD NEW MOBILE MENU DRAWER LOGIC HERE
+    // =========================================================
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const sidebar = document.getElementById("sidebar");
+
+    // Create backdrop overlay
+    const overlay = document.createElement("div");
+    overlay.className = "mobile-overlay hidden";
+    document.body.appendChild(overlay);
+
+    function toggleMobileMenu() {
+        if (!sidebar) return;
+        const isOpen = sidebar.classList.toggle("mobile-open");
+        
+        if (isOpen) {
+            overlay.classList.remove("hidden");
+        } else {
+            overlay.classList.add("hidden");
+        }
+
+        // Recalculate Leaflet map size when drawer toggles
+        setTimeout(() => {
+            if (typeof map !== "undefined" && map.invalidateSize) {
+                map.invalidateSize();
+            }
+        }, 300);
+    }
+
+    if (mobileMenuBtn) {
+        mobileMenuBtn.onclick = toggleMobileMenu;
+    }
+
+    overlay.onclick = toggleMobileMenu;
+
+    // Close mobile drawer when selecting a parcel/project from list
+    const parcelList = document.getElementById("list");
+    if (parcelList) {
+        parcelList.addEventListener("click", () => {
+            if (window.innerWidth <= 768 && sidebar?.classList.contains("mobile-open")) {
+                toggleMobileMenu();
+            }
+        });
+    }
+
+    // --- INITIALIZATION ---
     initInfrastructureLayers();
 
-    // Layer Checkbox Toggles
+    // Checkbox Toggles Setup
     const setupLayerToggle = (elementId, layer) => {
         const checkbox = document.getElementById(elementId);
         if (checkbox) {

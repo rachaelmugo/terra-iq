@@ -31,45 +31,50 @@
 <div id="app">
 
     <!-- LEFT SIDEBAR -->
-    <aside id="sidebar">
-        <!-- BRANDING HEADER -->
-        <div id="companyHeader">
-            <div class="brand-logo-wrapper">
-                <img src="logo.png" id="logo" alt="TerraIQ Logo" onerror="this.style.display='none'">
-                <div class="brand-icon-fallback" id="logoFallback">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-                        <polyline points="2 17 12 22 22 17"></polyline>
-                        <polyline points="2 12 12 17 22 12"></polyline>
-                    </svg>
-                </div>
-            </div>
-            <div class="brand-info">
-                <div class="brand-title">TERRA-IQ</div>
-                <div class="brand-subtitle">Smart Land Intelligence Platform</div>
+   <aside id="sidebar">
+    <!-- 📱 MOBILE CLOSE BUTTON (Shown only on small screens) -->
+    <div class="mobile-drawer-header">
+        <button id="closeMobileSidebar" aria-label="Close menu">&times;</button>
+    </div>
+
+    <!-- BRANDING HEADER -->
+    <div id="companyHeader">
+        <div class="brand-logo-wrapper">
+            <img src="logo.png" id="logo" alt="TerraIQ Logo" onerror="this.style.display='none'">
+            <div class="brand-icon-fallback" id="logoFallback">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                    <polyline points="2 17 12 22 22 17"></polyline>
+                    <polyline points="2 12 12 17 22 12"></polyline>
+                </svg>
             </div>
         </div>
+        <div class="brand-info">
+            <div class="brand-title">TERRA-IQ</div>
+            <div class="brand-subtitle">Smart Land Intelligence Platform</div>
+        </div>
+    </div>
 
-        <!-- PROJECT SELECTOR & PORTFOLIO OVERVIEW -->
-        <div class="section">
-            <div class="section-title">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-                Development Overview
+    <!-- PROJECT SELECTOR & PORTFOLIO OVERVIEW -->
+    <div class="section">
+        <div class="section-title">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
+            Development Overview
+        </div>
+        <div class="controlPanel">
+            <div class="controlGroup">
+                <label for="companySelect">Company Account</label>
+                <select id="companySelect">
+                    <option selected>Kenmark Realtors</option>
+                </select>
             </div>
-            <div class="controlPanel">
-                <div class="controlGroup">
-                    <label for="companySelect">Company Account</label>
-                    <select id="companySelect">
-                        <option selected>Kenmark Realtors</option>
-                    </select>
-                </div>
 
-                <div class="controlGroup">
-                    <label for="projectSelect">Development Project</label>
-                    <select id="projectSelect">
-                        <!-- Populated dynamically -->
-                    </select>
-                </div>
+            <div class="controlGroup">
+                <label for="projectSelect">Development Project</label>
+                <select id="projectSelect">
+                    <!-- Populated dynamically -->
+                </select>
+            </div>
 
                 <div id="activeProjectStats">
                     <div class="projectStat">
