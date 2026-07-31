@@ -984,6 +984,82 @@ display:none;
 
         top:10px;
 
-    }
+    } 
+
+    /* -------------------------
+   MOBILE HEADER
+------------------------- */
+
+.workspace-title h2{
+
+    font-size:20px;
+
+    font-weight:800;
+
+}
+
+.workspace-title h2::before{
+
+    content:"TERRA-IQ";
+
+}
+
+.workspace-title h2{
+
+    color:transparent;
+
+    position:relative;
+
+}
+
+.workspace-title h2::before{
+
+    color:#0F2D52;
+
+}
+
+.workspace-title p{
+
+    font-size:11px;
+
+}
+
+.workspace-title p::before{
+
+    content:"Enterprise Land Intelligence Platform";
+
+}
+
+.workspace-title p{
+
+    color:transparent;
+
+}
+
+.workspace-title p::before{
+
+    color:#64748B;
+
+}
+
+.basemap-wrapper{
+
+    display:none;
+
+}
+
+#layerPanel{
+
+    display:none;
+
+} 
+
+.header-controls{
+
+    width:auto;
+
+    gap:0;
+
+}
 
 }
