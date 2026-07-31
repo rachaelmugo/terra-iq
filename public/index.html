@@ -215,41 +215,44 @@
             </div>
         </header>
         
-        <div id="layerPanel" class="gis-modal hidden">
+       <div id="layerPanel" class="gis-modal hidden">
     <div class="modal-header">
         <h3>Layer Manager</h3>
         <button id="closeLayersBtn">&times;</button>
     </div>
 
+    <!-- KEEP CHECKED: Imagery, Labels, Towns -->
     <label class="layer-item">
         <input type="checkbox" id="imageryLayer" checked>
         Satellite Imagery
     </label>
-                    <label class="layer-item">
-                        <input type="checkbox" id="labelsLayer" checked>
-                        Labels
-                    </label> 
-                    <label class="layer-item">
-                        <input type="checkbox" id="chkTowns" checked>
-                        Cities & Towns
-                    </label>
-                    <label class="layer-item">
-                        <input type="checkbox" id="roadsLayer" checked>
-                        🛣️ Roads
-                    </label>
-                    <label class="layer-item">
-                        <input type="checkbox" id="schoolsLayer">
-                        🏫 Schools
-                    </label>
-                    <label class="layer-item">
-                        <input type="checkbox" id="hospitalsLayer">
-                        🏥 Hospitals
-                    </label>
-                    <label class="layer-item">
-                        <input type="checkbox" id="ketracoLayer" checked>
-                        ⚡ Power Lines (KETRACO)
-                    </label>
-                </div> 
+    <label class="layer-item">
+        <input type="checkbox" id="labelsLayer" checked>
+        Labels
+    </label> 
+    <label class="layer-item">
+        <input type="checkbox" id="chkTowns" checked>
+        Cities & Towns
+    </label>
+
+    <!-- UNCHECKED: Roads, Schools, Hospitals, Power Lines -->
+    <label class="layer-item">
+        <input type="checkbox" id="roadsLayer">
+        🛣️ Roads
+    </label>
+    <label class="layer-item">
+        <input type="checkbox" id="schoolsLayer">
+        🏫 Schools
+    </label>
+    <label class="layer-item">
+        <input type="checkbox" id="hospitalsLayer">
+        🏥 Hospitals
+    </label>
+    <label class="layer-item">
+        <input type="checkbox" id="ketracoLayer">
+        ⚡ Power Lines (KETRACO)
+    </label>
+</div>
 
         <!-- LEAFLET MAP TARGET -->
         <div id="map">

@@ -120,12 +120,18 @@ async function initInfrastructureLayers() {
         loadKetracoData()
     ]);
 
-    // Check DOM checkboxes to determine initial visibility on map load:
+    // Clear any active infrastructure layers first
+    map.removeLayer(hospitalsLayer);
+    map.removeLayer(schoolsLayer);
+    map.removeLayer(roadsLayer);
+    map.removeLayer(ketracoLayer);
+
+    // Add only checked layers based on HTML checkboxes:
     if (document.getElementById("chkTowns")?.checked) townsLayer.addTo(map);
     if (document.getElementById("roadsLayer")?.checked) roadsLayer.addTo(map);
-    if (document.getElementById("ketracoLayer")?.checked) ketracoLayer.addTo(map);
     if (document.getElementById("schoolsLayer")?.checked) schoolsLayer.addTo(map);
     if (document.getElementById("hospitalsLayer")?.checked) hospitalsLayer.addTo(map);
+    if (document.getElementById("ketracoLayer")?.checked) ketracoLayer.addTo(map);
 }
 
 async function loadHospitalsData() {
