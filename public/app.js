@@ -84,7 +84,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const closeLayersBtn = document.getElementById("closeLayersBtn");
 
     if (layersBtn && layerPanel) {
-        layersBtn.addEventListener("click", (e) => {
+      layersBtn.addEventListener("click", (e) => {
+    console.log("Toggle function running");
             e.stopPropagation();
             layerPanel.classList.toggle("hidden");
             layersBtn.classList.toggle("active", !layerPanel.classList.contains("hidden"));
