@@ -792,6 +792,23 @@ margin:0;
     animation: spin 0.8s linear infinite;
 }
 
+.mobileBrand{
+    display:none;
+}
+
+.mobileBrand h2{
+    margin:0;
+    font-size:18px;
+    font-weight:800;
+    color:var(--brand-navy-main);
+}
+
+.mobileBrand p{
+    margin:2px 0 0;
+    font-size:11px;
+    color:var(--text-muted);
+}
+
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
@@ -898,7 +915,7 @@ display:none;
 
 @media (max-width:768px){
 
-    /* Make the map occupy the screen */
+    /* Fullscreen map */
     #app{
         display:block;
         width:100vw;
@@ -916,150 +933,94 @@ display:none;
         height:100%;
     }
 
-    /* Hide sidebar off-screen */
+    /* Sidebar slides in */
     #sidebar{
-
         position:fixed;
-
         top:0;
-
         left:-100%;
-
         width:320px;
-
         max-width:90vw;
-
         height:100vh;
-
         background:#fff;
-
         z-index:9999;
-
         transition:left .3s ease;
-
         box-shadow:0 0 25px rgba(0,0,0,.25);
-
     }
 
-    /* Open sidebar */
     #sidebar.open{
-
         left:0;
-
     }
 
-    /* Show menu button */
+    /* Mobile menu button */
     #mobileMenuBtn{
-
         display:flex;
-
         align-items:center;
-
         justify-content:center;
-
         width:46px;
-
         height:46px;
-
         border:none;
-
         border-radius:12px;
-
         background:#fff;
-
         font-size:28px;
-
         cursor:pointer;
-
         box-shadow:var(--shadow-lg);
-
+        flex-shrink:0;
     }
 
-    /* Smaller header */
+    /* Mobile header */
     #mapHeader{
-
+        top:10px;
         left:10px;
-
         right:10px;
 
-        top:10px;
+        display:flex;
+        align-items:center;
+        justify-content:flex-start;
 
-    } 
+        padding:12px 16px;
+        gap:14px;
+    }
 
-    /* -------------------------
-   MOBILE HEADER
-------------------------- */
+    /* Hide desktop branding */
+    .workspace-title{
+        display:none;
+    }
 
-.workspace-title h2{
+    /* Show mobile branding */
+   .mobileBrand{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    flex:1;
+}
 
-    font-size:20px;
-
+.mobileBrand h2{
+    margin:0;
+    font-size:22px;
     font-weight:800;
-
+    color:var(--brand-navy-main);
+    line-height:1.1;
 }
 
-.workspace-title h2::before{
-
-    content:"TERRA-IQ";
-
-}
-
-.workspace-title h2{
-
-    color:transparent;
-
-    position:relative;
-
-}
-
-.workspace-title h2::before{
-
-    color:#0F2D52;
-
-}
-
-.workspace-title p{
-
+.mobileBrand p{
+    margin:2px 0 0;
     font-size:11px;
-
+    color:var(--text-muted);
+    line-height:1.3;
 }
 
-.workspace-title p::before{
+    /* Hide desktop controls from header */
+    .basemap-wrapper{
+        display:none;
+    }
 
-    content:"Enterprise Land Intelligence Platform";
+    #layerPanel{
+        display:none;
+    }
 
-}
-
-.workspace-title p{
-
-    color:transparent;
-
-}
-
-.workspace-title p::before{
-
-    color:#64748B;
-
-}
-
-.basemap-wrapper{
-
-    display:none;
-
-}
-
-#layerPanel{
-
-    display:none;
-
-} 
-
-.header-controls{
-
-    width:auto;
-
-    gap:0;
-
-}
+    .header-controls{
+        width:auto;
+        margin-left:auto;
+    }
 
 }
