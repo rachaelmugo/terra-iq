@@ -120,7 +120,12 @@ async function initInfrastructureLayers() {
         loadKetracoData()
     ]);
 
-    townsLayer.addTo(map);
+    // Check DOM checkboxes to determine initial visibility on map load:
+    if (document.getElementById("chkTowns")?.checked) townsLayer.addTo(map);
+    if (document.getElementById("roadsLayer")?.checked) roadsLayer.addTo(map);
+    if (document.getElementById("ketracoLayer")?.checked) ketracoLayer.addTo(map);
+    if (document.getElementById("schoolsLayer")?.checked) schoolsLayer.addTo(map);
+    if (document.getElementById("hospitalsLayer")?.checked) hospitalsLayer.addTo(map);
 }
 
 async function loadHospitalsData() {
@@ -1141,10 +1146,33 @@ document.addEventListener("DOMContentLoaded", () => {
         printBtn.onclick = function () {
             window.print();
         };
+    } // <--- Added closing brace for "if (printBtn)" here
+
+    // --- 🗺️ LAYER MANAGER MODAL CONTROLS ---
+    const layersBtn = document.getElementById("layersBtn");
+    const closeLayersBtn = document.getElementById("closeLayersBtn");
+    const layerPanel = document.getElementById("layerPanel");
+
+    if (layersBtn) {
+        layersBtn.title = "Layers Manager";
+        layersBtn.setAttribute("aria-label", "Layers Manager");
+
+        layersBtn.onclick = function() {
+            if (layerPanel) {
+                layerPanel.classList.toggle("hidden");
+            }
+        };
+    }
+
+    if (closeLayersBtn && layerPanel) {
+        closeLayersBtn.onclick = function() {
+            layerPanel.classList.add("hidden");
+        };
     }
 
     initInfrastructureLayers();
 
+    // Layer Checkbox Toggles
     const setupLayerToggle = (elementId, layer) => {
         const checkbox = document.getElementById(elementId);
         if (checkbox) {
