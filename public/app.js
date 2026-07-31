@@ -62,15 +62,15 @@ function initNavigationRouter() {
     });
 } 
 
-const menuBtn = document.getElementById("mobileMenuBtn");
-const sidebar = document.getElementById("sidebar");
+document.addEventListener("DOMContentLoaded", () => {
 
-if(menuBtn && sidebar){
+    const menuBtn = document.getElementById("mobileMenuBtn");
+    const sidebar = document.getElementById("sidebar");
 
-    menuBtn.addEventListener("click", ()=>{
+    if (!menuBtn || !sidebar) return;
 
+    menuBtn.addEventListener("click", () => {
         sidebar.classList.toggle("open");
-
     });
 
-}
+});
