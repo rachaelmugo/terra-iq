@@ -616,7 +616,7 @@ function updateParcelIntelligenceCard(parcelData, roadDist, amenityDist, riparia
     }
 
     if (recommendationEl) {
-        if (analysis.riskFlags.length > 0) {
+        if (analysis.riskFlags && analysis.riskFlags.length > 0) {
             recommendationEl.innerHTML = `<b>⚠️ Risk Flags:</b> ${analysis.riskFlags.join(' • ')}`;
             recommendationEl.style.borderLeftColor = "#ef4444";
             recommendationEl.style.backgroundColor = "#fef2f2";

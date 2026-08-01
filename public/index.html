@@ -105,47 +105,49 @@
             <div class="small-card-text">Filter inventory in real-time across active developments.</div>
         </div>
 
-        <!-- PARCEL INTELLIGENCE CARD -->
-        <div class="section">
-            <div class="section-title">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-                Parcel Intelligence
-            </div>
+<!-- PARCEL INTELLIGENCE CARD -->
+<div class="section">
+    <div class="section-title">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        Parcel Intelligence
+    </div>
 
-            <!-- GIS INTELLIGENCE & FEASIBILITY CARD -->
-            <div id="parcelIntelligenceCard" class="intelligence-card">
-                <div class="intel-header">
-                    <h4 id="intelParcelTitle">Parcel Analysis</h4>
-                    <span id="intelRiskBadge">Ready</span>
-                </div>
-
-                <!-- Feasibility Score Metric -->
-                <div class="intel-metrics">
-                    <div class="score-box">
-                        <span class="score-label">Score</span>
-                        <div id="intelScore">--</div>
-                    </div>
-                    <div class="status-details">
-                        <div id="intelHighwayDist">🛣️ Highway: <b>Select parcel</b></div>
-                        <div id="intelRiparianStatus">🌊 Riparian: <b>Select parcel</b></div>
-                    </div>
-                </div> 
-                <div class="intelligence-row">
-                    <span>Road Access:</span>
-                    <span id="roadAccessStars">☆☆☆☆☆</span>
-                </div>
-
-                <div id="intelRecommendation">
-                    Click any parcel on the map or inventory list to trigger automated GIS feasibility analysis.
-                </div>
-            </div>
-
-            <div id="propertyCardSection" style="display:none;">
-                <div class="card propertyCard">
-                    <div id="details"></div>
-                </div>
-            </div>
+    <!-- GIS INTELLIGENCE & FEASIBILITY CARD -->
+    <div id="parcelIntelligenceCard" class="intelligence-card">
+        <div class="intel-header">
+            <h4 id="intelParcelTitle">Parcel Analysis</h4>
+            <span id="intelRiskBadge">Ready</span>
         </div>
+
+        <!-- Feasibility Score Metric -->
+        <div class="intel-metrics">
+            <div class="score-box">
+                <span class="score-label">Score</span>
+                <div id="intelScore">--</div>
+            </div>
+            <div class="status-details">
+                <div id="intelHighwayDist">🛣️ Highway: <b>Select parcel</b></div>
+                <!-- Added missing DOM ID below -->
+                <div id="intelAmenityDist">🏥 Amenities: <b>Select parcel</b></div>
+                <div id="intelRiparianStatus">🌊 Riparian: <b>Select parcel</b></div>
+            </div>
+        </div> 
+        <div class="intelligence-row">
+            <span>Road Access:</span>
+            <span id="roadAccessStars">☆☆☆☆☆</span>
+        </div>
+
+        <div id="intelRecommendation">
+            Click any parcel on the map or inventory list to trigger automated GIS feasibility analysis.
+        </div>
+    </div>
+
+    <div id="propertyCardSection" style="display:none;">
+        <div class="card propertyCard">
+            <div id="details"></div>
+        </div>
+    </div>
+</div>
 
         <!-- PARCEL EXPLORER LIST -->
         <div class="section flex-grow">
