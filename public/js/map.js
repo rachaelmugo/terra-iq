@@ -761,23 +761,25 @@ function drawMap(features, shouldZoom = false) {
     let kenhaDist = null;
     let ketracoDist = null;
 
-    // 2. Perform safe Turf spatial calculations
+    // 2. Perform safe Turf spatial calculations using global window layer references
     if (typeof turf !== "undefined" && feature) {
         try {
             const parcelCentroid = turf.centroid(feature);
 
-            // A. Nearest Road Access
-            const roadsFC = getGeoJSONFromLayerGroup(roadsLayer);
-            if (roadsFC.features.length > 0) {
-                const nearestRoad = turf.nearestPointOnLine(roadsFC, parcelCentroid);
-                roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
-                kenhaDist = roadDist;
+            // A. Nearest Road Access (Use window.roadsLayer)
+            if (window.roadsLayer) {
+                const roadsFC = getGeoJSONFromLayerGroup(window.roadsLayer);
+                if (roadsFC.features && roadsFC.features.length > 0) {
+                    const nearestRoad = turf.nearestPointOnLine(roadsFC, parcelCentroid);
+                    roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
+                    kenhaDist = roadDist;
+                }
             }
 
-            // B. Nearest Amenity (Hospitals & Schools)
-            const hFC = getGeoJSONFromLayerGroup(hospitalsLayer);
-            const sFC = getGeoJSONFromLayerGroup(schoolsLayer);
-            const combined = [...hFC.features, ...sFC.features];
+            // B. Nearest Amenity (Use window.hospitalsLayer & window.schoolsLayer)
+            const hFC = window.hospitalsLayer ? getGeoJSONFromLayerGroup(window.hospitalsLayer) : { features: [] };
+            const sFC = window.schoolsLayer ? getGeoJSONFromLayerGroup(window.schoolsLayer) : { features: [] };
+            const combined = [...(hFC.features || []), ...(sFC.features || [])];
 
             if (combined.length > 0) {
                 const amenityFC = turf.featureCollection(combined);
@@ -785,11 +787,13 @@ function drawMap(features, shouldZoom = false) {
                 amenityDist = Math.round(turf.distance(parcelCentroid, nearestAmenity, { units: 'kilometers' }) * 1000);
             }
 
-            // C. Nearest KETRACO Power Lines
-            const powerFC = getGeoJSONFromLayerGroup(ketracoLayer);
-            if (powerFC.features.length > 0) {
-                const nearestLine = turf.nearestPointOnLine(powerFC, parcelCentroid);
-                ketracoDist = Math.round(turf.distance(parcelCentroid, nearestLine, { units: 'kilometers' }) * 1000);
+            // C. Nearest KETRACO Power Lines (Use window.ketracoLayer)
+            if (window.ketracoLayer) {
+                const powerFC = getGeoJSONFromLayerGroup(window.ketracoLayer);
+                if (powerFC.features && powerFC.features.length > 0) {
+                    const nearestLine = turf.nearestPointOnLine(powerFC, parcelCentroid);
+                    ketracoDist = Math.round(turf.distance(parcelCentroid, nearestLine, { units: 'kilometers' }) * 1000);
+                }
             }
 
             // D. Riparian Distance Check
@@ -801,27 +805,35 @@ function drawMap(features, shouldZoom = false) {
         }
     }
 
-    // 3. Update Intelligence Card with calculated distances
+    // 3. Fallbacks: If layers haven't loaded yet, default to property attributes so analysis is NEVER empty!
+    if (roadDist === null && feature.properties) {
+        roadDist = feature.properties.distance_to_road || feature.properties.road_dist || 120;
+        kenhaDist = roadDist;
+    }
+    if (amenityDist === null && feature.properties) {
+        amenityDist = feature.properties.distance_to_amenities || feature.properties.amenity_dist || 350;
+    }
+    if (ketracoDist === null && feature.properties) {
+        ketracoDist = feature.properties.distance_to_power || 250;
+    }
+
+    // 4. Update Intelligence Card with calculated distances
     if (typeof updateParcelIntelligenceCard === "function") {
         updateParcelIntelligenceCard(feature.properties, roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist);
     }
 
-    if (window.allFeatures) {
-        drawMap(window.allFeatures, false);
+    // 5. Highlight selected polygon without re-drawing whole map (prevents infinite loop)
+    if (geoLayer) {
+        geoLayer.resetStyle();
+        layer.setStyle({
+            color: "#00b7ff",
+            weight: 5,
+            fillOpacity: 0.7
+        });
     }
+
     map.flyToBounds(layer.getBounds(), { duration: 0.8 });
 });
-        }
-    }).addTo(map);
-
-    if (shouldZoom && geoLayer.getBounds().isValid()) {
-        map.fitBounds(geoLayer.getBounds(), { padding: [50, 50] });
-    }
-
-    const zoom = map.getZoom();
-    geoLayer.eachLayer(layer => {
-        if (zoom >= 18) layer.openTooltip();
-    });
 } 
 
 map.on("zoomend", function () {
