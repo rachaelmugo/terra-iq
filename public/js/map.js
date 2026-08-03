@@ -711,21 +711,16 @@ async function calculateSpatialMetrics(feature) {
     let amenityDist = null;
     let powerDist = null;
 
-    // ----------------------------------------------------------------------
-    // 1. LIVE OSM OVERPASS QUERY (Roads, Amenities, and Power Lines)
-    // ----------------------------------------------------------------------
     try {
-        // Query bounding box (~3km - 5km radius around parcel)
-        const bbox = `${lat - 0.03},${lng - 0.03},${lat + 0.03},${lng + 0.03}`;
-        
-        // Overpass QL: Get ways for highways/power and nodes/ways for amenities
+        // Query 5km radius around parcel centroid using Overpass 'around'
+        const radius = 5000;
         const query = `
-            [out:json][timeout:8];
+            [out:json][timeout:10];
             (
-              way["highway"](${bbox});
-              way["power"="line"](${bbox});
-              node["amenity"](${bbox});
-              way["amenity"](${bbox});
+              way["highway"~"primary|secondary|tertiary|unclassified|residential|trunk"](around:${radius},${lat},${lng});
+              way["power"="line"](around:${radius},${lat},${lng});
+              node["amenity"~"school|hospital|clinic|marketplace|bank|pharmacy"](around:${radius},${lat},${lng});
+              way["amenity"~"school|hospital|clinic|marketplace|bank|pharmacy"](around:${radius},${lat},${lng});
             );
             out body;
             >;
@@ -737,7 +732,6 @@ async function calculateSpatialMetrics(feature) {
         if (res.ok) {
             const data = await res.json();
             
-            // Map OSM nodes by ID for fast coordinate lookup
             const nodesMap = new Map();
             data.elements.forEach(el => {
                 if (el.type === 'node') {
@@ -749,46 +743,35 @@ async function calculateSpatialMetrics(feature) {
             const powerLines = [];
             const amenityPoints = [];
 
-            // Process OSM elements into Turf geometries
             data.elements.forEach(el => {
-                // A. Process Ways (Roads & Power Lines)
                 if (el.type === 'way' && el.nodes && el.nodes.length > 1) {
                     const coords = el.nodes.map(nodeId => nodesMap.get(nodeId)).filter(Boolean);
                     if (coords.length > 1) {
                         const line = turf.lineString(coords, el.tags || {});
-                        if (el.tags && el.tags.highway) {
-                            roadLines.push(line);
-                        } else if (el.tags && el.tags.power) {
-                            powerLines.push(line);
-                        } else if (el.tags && el.tags.amenity) {
-                            amenityPoints.push(turf.centroid(line));
-                        }
+                        if (el.tags && el.tags.highway) roadLines.push(line);
+                        else if (el.tags && el.tags.power) powerLines.push(line);
+                        else if (el.tags && el.tags.amenity) amenityPoints.push(turf.centroid(line));
                     }
-                } 
-                // B. Process Amenity Nodes (Hospitals, Schools, etc.)
-                else if (el.type === 'node' && el.tags && el.tags.amenity) {
+                } else if (el.type === 'node' && el.tags && el.tags.amenity) {
                     amenityPoints.push(turf.point([el.lon, el.lat], el.tags));
                 }
             });
 
-            // --- 📏 1. Calculate Nearest Road Distance ---
+            // 🛣️ Distance to nearest Road (meters)
             if (roadLines.length > 0) {
-                const roadsFC = turf.featureCollection(roadLines);
-                const nearestRoad = turf.nearestPointOnLine(roadsFC, parcelCentroid);
+                const nearestRoad = turf.nearestPointOnLine(turf.featureCollection(roadLines), parcelCentroid);
                 roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
             }
 
-            // --- 🏥 2. Calculate Nearest Amenity Distance ---
+            // 🏥 Distance to nearest Amenity (meters)
             if (amenityPoints.length > 0) {
-                const amenityFC = turf.featureCollection(amenityPoints);
-                const nearestAmenity = turf.nearestPoint(parcelCentroid, amenityFC);
+                const nearestAmenity = turf.nearestPoint(parcelCentroid, turf.featureCollection(amenityPoints));
                 amenityDist = Math.round(turf.distance(parcelCentroid, nearestAmenity, { units: 'kilometers' }) * 1000);
             }
 
-            // --- ⚡ 3. Calculate Nearest Power Line Distance ---
+            // ⚡ Distance to nearest Power Line (meters)
             if (powerLines.length > 0) {
-                const powerFC = turf.featureCollection(powerLines);
-                const nearestPower = turf.nearestPointOnLine(powerFC, parcelCentroid);
+                const nearestPower = turf.nearestPointOnLine(turf.featureCollection(powerLines), parcelCentroid);
                 powerDist = Math.round(turf.distance(parcelCentroid, nearestPower, { units: 'kilometers' }) * 1000);
             }
         }
@@ -796,15 +779,13 @@ async function calculateSpatialMetrics(feature) {
         console.warn("Live OSM Overpass query failed:", err);
     }
 
-    // ----------------------------------------------------------------------
-    // 2. FALLBACK TO PARCEL PROPERTIES (If OSM returns no results or fails)
-    // ----------------------------------------------------------------------
-    if (roadDist === null) roadDist = properties.distance_to_road || properties.road_distance || 150;
-    if (amenityDist === null) amenityDist = properties.distance_to_amenities || properties.amenity_distance || 450;
-    if (powerDist === null) powerDist = properties.distance_to_power || properties.power_distance || 300;
+    // Fallbacks from Feature Properties if OSM API is empty/blocked
+    if (roadDist === null) roadDist = properties.distance_to_road ?? properties.road_distance ?? null;
+    if (amenityDist === null) amenityDist = properties.distance_to_amenities ?? properties.amenity_distance ?? null;
+    if (powerDist === null) powerDist = properties.distance_to_power ?? properties.power_distance ?? null;
 
     return { roadDist, amenityDist, powerDist };
-}
+} 
 /* =========================
    MAP PARCEL DRAWING LOGIC
    ========================= */
@@ -882,69 +863,57 @@ function drawMap(features, shouldZoom = false) {
 
             // 👈 Note the 'async' keyword here
             layer.on('click', async () => {
-                window.selectedParcelId = feature.properties.parcel_no;
-                
-                // 1. Load HTML structure into sidebar
-                if (typeof showDetails === "function") {
-                    showDetails(feature.properties);
-                }
+    window.selectedParcelId = feature.properties.parcel_no;
+    
+    // 1. Render base sidebar UI immediately in Loading state
+    if (typeof showDetails === "function") {
+        showDetails(feature.properties, null); // Pass null for initial state
+    }
 
-                // 2. FETCH LIVE METRICS FROM OSM
-                let metrics = { roadDist: null, amenityDist: null, powerDist: null };
-                if (typeof calculateSpatialMetrics === "function") {
-                    try {
-                        metrics = await calculateSpatialMetrics(feature);
-                    } catch (e) {
-                        console.warn("Failed to calculate live OSM metrics:", e);
-                    }
-                }
+    // 2. Extract Riparian Distance from feature properties
+    const riparianDist = (feature.properties?.riparian_distance !== undefined && feature.properties?.riparian_distance !== null)
+        ? parseFloat(feature.properties.riparian_distance) 
+        : null;
 
-                // 3. EXTRACT DISTANCES & RIPARIAN PROPERTY
-                const roadDist = metrics.roadDist;
-                const amenityDist = metrics.amenityDist;
-                const ketracoDist = metrics.powerDist;
-                const kenhaDist = roadDist;
-                const riparianDist = feature.properties?.riparian_distance !== undefined 
-                    ? parseFloat(feature.properties.riparian_distance) 
-                    : null;
+    // 3. Perform Live OpenStreetMap Calculation
+    let metrics = { roadDist: null, amenityDist: null, powerDist: null };
+    try {
+        metrics = await calculateSpatialMetrics(feature);
+    } catch (e) {
+        console.warn("Failed to calculate live OSM metrics:", e);
+    }
 
-                // 4. FEED METRICS DIRECTLY INTO SCORE CALCULATOR
-                if (typeof calculateComprehensiveScore === "function") {
-                    const scoreAnalysis = calculateComprehensiveScore(
-                        roadDist,
-                        amenityDist,
-                        riparianDist,
-                        kenhaDist,   // KeNHA reserve distance
-                        ketracoDist  // Power line wayleave distance
-                    );
-                }
+    const roadDist = metrics.roadDist;
+    const amenityDist = metrics.amenityDist;
+    const ketracoDist = metrics.powerDist;
+    const kenhaDist = roadDist; // or feature.properties.kenha_distance
 
-                // 5. UPDATE INTELLIGENCE CARD UI
-                if (typeof updateParcelIntelligenceCard === "function") {
-                    updateParcelIntelligenceCard(
-                        feature.properties, 
-                        roadDist, 
-                        amenityDist, 
-                        riparianDist, 
-                        kenhaDist, 
-                        ketracoDist
-                    );
-                }
+    // 4. Update UI Card with Real OSM Numbers & Comprehensive Score
+    if (typeof updateParcelIntelligenceCard === "function") {
+        updateParcelIntelligenceCard(
+            feature.properties, 
+            roadDist, 
+            amenityDist, 
+            riparianDist, 
+            kenhaDist, 
+            ketracoDist
+        );
+    }
 
-                // 6. HIGHLIGHT SELECTED POLYGON & ANIMATE CAMERA
-                if (geoLayer) {
-                    geoLayer.resetStyle();
-                    layer.setStyle({
-                        color: "#00b7ff",
-                        weight: 5,
-                        fillOpacity: 0.7
-                    });
-                }
-                
-                if (layer.getBounds && layer.getBounds().isValid()) {
-                    map.flyToBounds(layer.getBounds(), { duration: 0.8 });
-                }
-            });
+    // 5. Highlight & Camera Fly
+    if (geoLayer) {
+        geoLayer.resetStyle();
+        layer.setStyle({
+            color: "#00b7ff",
+            weight: 5,
+            fillOpacity: 0.7
+        });
+    }
+    
+    if (layer.getBounds && layer.getBounds().isValid()) {
+        map.flyToBounds(layer.getBounds(), { duration: 0.8 });
+    }
+});
         }
     }).addTo(map);
 
