@@ -2,7 +2,7 @@
    🏢 TERRA-IQ - UI RENDERER (ui.js)
    ========================================================================== */
 
-function showDetails(p) {
+function showDetails(p, metrics = null) {
     let statusColor = "#16a34a";
     const statusLower = (p.status || "").toLowerCase();
 
@@ -18,6 +18,23 @@ function showDetails(p) {
     // Safely extract coordinates if available in parcel object
     const lat = p.lat || p.latitude || "";
     const lng = p.lng || p.longitude || "";
+
+    // Extract pre-existing or default metric properties safely
+    const roadDist = metrics?.roadDist ?? p.distance_to_road ?? p.road_distance ?? 150;
+    const amenityDist = metrics?.amenityDist ?? p.distance_to_amenities ?? p.amenity_distance ?? 450;
+    const powerDist = metrics?.powerDist ?? p.distance_to_power ?? p.power_distance ?? 300;
+    const riparianDist = p.riparian_distance ? parseFloat(p.riparian_distance) : null;
+
+    // Format helper inline for initial render
+    const formatDist = (m) => (m !== null && m !== undefined && !isNaN(m)) 
+        ? (m >= 1000 ? (m / 1000).toFixed(1) + " km" : Math.round(m) + " m") 
+        : "Clear";
+
+    // Quick score calculation for instant initial render
+    let totalScore = 85; 
+    if (roadDist > 1500) totalScore -= 15;
+    if (amenityDist > 3000) totalScore -= 10;
+    if (riparianDist && riparianDist < 30) totalScore -= 20;
 
     detailsEl.innerHTML = `
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -67,12 +84,14 @@ function showDetails(p) {
     <div style="margin-top:20px;padding:18px;border-radius:14px;background:linear-gradient(135deg,#0F2D52,#1E4E8C);color:white;">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
             <div style="font-size:16px;font-weight:bold;" id="intelParcelTitle">⭐ Property Intelligence</div>
-            <span id="intelRiskBadge" style="padding:4px 10px; border-radius:12px; font-size:11px; font-weight:bold; background:#16a34a; color:white;">EXCELLENT</span>
+            <span id="intelRiskBadge" style="padding:4px 10px; border-radius:12px; font-size:11px; font-weight:bold; background:#16a34a; color:white;">
+                ${totalScore >= 80 ? 'EXCELLENT' : totalScore >= 55 ? 'MODERATE' : 'HIGH RISK'}
+            </span>
         </div>
 
         <div style="display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;">
             <span style="font-size:13px; opacity:0.9;">Feasibility Score</span>
-            <strong id="intelScore" style="color:#FFD54A; font-size:20px; font-weight:800;">-- /100</strong>
+            <strong id="intelScore" style="color:#FFD54A; font-size:20px; font-weight:800;">${totalScore} /100</strong>
         </div>
 
         <div style="display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;">
@@ -83,9 +102,10 @@ function showDetails(p) {
         <hr style="border:none; border-top:1px solid rgba(255,255,255,0.15); margin:10px 0;">
 
         <div style="display:flex; flex-direction:column; gap:6px; font-size:12px; color:#E2E8F0;">
-            <div id="intelHighwayDist">🛣️ Highway Access: <b>Calculating...</b></div>
-            <div id="intelAmenityDist">🏥 Nearby Amenities: <b>Calculating...</b></div>
-            <div id="intelRiparianStatus">🌊 Riparian Buffer: <b>Clear (>30m)</b></div>
+            <div id="intelHighwayDist">🛣️ Highway Access: <b>${formatDist(roadDist)}</b></div>
+            <div id="intelAmenityDist">🏥 Nearby Amenities: <b>${formatDist(amenityDist)}</b></div>
+            <div id="intelRiparianStatus">🌊 Riparian Buffer: <b>${riparianDist ? formatDist(riparianDist) : 'Clear (>30m)'}</b></div>
+            <div id="intelPowerStatus">⚡ Power Line: <b>${formatDist(powerDist)}</b></div>
         </div>
 
         <div id="intelRecommendation" style="margin-top:14px; padding:10px 12px; border-radius:8px; font-size:12px; background:#f0fdf4; color:#166534; border-left:4px solid #16a34a; line-height:1.4;">
@@ -127,7 +147,6 @@ function showDetails(p) {
         };
     }
 }
-
 function renderList(features) {
     const list = document.getElementById("list");
     if (!list) return;
