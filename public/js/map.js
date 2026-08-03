@@ -1420,12 +1420,13 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.onclick = window.closeMobileMenu;
     }
 
-    // 4. Close drawer ONLY when a parcel/item in #list is clicked
+    // 4. Close drawer ONLY when a specific parcel item card is clicked
     const parcelList = document.getElementById("list");
     if (parcelList) {
         parcelList.addEventListener("click", (e) => {
-            // If user taps an item card or link inside the inventory list
-            if (e.target.closest(".item") || e.target.closest("div")) {
+            // Target specific parcel cards or list items, NOT generic divs
+            const clickedCard = e.target.closest(".item, .parcel-card, .list-item, [data-parcel-id]");
+            if (clickedCard) {
                 window.closeMobileMenu(e);
             }
         });
@@ -1441,20 +1442,20 @@ document.addEventListener("DOMContentLoaded", () => {
         const checkbox = document.getElementById(elementId);
         if (checkbox) {
             checkbox.onchange = function() {
-                if (this.checked) {
+                if (this.checked && layer) {
                     layer.addTo(map);
-                } else {
+                } else if (layer) {
                     map.removeLayer(layer);
                 }
             };
         }
     }; 
     
-    setupLayerToggle("roadsLayer", roadsLayer);
-    setupLayerToggle("schoolsLayer", schoolsLayer);
-    setupLayerToggle("hospitalsLayer", hospitalsLayer);
-    setupLayerToggle("ketracoLayer", ketracoLayer);
-    setupLayerToggle("imageryLayer", imagery);
-    setupLayerToggle("labelsLayer", labels);
-    setupLayerToggle("chkTowns", townsLayer);
+    setupLayerToggle("roadsLayer", typeof roadsLayer !== "undefined" ? roadsLayer : null);
+    setupLayerToggle("schoolsLayer", typeof schoolsLayer !== "undefined" ? schoolsLayer : null);
+    setupLayerToggle("hospitalsLayer", typeof hospitalsLayer !== "undefined" ? hospitalsLayer : null);
+    setupLayerToggle("ketracoLayer", typeof ketracoLayer !== "undefined" ? ketracoLayer : null);
+    setupLayerToggle("imageryLayer", typeof imagery !== "undefined" ? imagery : null);
+    setupLayerToggle("labelsLayer", typeof labels !== "undefined" ? labels : null);
+    setupLayerToggle("chkTowns", typeof townsLayer !== "undefined" ? townsLayer : null);
 });

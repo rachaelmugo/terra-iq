@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TerraIQ | Enterprise Land Intelligence Workspace</title>
-<meta name="description" content="Terra-IQ is an enterprise GIS workspace for land intelligence, parcel management, spatial analysis, and real estate analytics.">
+    <meta name="description" content="Terra-IQ is an enterprise GIS workspace for land intelligence, parcel management, spatial analysis, and real estate analytics.">
+    <meta name="author" content="Rachael Mugo">
+    <meta name="theme-color" content="#0f172a">
 
-<meta name="author" content="Rachael Mugo">
-
-<meta name="theme-color" content="#0f172a">
-
-<meta property="og:title" content="Terra-IQ | Enterprise GIS Workspace">
-<meta property="og:description" content="Interactive GIS platform for land intelligence, parcel analysis and real estate management.">
-<meta property="og:type" content="website">
+    <meta property="og:title" content="Terra-IQ | Enterprise GIS Workspace">
+    <meta property="og:description" content="Interactive GIS platform for land intelligence, parcel analysis and real estate management.">
+    <meta property="og:type" content="website">
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -105,16 +103,28 @@
         <div class="small-card-text">Filter inventory in real-time across active developments.</div>
     </div>
 
-    <!-- PARCEL INTELLIGENCE CARD -->
+    <!-- 🌟 PARCEL INTELLIGENCE CARD (Single Section Above Inventory Explorer) -->
     <div class="section">
         <div class="section-title">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
             Parcel Intelligence
         </div>
 
-        <div id="propertyCardSection" style="display:none;">
+        <!-- Populates with parcel spatial analysis when a plot is selected -->
+        <div id="propertyCardSection">
             <div class="card propertyCard">
-                <div id="details"></div>
+                <div id="details">
+                    <div style="padding:16px; border-radius:10px; background:rgba(255,255,255,0.05); color:#94A3B8; text-align:center; font-size:13px; line-height:1.5;">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom:6px;">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                        <br>
+                        <strong>No Parcel Selected</strong>
+                        <div style="font-size:11px; margin-top:4px; opacity:0.8;">Click any plot polygon on the map or select from the list below to view detailed spatial intelligence.</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -135,13 +145,11 @@
         
         <!-- GIS TOP HEADER BAR -->
         <header id="mapHeader">
-            <button id="mobileMenuBtn">
-☰
-</button> 
-<div class="mobileBrand">
-    <h2>TERRA-IQ</h2>
-    <p>Enterprise Land Intelligence Platform</p>
-</div>
+            <button id="mobileMenuBtn">☰</button> 
+            <div class="mobileBrand">
+                <h2>TERRA-IQ</h2>
+                <p>Enterprise Land Intelligence Platform</p>
+            </div>
             <div class="workspace-title">
                 <h2>KENMARK GIS WORKSPACE</h2>
                 <p>Interactive Land Intelligence & Cadastral Viewer</p>
@@ -178,14 +186,13 @@
                             <path d="M12 6L4 14l8 8"></path>
                         </svg>
                     </button> 
-                    <!-- LAYER MANAGER ICON BUTTON (Positioned directly above Print) -->
-    <button id="layersBtn" title="Layers Manager" aria-label="Layers Manager" class="gis-btn">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
-            <polyline points="2 17 12 22 22 17"></polyline>
-            <polyline points="2 12 12 17 22 12"></polyline>
-        </svg>
-    </button>
+                    <button id="layersBtn" title="Layers Manager" aria-label="Layers Manager" class="gis-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="12 2 2 7 12 12 22 7 12 2"></polygon>
+                            <polyline points="2 17 12 22 22 17"></polyline>
+                            <polyline points="2 12 12 17 22 12"></polyline>
+                        </svg>
+                    </button>
                     <button id="printBtn" title="Export / Print Map" aria-label="Export or Print Map" class="gis-btn">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
                     </button>
@@ -193,44 +200,42 @@
             </div>
         </header>
         
-       <div id="layerPanel" class="gis-modal hidden">
-    <div class="modal-header">
-        <h3>Layer Manager</h3>
-        <button id="closeLayersBtn">&times;</button>
-    </div>
+        <div id="layerPanel" class="gis-modal hidden">
+            <div class="modal-header">
+                <h3>Layer Manager</h3>
+                <button id="closeLayersBtn">&times;</button>
+            </div>
 
-    <!-- KEEP CHECKED: Imagery, Labels, Towns -->
-    <label class="layer-item">
-        <input type="checkbox" id="imageryLayer" checked>
-        Satellite Imagery
-    </label>
-    <label class="layer-item">
-        <input type="checkbox" id="labelsLayer" checked>
-        Labels
-    </label> 
-    <label class="layer-item">
-        <input type="checkbox" id="chkTowns" checked>
-        Cities & Towns
-    </label>
+            <label class="layer-item">
+                <input type="checkbox" id="imageryLayer" checked>
+                Satellite Imagery
+            </label>
+            <label class="layer-item">
+                <input type="checkbox" id="labelsLayer" checked>
+                Labels
+            </label> 
+            <label class="layer-item">
+                <input type="checkbox" id="chkTowns" checked>
+                Cities & Towns
+            </label>
 
-    <!-- UNCHECKED: Roads, Schools, Hospitals, Power Lines -->
-    <label class="layer-item">
-        <input type="checkbox" id="roadsLayer">
-        🛣️ Roads
-    </label>
-    <label class="layer-item">
-        <input type="checkbox" id="schoolsLayer">
-        🏫 Schools
-    </label>
-    <label class="layer-item">
-        <input type="checkbox" id="hospitalsLayer">
-        🏥 Hospitals
-    </label>
-    <label class="layer-item">
-        <input type="checkbox" id="ketracoLayer">
-        ⚡ Power Lines (KETRACO)
-    </label>
-</div>
+            <label class="layer-item">
+                <input type="checkbox" id="roadsLayer">
+                🛣️ Roads
+            </label>
+            <label class="layer-item">
+                <input type="checkbox" id="schoolsLayer">
+                🏫 Schools
+            </label>
+            <label class="layer-item">
+                <input type="checkbox" id="hospitalsLayer">
+                🏥 Hospitals
+            </label>
+            <label class="layer-item">
+                <input type="checkbox" id="ketracoLayer">
+                ⚡ Power Lines (KETRACO)
+            </label>
+        </div>
 
         <!-- LEAFLET MAP TARGET -->
         <div id="map">

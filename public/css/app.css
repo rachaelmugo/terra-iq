@@ -999,7 +999,6 @@ display:none;
     }
 
     /* Google Earth Style Bottom Sheet Drawer */
-    /* Google Earth Style Bottom Sheet Drawer */
     #sidebar {
         position: fixed !important;
         bottom: 0 !important;
@@ -1017,6 +1016,7 @@ display:none;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important; /* Smooth touch scrolling on mobile */
         pointer-events: auto !important; /* Forces input & button touches to register */
+        touch-action: pan-y !important; /* Allows smooth vertical scrolling */
         padding: 16px !important;
     } 
 
@@ -1033,6 +1033,7 @@ display:none;
         align-items: center;
         padding-bottom: 12px;
         position: relative;
+        z-index: 3001 !important; /* Keep drag header / close button above drawer content */
     }
 
     .mobile-drawer-header::before {
@@ -1050,8 +1051,11 @@ display:none;
         background: transparent;
         border: none;
         color: #64748B;
-        font-size: 24px;
+        font-size: 28px;
+        line-height: 1;
+        padding: 8px;
         cursor: pointer;
+        z-index: 3002 !important; /* Explicit top layer for tap accuracy */
     }
 
     /* Layer Manager Centered Modal */
@@ -1068,17 +1072,18 @@ display:none;
 
     /* Backdrop Overlay */
     .mobile-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: rgba(0, 0, 0, 0.4);
-        z-index: 2999;
-        transition: opacity 0.3s ease;
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        z-index: 2999 !important;
+        transition: opacity 0.3s ease !important;
     }
 
     .mobile-overlay.hidden {
         display: none !important;
+        pointer-events: none !important; /* Crucial: ensures hidden overlay cannot steal touches */
     }
 }
