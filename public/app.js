@@ -62,17 +62,39 @@ function initNavigationRouter() {
     });
 } 
 
+/* ==========================================================================
+   📱 MOBILE SIDEBAR & NAVIGATION CONTROLLER
+   ========================================================================== */
 document.addEventListener("DOMContentLoaded", () => {
-
     const menuBtn = document.getElementById("mobileMenuBtn");
     const sidebar = document.getElementById("sidebar");
+    const closeBtn = document.getElementById("closeMobileSidebar");
 
-    if (!menuBtn || !sidebar) return;
-
-    menuBtn.addEventListener("click", () => {
+    function toggleSidebar() {
+        if (!sidebar) return;
         sidebar.classList.toggle("open");
-    });
+        sidebar.classList.toggle("mobile-open");
+    }
 
+    if (menuBtn) {
+        menuBtn.addEventListener("click", (e) => {
+            e.stopPropagation();
+            toggleSidebar();
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener("click", toggleSidebar);
+    }
+
+    // Auto-close drawer on mobile when clicking a parcel card or menu item
+    document.addEventListener("click", (e) => {
+        if (window.innerWidth <= 768 && sidebar && sidebar.classList.contains("open")) {
+            if (!sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+                sidebar.classList.remove("open", "mobile-open");
+            }
+        }
+    });
 }); 
 
 // --------------------------------------------------------------------------

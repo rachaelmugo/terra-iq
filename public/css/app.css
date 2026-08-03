@@ -1132,41 +1132,61 @@ display:none;
 @media (max-width: 768px) {
     /* Main Layout: Full screen map container */
     #app {
-        display: block;
-        position: relative;
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
+        display: block !important;
+        position: relative !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        overflow: hidden !important;
     }
 
     #mapContainer {
-        width: 100vw;
-        height: 100vh;
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: 1;
+        width: 100vw !important;
+        height: 100vh !important;
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        z-index: 1 !important;
     }
 
     /* Convert Sidebar into a Mobile Drawer */
     #sidebar {
-        position: fixed;
-        top: 0;
-        left: -100%; /* Hidden off-screen by default */
-        width: 85vw;
-        max-width: 360px;
-        height: 100vh;
-        background: #ffffff;
-        z-index: 9999;
-        box-shadow: 4px 0 20px rgba(0, 0, 0, 0.25);
-        transition: left 0.3s ease-in-out;
-        overflow-y: auto;
-        padding-bottom: 20px;
+        position: fixed !important;
+        top: 0 !important;
+        left: -100% !important; /* Hidden off-screen by default */
+        width: 85vw !important;
+        max-width: 360px !important;
+        height: 100vh !important;
+        background: #ffffff !important;
+        z-index: 9999 !important;
+        box-shadow: 6px 0 25px rgba(0, 0, 0, 0.3) !important;
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        overflow-y: auto !important;
+        padding-bottom: 20px !important;
     }
 
-    /* Active state to slide in drawer */
+    /* Active state to slide in drawer (Supports both .open and .mobile-open) */
+    #sidebar.open,
     #sidebar.mobile-open {
-        left: 0;
+        left: 0 !important;
+    }
+
+    /* Top Close Bar inside Mobile Drawer */
+    .mobile-drawer-header {
+        display: flex !important;
+        justify-content: flex-end;
+        align-items: center;
+        padding: 12px 16px;
+        background: #0F2D52;
+    }
+
+    #closeMobileSidebar {
+        background: transparent;
+        border: none;
+        color: #FFFFFF;
+        font-size: 26px;
+        font-weight: bold;
+        line-height: 1;
+        cursor: pointer;
     }
 
     /* Mobile Header Simplification */
@@ -1226,19 +1246,26 @@ display:none;
         left: 0;
         width: 100vw;
         height: 100vh;
-        background: rgba(0,0,0,0.4);
+        background: rgba(0, 0, 0, 0.4);
         z-index: 9998;
     }
 }
+/* ==========================================================================
+   📱 MOBILE & RESPONSIVE ADAPTATIONS
+   ========================================================================== */
 
-/* Hide Mobile Elements on Desktop Screens */
+/* 1. Hide Mobile-Only Elements on Desktop Screens */
 @media (min-width: 769px) {
-    #mobileMenuBtn, .mobileBrand {
+    #mobileMenuBtn, 
+    .mobileBrand,
+    .mobile-drawer-header {
         display: none !important;
     }
 } 
 
+/* 2. Mobile Specific Responsive Overrides (Under 768px) */
 @media (max-width: 768px) {
+    
     /* Center the Layer Manager modal properly on mobile screens */
     #layerPanel.gis-modal {
         position: fixed;
@@ -1250,18 +1277,13 @@ display:none;
         z-index: 10000;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
     }
-}  
 
-/* ==========================================================================
-   📱 MOBILE ICON & TOOLTIP RESPONSIVE RESIZING
-   ========================================================================== */
-@media (max-width: 768px) {
-    /* Scale down custom project pins on mobile */
+    /* Scale down custom project pins for smaller touch viewports */
     .custom-project-pin {
         transform: scale(0.75); /* Makes pins 25% smaller on mobile */
     }
 
-    /* Keep Leaflet popups responsive and touch-friendly */
+    /* Make Leaflet popups responsive and touch-friendly */
     .leaflet-popup-content-wrapper {
         border-radius: 8px !important;
         padding: 4px !important;
@@ -1271,18 +1293,14 @@ display:none;
         margin: 8px 10px !important;
         font-size: 12px !important;
     }
-} 
 
-/* Hide mobile close button header on desktop */
-.mobile-drawer-header {
-    display: none;
-}
-
-@media (max-width: 768px) {
+    /* Drawer Header & Mobile Close (×) Button */
     .mobile-drawer-header {
-        display: flex;
+        display: flex !important;
         justify-content: flex-end;
-        padding: 8px 12px 0 0;
+        align-items: center;
+        padding: 8px 12px;
+        background: var(--brand-navy-dark, #0F2D52);
     }
 
     #closeMobileSidebar {
