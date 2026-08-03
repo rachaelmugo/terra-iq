@@ -861,59 +861,64 @@ function drawMap(features, shouldZoom = false) {
                 }
             });
 
-            // 👈 Note the 'async' keyword here
+            // 📍 PARCEL CLICK HANDLER
             layer.on('click', async () => {
-    window.selectedParcelId = feature.properties.parcel_no;
-    
-    // 1. Render base sidebar UI immediately in Loading state
-    if (typeof showDetails === "function") {
-        showDetails(feature.properties, null); // Pass null for initial state
-    }
+                window.selectedParcelId = feature.properties.parcel_no;
+                
+                // 1. Render base sidebar UI immediately in Loading state
+                if (typeof showDetails === "function") {
+                    showDetails(feature.properties, null);
+                }
 
-    // 2. Extract Riparian Distance from feature properties
-    const riparianDist = (feature.properties?.riparian_distance !== undefined && feature.properties?.riparian_distance !== null)
-        ? parseFloat(feature.properties.riparian_distance) 
-        : null;
+                // 2. Extract Riparian Distance from feature properties
+                const riparianDist = (feature.properties?.riparian_distance !== undefined && feature.properties?.riparian_distance !== null)
+                    ? parseFloat(feature.properties.riparian_distance) 
+                    : null;
 
-    // 3. Perform Live OpenStreetMap Calculation
-    let metrics = { roadDist: null, amenityDist: null, powerDist: null };
-    try {
-        metrics = await calculateSpatialMetrics(feature);
-    } catch (e) {
-        console.warn("Failed to calculate live OSM metrics:", e);
-    }
+                // 3. Perform Live OpenStreetMap Calculation
+                let metrics = { roadDist: null, amenityDist: null, powerDist: null };
+                try {
+                    metrics = await calculateSpatialMetrics(feature);
+                } catch (e) {
+                    console.warn("Failed to calculate live OSM metrics:", e);
+                }
 
-    const roadDist = metrics.roadDist;
-    const amenityDist = metrics.amenityDist;
-    const ketracoDist = metrics.powerDist;
-    const kenhaDist = roadDist; // or feature.properties.kenha_distance
+                const roadDist = metrics.roadDist;
+                const amenityDist = metrics.amenityDist;
+                const ketracoDist = metrics.powerDist;
+                const kenhaDist = roadDist; 
 
-    // 4. Update UI Card with Real OSM Numbers & Comprehensive Score
-    if (typeof updateParcelIntelligenceCard === "function") {
-        updateParcelIntelligenceCard(
-            feature.properties, 
-            roadDist, 
-            amenityDist, 
-            riparianDist, 
-            kenhaDist, 
-            ketracoDist
-        );
-    }
+                // 4. Update UI Card with Real OSM Numbers & Comprehensive Score
+                if (typeof updateParcelIntelligenceCard === "function") {
+                    updateParcelIntelligenceCard(
+                        feature.properties, 
+                        roadDist, 
+                        amenityDist, 
+                        riparianDist, 
+                        kenhaDist, 
+                        ketracoDist
+                    );
+                }
 
-    // 5. Highlight & Camera Fly
-    if (geoLayer) {
-        geoLayer.resetStyle();
-        layer.setStyle({
-            color: "#00b7ff",
-            weight: 5,
-            fillOpacity: 0.7
-        });
-    }
-    
-    if (layer.getBounds && layer.getBounds().isValid()) {
-        map.flyToBounds(layer.getBounds(), { duration: 0.8 });
-    }
-});
+                // 5. Highlight & Camera Fly
+                if (geoLayer) {
+                    geoLayer.resetStyle();
+                    layer.setStyle({
+                        color: "#00b7ff",
+                        weight: 5,
+                        fillOpacity: 0.7
+                    });
+                }
+                
+                if (layer.getBounds && layer.getBounds().isValid()) {
+                    map.flyToBounds(layer.getBounds(), { duration: 0.8 });
+                }
+
+                // 📱 6. SLIDE UP MOBILE SHEET (Only runs on phones <= 768px)
+                if (window.innerWidth <= 768 && typeof window.openMobileMenu === "function") {
+                    window.openMobileMenu();
+                }
+            });
         }
     }).addTo(map);
 

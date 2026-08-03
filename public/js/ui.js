@@ -94,9 +94,10 @@ function showDetails(p, metrics = null) {
             <div id="intelPowerStatus">⚡ Power Line: <i>Calculating...</i></div>
         </div>
 
-        <div id="intelRecommendation" style="margin-top:14px; padding:10px 12px; border-radius:8px; font-size:12px; background:rgba(255,255,255,0.1); color:#E2E8F0; line-height:1.4;">
-            <b>⏳ Live GIS Feasibility:</b> Querying OpenStreetMap vector data...
-        </div>
+        /* Change this section in showDetails() inside js/ui.js */
+<div id="intelRecommendation" style="margin-top:14px; padding:10px 12px; border-radius:8px; font-size:12px; background:rgba(255,255,255,0.15); color:#ffffff; line-height:1.4;">
+    <b>⏳ Live GIS Feasibility:</b> Querying spatial metrics...
+</div>
     </div>
 
     <h3 style="margin-top:25px;color:#0F2D52;">Reserve Parcel</h3>
