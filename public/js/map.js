@@ -1376,11 +1376,15 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.appendChild(overlay);
     }
 
-    // Attach to window so js/map.js can trigger it on parcel click
+    // Attach to window so map parcel clicks can trigger it
     window.openMobileMenu = function(e) {
-        if (e) e.stopPropagation();
-        if (sidebar) sidebar.classList.add("mobile-open");
-        if (overlay) overlay.classList.remove("hidden");
+        if (e && e.stopPropagation) e.stopPropagation();
+        if (sidebar) {
+            sidebar.classList.add("mobile-open", "open");
+        }
+        if (overlay) {
+            overlay.classList.remove("hidden");
+        }
         
         setTimeout(() => {
             if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
@@ -1388,40 +1392,45 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     window.closeMobileMenu = function(e) {
-        if (e) e.stopPropagation();
-        if (sidebar) sidebar.classList.remove("mobile-open");
-        if (overlay) overlay.classList.add("hidden");
+        if (e && e.stopPropagation) e.stopPropagation();
+        if (sidebar) {
+            sidebar.classList.remove("mobile-open", "open");
+        }
+        if (overlay) {
+            overlay.classList.add("hidden");
+        }
 
         setTimeout(() => {
             if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
         }, 300);
     };
 
-    // 1. Tapping the hamburger button opens the menu
+    // 1. Tapping hamburger button opens menu
     if (mobileMenuBtn) {
         mobileMenuBtn.onclick = window.openMobileMenu;
     }
 
-    // 2. Tapping the 'X' button closes the menu
+    // 2. Tapping 'X' button closes menu
     if (closeMobileSidebarBtn) {
         closeMobileSidebarBtn.onclick = window.closeMobileMenu;
     }
 
-    // 3. Tapping outside on the overlay backdrop closes the menu
-    overlay.onclick = window.closeMobileMenu;
-
-    // 4. Handle clicks inside the sidebar smartly
-    if (sidebar) {
-        sidebar.addEventListener("click", (e) => {
-            // Close drawer if clicking on close button or parcel list item
-            if (e.target.closest("#closeMobileSidebar") || e.target.closest("#list .item")) {
-                window.closeMobileMenu(e);
-            } else {
-                e.stopPropagation(); // Keep drawer open when interacting inside
-            }
-        });
+    // 3. Tapping outside on overlay backdrop closes menu
+    if (overlay) {
+        overlay.onclick = window.closeMobileMenu;
     }
 
+    // 4. Close drawer ONLY when a parcel/item in #list is clicked
+    const parcelList = document.getElementById("list");
+    if (parcelList) {
+        parcelList.addEventListener("click", (e) => {
+            // If user taps an item card or link inside the inventory list
+            if (e.target.closest(".item") || e.target.closest("div")) {
+                window.closeMobileMenu(e);
+            }
+        });
+    } 
+    
     // --- INITIALIZATION ---
     if (typeof initInfrastructureLayers === "function") {
         initInfrastructureLayers();
