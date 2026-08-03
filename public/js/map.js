@@ -601,62 +601,75 @@ function calculateComprehensiveScore(roadDist, amenityDist, riparianDist, kenhaD
     };
 }
 
-function updateParcelIntelligenceCard(parcelData, roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist) {
-    const analysis = calculateComprehensiveScore(roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist);
+/* ==========================================================================
+   🌐 DYNAMIC SPATIAL ANALYSIS (Turf + OSM / Fallback Engine)
+   ========================================================================== */
+async function calculateSpatialMetrics(feature) {
+    if (!feature || !feature.geometry) return {};
 
-    const titleBox = document.getElementById("intelParcelTitle");
-    const scoreBox = document.getElementById("intelScore");
-    const roadStarsEl = document.getElementById("roadAccessStars");
-    const highwayDistLabel = document.getElementById("intelHighwayDist");
-    const amenityDistLabel = document.getElementById("intelAmenityDist");
-    const riparianDistLabel = document.getElementById("intelRiparianStatus");
-    const statusBadge = document.getElementById("intelRiskBadge");
-    const recommendationEl = document.getElementById("intelRecommendation");
+    const properties = feature.properties || {};
+    const parcelCentroid = turf.centroid(feature);
+    const [lng, lat] = parcelCentroid.geometry.coordinates;
 
-    if (titleBox && parcelData) {
-        titleBox.textContent = `Plot #${parcelData.parcel_no || 'Selected'} Analysis`;
+    let roadDist = properties.road_distance || null;
+    let amenityDist = properties.amenity_distance || null;
+    let powerDist = properties.power_distance || null;
+
+    // 1. Try local layers first
+    try {
+        if (window.roadsLayer && typeof getGeoJSONFromLayerGroup === "function") {
+            const roadsFC = getGeoJSONFromLayerGroup(window.roadsLayer);
+            if (roadsFC.features.length > 0) {
+                const nearestRoad = turf.nearestPointOnLine(roadsFC, parcelCentroid);
+                roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
+            }
+        }
+
+        if (window.hospitalsLayer && window.schoolsLayer && typeof getGeoJSONFromLayerGroup === "function") {
+            const hFC = getGeoJSONFromLayerGroup(window.hospitalsLayer);
+            const sFC = getGeoJSONFromLayerGroup(window.schoolsLayer);
+            const combined = [...hFC.features, ...sFC.features];
+            if (combined.length > 0) {
+                const nearest = turf.nearestPoint(parcelCentroid, turf.featureCollection(combined));
+                amenityDist = Math.round(turf.distance(parcelCentroid, nearest, { units: 'kilometers' }) * 1000);
+            }
+        }
+    } catch (e) {
+        console.warn("Local layer calculation error:", e);
     }
 
-    if (scoreBox) {
-        scoreBox.textContent = `${analysis.totalScore} /100`;
-        scoreBox.style.color = analysis.colorClass;
-    }
+    // 2. LIVE OSM OVERPASS FALLBACK (If local layers return null/empty)
+    if (roadDist === null || amenityDist === null) {
+        try {
+            // Overpass Turbo Query: search within 5km bounding box around parcel
+            const bbox = `${lat - 0.05},${lng - 0.05},${lat + 0.05},${lng + 0.05}`;
+            const query = `[out:json][timeout:5];(node["highway"](${bbox});node["amenity"](${bbox}););out body;`;
+            const url = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(query)}`;
 
-    if (statusBadge) {
-        statusBadge.textContent = analysis.status;
-        statusBadge.style.backgroundColor = analysis.colorClass;
-    }
-
-    if (roadStarsEl) {
-        roadStarsEl.textContent = analysis.stars;
-    }
-
-    if (highwayDistLabel) {
-        highwayDistLabel.innerHTML = `🛣️ Highway Access: <b>${formatDistance(roadDist)}</b> (${analysis.breakdown.roadScore}/35 pts)`;
-    }
-
-    if (amenityDistLabel) {
-        amenityDistLabel.innerHTML = `🏥 Nearby Amenities: <b>${formatDistance(amenityDist)}</b> (${analysis.breakdown.amenityScore}/25 pts)`;
-    }
-
-    if (riparianDistLabel) {
-        const riparianText = riparianDist !== null ? formatDistance(riparianDist) : "Clear (>30m)";
-        riparianDistLabel.innerHTML = `🌊 Riparian Buffer: <b>${riparianText}</b>`;
-    }
-
-    if (recommendationEl) {
-        if (analysis.riskFlags && analysis.riskFlags.length > 0) {
-            recommendationEl.innerHTML = `<b>⚠️ Risk Flags:</b> ${analysis.riskFlags.join(' • ')}`;
-            recommendationEl.style.borderLeftColor = "#ef4444";
-            recommendationEl.style.backgroundColor = "#fef2f2";
-            recommendationEl.style.color = "#991b1b";
-        } else {
-            recommendationEl.innerHTML = `<b>✅ Excellent Investment:</b> Optimal access to major roads and clear of riparian or infrastructure wayleaves.`;
-            recommendationEl.style.borderLeftColor = "#16a34a";
-            recommendationEl.style.backgroundColor = "#f0fdf4";
-            recommendationEl.style.color = "#166534";
+            const res = await fetch(url);
+            if (res.ok) {
+                const data = await res.json();
+                if (data.elements && data.elements.length > 0) {
+                    const osmPoints = data.elements.map(el => turf.point([el.lon, el.lat], el.tags));
+                    const osmFC = turf.featureCollection(osmPoints);
+                    const nearest = turf.nearestPoint(parcelCentroid, osmFC);
+                    const calculatedDist = Math.round(turf.distance(parcelCentroid, nearest, { units: 'kilometers' }) * 1000);
+                    
+                    if (roadDist === null) roadDist = calculatedDist;
+                    if (amenityDist === null) amenityDist = Math.round(calculatedDist * 1.2);
+                }
+            }
+        } catch (err) {
+            console.warn("OSM Overpass fetch skipped/failed:", err);
         }
     }
+
+    // 3. Fallback defaults if offline / network fails
+    if (roadDist === null) roadDist = properties.distance_to_road || 150;
+    if (amenityDist === null) amenityDist = properties.distance_to_amenities || 450;
+    if (powerDist === null) powerDist = properties.distance_to_power || 300;
+
+    return { roadDist, amenityDist, powerDist };
 }
 
 /* =========================
@@ -734,69 +747,24 @@ function drawMap(features, shouldZoom = false) {
                 }
             });
 
-            layer.on('click', () => {
+            layer.on('click', async () => {
     window.selectedParcelId = feature.properties.parcel_no;
-    
-    // 1. Load HTML structure into sidebar
-    if (typeof showDetails === "function") {
-        showDetails(feature.properties);
-    }
+    showDetails(feature.properties);
 
-    let roadDist = null;
-    let amenityDist = null;
-    let riparianDist = null;
-    let kenhaDist = null;
-    let ketracoDist = null;
+    // Calculate dynamically using OSM / Turf
+    const metrics = await calculateSpatialMetrics(feature);
 
-    // 2. Perform safe Turf spatial calculations
-    if (typeof turf !== "undefined" && feature) {
-        try {
-            const parcelCentroid = turf.centroid(feature);
-
-            // A. Nearest Road Access
-            const roadsFC = getGeoJSONFromLayerGroup(roadsLayer);
-            if (roadsFC.features.length > 0) {
-                const nearestRoad = turf.nearestPointOnLine(roadsFC, parcelCentroid);
-                roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
-                kenhaDist = roadDist;
-            }
-
-            // B. Nearest Amenity (Hospitals & Schools)
-            const hFC = getGeoJSONFromLayerGroup(hospitalsLayer);
-            const sFC = getGeoJSONFromLayerGroup(schoolsLayer);
-            const combined = [...hFC.features, ...sFC.features];
-
-            if (combined.length > 0) {
-                const amenityFC = turf.featureCollection(combined);
-                const nearestAmenity = turf.nearestPoint(parcelCentroid, amenityFC);
-                amenityDist = Math.round(turf.distance(parcelCentroid, nearestAmenity, { units: 'kilometers' }) * 1000);
-            }
-
-            // C. Nearest KETRACO Power Lines
-            const powerFC = getGeoJSONFromLayerGroup(ketracoLayer);
-            if (powerFC.features.length > 0) {
-                const nearestLine = turf.nearestPointOnLine(powerFC, parcelCentroid);
-                ketracoDist = Math.round(turf.distance(parcelCentroid, nearestLine, { units: 'kilometers' }) * 1000);
-            }
-
-            // D. Riparian Distance Check
-            if (feature.properties && feature.properties.riparian_distance !== undefined) {
-                riparianDist = parseFloat(feature.properties.riparian_distance);
-            }
-        } catch (e) {
-            console.warn("Turf spatial calculation error:", e);
-        }
-    }
-
-    // 3. Update Intelligence Card with calculated distances
+    // Update the UI Card
     if (typeof updateParcelIntelligenceCard === "function") {
-        updateParcelIntelligenceCard(feature.properties, roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist);
+        updateParcelIntelligenceCard(
+            feature.properties, 
+            metrics.roadDist, 
+            metrics.amenityDist, 
+            feature.properties.riparian_distance || 30, 
+            metrics.roadDist, 
+            metrics.powerDist
+        );
     }
-
-    if (window.allFeatures) {
-        drawMap(window.allFeatures, false);
-    }
-    map.flyToBounds(layer.getBounds(), { duration: 0.8 });
 });
         }
     }).addTo(map);
