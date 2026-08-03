@@ -1365,7 +1365,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // 📱 FIXED MOBILE MENU DRAWER LOGIC
     // =========================================================
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-    const closeMobileSidebarBtn = document.getElementById("closeMobileSidebar"); // 👈 Added selector
+    const closeMobileSidebarBtn = document.getElementById("closeMobileSidebar");
     const sidebar = document.getElementById("sidebar");
 
     // Create backdrop overlay safely
@@ -1376,52 +1376,56 @@ document.addEventListener("DOMContentLoaded", () => {
         document.body.appendChild(overlay);
     }
 
-    function openMobileMenu(e) {
+    // Attach to window so js/map.js can trigger it on parcel click
+    window.openMobileMenu = function(e) {
         if (e) e.stopPropagation();
-        sidebar?.classList.add("mobile-open");
-        overlay.classList.remove("hidden");
+        if (sidebar) sidebar.classList.add("mobile-open");
+        if (overlay) overlay.classList.remove("hidden");
         
         setTimeout(() => {
             if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
         }, 300);
-    }
+    };
 
-    function closeMobileMenu(e) {
+    window.closeMobileMenu = function(e) {
         if (e) e.stopPropagation();
-        sidebar?.classList.remove("mobile-open");
-        overlay.classList.add("hidden");
+        if (sidebar) sidebar.classList.remove("mobile-open");
+        if (overlay) overlay.classList.add("hidden");
 
         setTimeout(() => {
             if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
         }, 300);
-    }
+    };
 
+    // 1. Tapping the hamburger button opens the menu
     if (mobileMenuBtn) {
-        // Tapping the hamburger button ONLY opens the menu
-        mobileMenuBtn.onclick = openMobileMenu;
+        mobileMenuBtn.onclick = window.openMobileMenu;
     }
 
-    // 👈 ❌ Add this line to handle the 'x' close button inside the sidebar
+    // 2. Tapping the 'X' button closes the menu
     if (closeMobileSidebarBtn) {
-        closeMobileSidebarBtn.onclick = closeMobileMenu;
+        closeMobileSidebarBtn.onclick = window.closeMobileMenu;
     }
 
-    // Tapping outside ONLY closes the menu
-    overlay.onclick = closeMobileMenu;
+    // 3. Tapping outside on the overlay backdrop closes the menu
+    overlay.onclick = window.closeMobileMenu;
 
-    // Prevent clicks inside the sidebar from bubbling up to map/overlay
+    // 4. Handle clicks inside the sidebar smartly
     if (sidebar) {
-        sidebar.onclick = (e) => e.stopPropagation();
+        sidebar.addEventListener("click", (e) => {
+            // Close drawer if clicking on close button or parcel list item
+            if (e.target.closest("#closeMobileSidebar") || e.target.closest("#list .item")) {
+                window.closeMobileMenu(e);
+            } else {
+                e.stopPropagation(); // Keep drawer open when interacting inside
+            }
+        });
     }
-
-    // Close mobile drawer when clicking item in list
-    const parcelList = document.getElementById("list");
-    if (parcelList) {
-        parcelList.addEventListener("click", closeMobileMenu);
-    } 
 
     // --- INITIALIZATION ---
-    initInfrastructureLayers();
+    if (typeof initInfrastructureLayers === "function") {
+        initInfrastructureLayers();
+    }
 
     // Checkbox Toggles Setup
     const setupLayerToggle = (elementId, layer) => {
@@ -1435,8 +1439,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             };
         }
-    };
-
+    }; 
+    
     setupLayerToggle("roadsLayer", roadsLayer);
     setupLayerToggle("schoolsLayer", schoolsLayer);
     setupLayerToggle("hospitalsLayer", hospitalsLayer);
