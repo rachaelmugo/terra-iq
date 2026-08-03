@@ -747,24 +747,69 @@ function drawMap(features, shouldZoom = false) {
                 }
             });
 
-            layer.on('click', async () => {
+            layer.on('click', () => {
     window.selectedParcelId = feature.properties.parcel_no;
-    showDetails(feature.properties);
-
-    // Calculate dynamically using OSM / Turf
-    const metrics = await calculateSpatialMetrics(feature);
-
-    // Update the UI Card
-    if (typeof updateParcelIntelligenceCard === "function") {
-        updateParcelIntelligenceCard(
-            feature.properties, 
-            metrics.roadDist, 
-            metrics.amenityDist, 
-            feature.properties.riparian_distance || 30, 
-            metrics.roadDist, 
-            metrics.powerDist
-        );
+    
+    // 1. Load HTML structure into sidebar
+    if (typeof showDetails === "function") {
+        showDetails(feature.properties);
     }
+
+    let roadDist = null;
+    let amenityDist = null;
+    let riparianDist = null;
+    let kenhaDist = null;
+    let ketracoDist = null;
+
+    // 2. Perform safe Turf spatial calculations
+    if (typeof turf !== "undefined" && feature) {
+        try {
+            const parcelCentroid = turf.centroid(feature);
+
+            // A. Nearest Road Access
+            const roadsFC = getGeoJSONFromLayerGroup(roadsLayer);
+            if (roadsFC.features.length > 0) {
+                const nearestRoad = turf.nearestPointOnLine(roadsFC, parcelCentroid);
+                roadDist = Math.round(turf.distance(parcelCentroid, nearestRoad, { units: 'kilometers' }) * 1000);
+                kenhaDist = roadDist;
+            }
+
+            // B. Nearest Amenity (Hospitals & Schools)
+            const hFC = getGeoJSONFromLayerGroup(hospitalsLayer);
+            const sFC = getGeoJSONFromLayerGroup(schoolsLayer);
+            const combined = [...hFC.features, ...sFC.features];
+
+            if (combined.length > 0) {
+                const amenityFC = turf.featureCollection(combined);
+                const nearestAmenity = turf.nearestPoint(parcelCentroid, amenityFC);
+                amenityDist = Math.round(turf.distance(parcelCentroid, nearestAmenity, { units: 'kilometers' }) * 1000);
+            }
+
+            // C. Nearest KETRACO Power Lines
+            const powerFC = getGeoJSONFromLayerGroup(ketracoLayer);
+            if (powerFC.features.length > 0) {
+                const nearestLine = turf.nearestPointOnLine(powerFC, parcelCentroid);
+                ketracoDist = Math.round(turf.distance(parcelCentroid, nearestLine, { units: 'kilometers' }) * 1000);
+            }
+
+            // D. Riparian Distance Check
+            if (feature.properties && feature.properties.riparian_distance !== undefined) {
+                riparianDist = parseFloat(feature.properties.riparian_distance);
+            }
+        } catch (e) {
+            console.warn("Turf spatial calculation error:", e);
+        }
+    }
+
+    // 3. Update Intelligence Card with calculated distances
+    if (typeof updateParcelIntelligenceCard === "function") {
+        updateParcelIntelligenceCard(feature.properties, roadDist, amenityDist, riparianDist, kenhaDist, ketracoDist);
+    }
+
+    if (window.allFeatures) {
+        drawMap(window.allFeatures, false);
+    }
+    map.flyToBounds(layer.getBounds(), { duration: 0.8 });
 });
         }
     }).addTo(map);
