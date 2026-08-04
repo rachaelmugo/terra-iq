@@ -1162,50 +1162,46 @@ display:none;
 }
 
 /* ==========================================================================
-   📱 RESTORE GIS TOOLBAR
+   📱 MOBILE GIS TOOLBAR
    ========================================================================== */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
-    /* GIS Toolbar */
-    #gisToolbar,
-    .gis-toolbar,
-    #toolsContainer,
-    .tools-container{
-        display:flex !important;
+    #gisToolbar{
         position:fixed !important;
         top:82px !important;
         right:12px !important;
-        left:auto !important;
-        bottom:auto !important;
-        z-index:99998 !important;
+
+        display:flex !important;
         flex-direction:column !important;
-        gap:6px !important;
-        background:var(--glass-bg) !important;
-        backdrop-filter:var(--glass-blur) !important;
-        -webkit-backdrop-filter:var(--glass-blur) !important;
-        border:1px solid var(--glass-border) !important;
-        border-radius:var(--radius-lg) !important;
-        padding:8px !important;
-        box-shadow:var(--shadow-lg) !important;
+        gap:8px !important;
+
+        z-index:99998 !important;
+
+        background:var(--glass-bg);
+        backdrop-filter:var(--glass-blur);
+        -webkit-backdrop-filter:var(--glass-blur);
+
+        border:1px solid var(--glass-border);
+        border-radius:var(--radius-lg);
+
+        padding:8px;
+
+        box-shadow:var(--shadow-lg);
     }
 
-    #gisToolbar button,
-    .gis-toolbar button,
-    .gis-btn{
-
+    #gisToolbar .gis-btn{
         width:42px !important;
         height:42px !important;
-        min-width:42px !important;
-        min-height:42px !important;
-        display:flex !important;
+        display:flex;
         align-items:center;
         justify-content:center;
     }
-    /* Leaflet Layers Control */
+
     .leaflet-top.leaflet-right{
         top:82px !important;
         right:68px !important;
         z-index:99997 !important;
     }
+
 }
