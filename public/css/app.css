@@ -1052,102 +1052,183 @@ display:none;
 } 
 
 /* ==========================================================================
-   📱 TERRA-IQ MOBILE HEADER REFINEMENT
+   📱 TERRA-IQ PROFESSIONAL MOBILE HEADER
    ========================================================================== */
+
 @media (max-width:768px){
-    /* Mobile Header Size */
+
+    /* Mobile Header */
     #mapHeader{
-    position:fixed !important;
-    top:10px !important;
-    left:10px !important;
-    right:10px !important;
-    width:calc(100% - 20px) !important;
-    height:60px !important;
-    background:#ffffff !important;
-    border-radius:18px !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:space-between !important;
-    padding:0 12px !important;
-    box-shadow:0 8px 25px rgba(15,45,82,.18) !important;
-    z-index:99999 !important;
-}
+        position:fixed !important;
+        top:10px !important;
+        left:10px !important;
+        right:10px !important;
+        width:calc(100% - 20px) !important;
+        height:64px !important;
 
-    /* Hide desktop header content on mobile */
-.workspace-title,
-.header-controls{
-    display:none !important;
-}
+        display:flex !important;
+        align-items:center !important;
+        justify-content:flex-start !important;
+        gap:12px !important;
 
+        padding:0 16px !important;
 
-/* Hide desktop map overlays on mobile */
-#coordinateBox,
-#legend{
-    display:none !important;
-}
+        background:linear-gradient(135deg,#0B132B 0%,#0F2D52 100%) !important;
 
-    /* Terra-IQ Mobile Branding */
-.mobileBrand{
-    display:flex !important;
-    flex-direction:column;
-    justify-content:center;
-    margin-left:10px;
-    line-height:1;
-}
+        border-bottom:3px solid #D4A017 !important;
+        border-radius:18px !important;
 
+        box-shadow:0 10px 28px rgba(11,19,43,.28) !important;
 
-.mobileBrand h2{
-    font-size:17px !important;
-    font-weight:900 !important;
-    letter-spacing:-0.04em;
-    color:#0F2D52 !important;
-    margin:0 !important;
-}
+        z-index:99999 !important;
+    }
 
+    /* Hide desktop title */
+    .workspace-title,
+    .header-controls{
+        display:none !important;
+    }
 
-.mobileBrand p{
-    font-size:9px !important;
-    font-weight:700 !important;
-    color:#64748B !important;
-    margin-top:4px !important;
-    text-transform:uppercase;
-    letter-spacing:.08em;
-}
+    /* Hide desktop overlays */
+    #coordinateBox,
+    #legend{
+        display:none !important;
+    }
 
-    /* Bigger hamburger button */
+    /* Hamburger */
     #mobileMenuBtn{
-    width:44px !important;
-    height:44px !important;
-    min-width:44px !important;
-    border-radius:14px !important;
-    font-size:21px !important;
-    display:flex !important;
-    align-items:center;
-    justify-content:center;
-    box-shadow:0 4px 12px rgba(15,45,82,.25);
+
+        order:1;
+
+        width:46px !important;
+        height:46px !important;
+
+        min-width:46px !important;
+
+        border-radius:12px !important;
+
+        background:#ffffff !important;
+
+        color:#0F2D52 !important;
+
+        font-size:24px !important;
+
+        font-weight:700;
+
+        border:none;
+
+        display:flex !important;
+
+        align-items:center;
+
+        justify-content:center;
+
+        box-shadow:0 4px 12px rgba(0,0,0,.20);
+    }
+
+    /* Logo */
+
+    #mobileLogo{
+
+        order:2;
+
+        display:block !important;
+
+        width:42px;
+
+        height:42px;
+
+        border-radius:10px;
+
+        background:#fff;
+
+        padding:4px;
+
+        object-fit:contain;
+
+        box-shadow:0 2px 10px rgba(0,0,0,.25);
+
+    }
+
+    /* Brand */
+
+    .mobileBrand{
+
+        order:3;
+
+        display:flex !important;
+
+        flex-direction:column;
+
+        justify-content:center;
+
+        flex:1;
+
+        line-height:1.1;
+
+    }
+
+    .mobileBrand h2{
+
+        margin:0;
+
+        font-size:18px !important;
+
+        font-weight:800;
+
+        color:#ffffff !important;
+
+        letter-spacing:-.02em;
+
+    }
+
+    .mobileBrand p{
+
+        margin-top:3px;
+
+        font-size:9px;
+
+        font-weight:700;
+
+        color:#94A3B8;
+
+        text-transform:uppercase;
+
+        letter-spacing:.08em;
+
+    }
+
+    /* Close Button */
+
+    #closeMobileSidebar{
+
+        width:46px !important;
+
+        height:46px !important;
+
+        font-size:30px !important;
+
+        border-radius:12px;
+
+        display:flex;
+
+        align-items:center;
+
+        justify-content:center;
+
+    }
+
+    .mobile-drawer-header{
+
+        height:46px;
+
+    }
+
 }
 
-    /* Bigger close button inside drawer */
-    #closeMobileSidebar{
-        width:44px !important;
-        height:44px !important;
-        font-size:30px !important;
-        right:8px !important;
-        top:6px !important;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-    }
-
-    /* Drawer top handle area */
-    .mobile-drawer-header{
-        height:42px;
-        padding-bottom:10px !important;
-    }
-} 
 
 /* ==========================================================================
-   📱 MOBILE GIS TOOLBAR RESTORE
+   📱 RESTORE GIS TOOLBAR
    ========================================================================== */
 
 @media(max-width:768px){
@@ -1161,18 +1242,17 @@ display:none;
 
         position:fixed !important;
 
-        top:85px !important;
+        top:86px !important;
 
         right:12px !important;
 
         left:auto !important;
 
-        z-index:8000 !important;
+        z-index:9000 !important;
 
         flex-direction:column !important;
 
     }
-
 
     #gisToolbar button,
     .gis-toolbar button,
@@ -1184,22 +1264,12 @@ display:none;
 
     }
 
-} 
+    .leaflet-top.leaflet-right{
 
-@media(max-width:768px){
+        top:86px !important;
 
-.leaflet-top.leaflet-right{
-    top:85px !important;
-    right:65px !important;
-}
-}
+        right:66px !important;
 
-#mobileLogo{
-    width:38px;
-    height:38px;
-    border-radius:10px;
-    background:#fff;
-    padding:3px;
-    object-fit:contain;
-    margin-left:8px;
+    }
+
 }
