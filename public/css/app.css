@@ -998,7 +998,7 @@ display:none;
         flex-shrink: 0;
     }
 
-    /* Google Earth Style Bottom Sheet Drawer */
+/* Google Earth Style Bottom Sheet Drawer */
     #sidebar {
         position: fixed !important;
         bottom: 0 !important;
@@ -1006,24 +1006,64 @@ display:none;
         left: 0 !important;
         width: 100vw !important;
         max-width: 100% !important;
-        height: 65vh !important;
+        height: 85vh !important; /* Fixed height so scrollable area is predictable */
+        max-height: 85vh !important; 
         background: #FFFFFF !important;
         border-radius: 20px 20px 0 0 !important;
         box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.25) !important;
         z-index: 3000 !important;
         transform: translateY(100%); /* Hidden off-screen below */
         transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important; /* Smooth touch scrolling on mobile */
-        pointer-events: auto !important; /* Forces input & button touches to register */
-        touch-action: pan-y !important; /* Allows smooth vertical scrolling */
+        
+        /* 🛑 CRITICAL FIX: Disable pointer events ONLY when hidden */
+        pointer-events: none !important; 
+        visibility: hidden;
+        
+        display: flex !important;
+        flex-direction: column !important;
         padding: 16px !important;
+        box-sizing: border-box !important;
     } 
 
-    /* Slide sheet up when open */
+    /* Slide sheet up when open & ENABLE POINTER EVENTS & TOUCH SCROLLING */
     #sidebar.open,
     #sidebar.mobile-open {
         transform: translateY(0) !important;
+        pointer-events: auto !important; /* 🟢 Re-enable touch for parent */
+        visibility: visible !important;
+    }
+
+    /* 🟢 CRITICAL FIX: Ensure inner containers allow scrolling & touch */
+    #sidebar *,
+    #sidebar .sidebar-content,
+    #sidebar #list,
+    #sidebar .controlPanel,
+    #sidebar .section {
+        pointer-events: auto !important;
+        touch-action: pan-y manipulation !important; /* Enables smooth vertical scrolling & instant tapping */
+    }
+
+    /* 🟢 Allow inner lists & body to scroll smoothly */
+    #sidebar .sidebar-content,
+    #sidebar #list {
+        flex: 1 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch !important;
+        max-height: 100 % !important;
+    }
+
+    /* Form controls (Project Select dropdowns, buttons, input fields) */
+    #sidebar select,
+    #sidebar input,
+    #sidebar button,
+    #sidebar option,
+    #sidebar .item,
+    #sidebar .parcel-card {
+        pointer-events: auto !important;
+        touch-action: manipulation !important;
+        position: relative;
+        z-index: 3005 !important;
+        cursor: pointer;
     }
 
     /* Top Drag Handle for Bottom Sheet */
@@ -1033,7 +1073,8 @@ display:none;
         align-items: center;
         padding-bottom: 12px;
         position: relative;
-        z-index: 3001 !important; /* Keep drag header / close button above drawer content */
+        flex-shrink: 0; /* Prevents handle from shrinking when scrolling */
+        z-index: 3001 !important;
     }
 
     .mobile-drawer-header::before {
@@ -1046,16 +1087,17 @@ display:none;
 
     #closeMobileSidebar {
         position: absolute;
-        right: 8px;
-        top: -4px;
+        right: 0px;
+        top: 0px;
         background: transparent;
         border: none;
         color: #64748B;
-        font-size: 28px;
+        font-size: 24px;
         line-height: 1;
-        padding: 8px;
+        padding: 4px 8px;
         cursor: pointer;
-        z-index: 3002 !important; /* Explicit top layer for tap accuracy */
+        z-index: 3002 !important;
+        pointer-events: auto !important;
     }
 
     /* Layer Manager Centered Modal */
@@ -1084,6 +1126,6 @@ display:none;
 
     .mobile-overlay.hidden {
         display: none !important;
-        pointer-events: none !important; /* Crucial: ensures hidden overlay cannot steal touches */
+        pointer-events: none !important;
     }
 }
