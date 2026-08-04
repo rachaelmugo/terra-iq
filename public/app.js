@@ -62,70 +62,8 @@ function initNavigationRouter() {
     });
 } 
 
-// =========================================================
-// 📱 GOOGLE EARTH MOBILE MENU SHEET LOGIC
-// =========================================================
-const mobileMenuBtn = document.getElementById("mobileMenuBtn");
-const closeMobileSidebarBtn = document.getElementById("closeMobileSidebar");
-const sidebar = document.getElementById("sidebar");
-
-// Safely obtain or create backdrop overlay
-let overlay = document.querySelector(".mobile-overlay");
-if (!overlay) {
-    overlay = document.createElement("div");
-    overlay.className = "mobile-overlay hidden";
-    document.body.appendChild(overlay);
-}
-
-function openMobileMenu(e) {
-    if (e) e.stopPropagation();
-    sidebar?.classList.add("mobile-open", "open");
-    overlay.classList.remove("hidden");
-    
-    // Force Leaflet map tile recalculation when drawer opens
-    setTimeout(() => {
-        if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
-    }, 300);
-}
-
-function closeMobileMenu(e) {
-    if (e) e.stopPropagation();
-    sidebar?.classList.remove("mobile-open", "open");
-    overlay.classList.add("hidden");
-
-    // Recalculate Leaflet view when drawer closes
-    setTimeout(() => {
-        if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
-    }, 300);
-}
-
-// Attach Event Listeners
-if (mobileMenuBtn) {
-    mobileMenuBtn.onclick = openMobileMenu;
-}
-
-if (closeMobileSidebarBtn) {
-    closeMobileSidebarBtn.onclick = closeMobileMenu;
-}
-
-overlay.onclick = closeMobileMenu;
-
-if (sidebar) {
-    sidebar.onclick = (e) => e.stopPropagation();
-}
-
-// Close bottom sheet when selecting a item from list
-const parcelList = document.getElementById("list");
-if (parcelList) {
-    parcelList.addEventListener("click", closeMobileMenu);
-}
-
-// Expose globally so map click handlers can trigger the sheet
-window.openMobileMenu = openMobileMenu;
-window.closeMobileMenu = closeMobileMenu;
-
 // --- INITIALIZATION ---
-initInfrastructureLayers();
+//initInfrastructureLayers();
 
 // Checkbox Toggles Setup
 const setupLayerToggle = (elementId, layer) => {
