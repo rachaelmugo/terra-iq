@@ -1384,6 +1384,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (sidebar) {
             sidebar.classList.add("mobile-open", "open");
             sidebar.scrollTop = 0; // Reset scroll to top
+
+            // 🟢 PREVENT LEAFLET MAP FROM HIJACKING SCROLL/TOUCHES INSIDE SIDEBAR
+            if (typeof L !== "undefined") {
+                L.DomEvent.disableScrollPropagation(sidebar);
+                L.DomEvent.disableClickPropagation(sidebar);
+            }
+            if (typeof map !== "undefined" && map && map.dragging) {
+                map.dragging.disable(); // Prevents map panning while scrolling drawer
+            }
         }
         if (overlay) {
             overlay.classList.remove("hidden");

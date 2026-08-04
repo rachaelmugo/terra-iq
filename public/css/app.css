@@ -1008,7 +1008,7 @@ display:none;
         z-index: 100000 !important;
     }
 
-    /* Google Earth Style Bottom Sheet Drawer */
+ /* Google Earth Style Bottom Sheet Drawer */
     #sidebar {
         position: fixed !important;
         bottom: 0 !important;
@@ -1030,14 +1030,15 @@ display:none;
         -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
         
-        pointer-events: none !important; 
+        /* 🟢 CHANGED FROM 'none' TO 'auto' SO TOUCHES WORK */
+        pointer-events: auto !important; 
         visibility: hidden;
         
         display: flex !important;
         flex-direction: column !important;
         padding: 16px !important;
         box-sizing: border-box !important;
-    } 
+    }
 
     /* Slide sheet up when open & ENABLE POINTER EVENTS */
     #sidebar.open,
