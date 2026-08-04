@@ -905,20 +905,6 @@ display:none;
 
 }
 
-/* ==========================================================================
-   📱 GOOGLE EARTH MOBILE INTERFACE (UP TO 768px)
-   ========================================================================== */
-
-/* 1. Hide Mobile Elements on Desktop Screens (769px and above) */
-@media (min-width: 769px) {
-    #mobileMenuBtn, 
-    .mobileBrand,
-    .mobile-drawer-header,
-    .mobile-overlay {
-        display: none !important;
-    }
-} 
-
 /* 2. Touch & Mobile Layout (768px and below) */
 @media (max-width: 768px) {
 
@@ -1005,10 +991,29 @@ display:none;
         pointer-events: auto !important;
         touch-action: manipulation !important;
         position: relative;
-        z-index: 100000 !important;
+        z-index: 100001 !important;
     }
 
- /* Google Earth Style Bottom Sheet Drawer */
+    /* Backdrop Overlay (Behind Sidebar) */
+    .mobile-overlay {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0, 0, 0, 0.4) !important;
+        backdrop-filter: blur(4px) !important; /* Blurs the map behind */
+        z-index: 99990 !important; /* Sits behind sidebar */
+        transition: opacity 0.3s ease !important;
+        pointer-events: auto !important;
+    }
+
+    .mobile-overlay.hidden {
+        display: none !important;
+        pointer-events: none !important;
+    }
+
+    /* Google Earth Style Bottom Sheet Drawer (In Front of Overlay) */
     #sidebar {
         position: fixed !important;
         bottom: 0 !important;
@@ -1021,16 +1026,14 @@ display:none;
         background: #FFFFFF !important;
         border-radius: 20px 20px 0 0 !important;
         box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.25) !important;
-        z-index: 99995 !important;
+        z-index: 100000 !important; /* Higher than overlay (99990) */
         transform: translateY(100%);
         transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) !important;
         
-        /* 🟢 Enabling scrolling on mobile touch devices */
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
         touch-action: pan-y !important;
         
-        /* 🟢 CHANGED FROM 'none' TO 'auto' SO TOUCHES WORK */
         pointer-events: auto !important; 
         visibility: hidden;
         
@@ -1040,7 +1043,7 @@ display:none;
         box-sizing: border-box !important;
     }
 
-    /* Slide sheet up when open & ENABLE POINTER EVENTS */
+    /* Slide sheet up when open */
     #sidebar.open,
     #sidebar.mobile-open {
         transform: translateY(0) !important;
@@ -1048,7 +1051,7 @@ display:none;
         visibility: visible !important;
     }
 
-    /* 🟢 Explicitly allow touches and vertical drags on all inner content */
+    /* Explicitly allow touches and vertical drags on all inner content */
     #sidebar *,
     #sidebar .sidebar-content,
     #sidebar #list,
@@ -1058,17 +1061,17 @@ display:none;
         touch-action: pan-y manipulation !important;
     }
 
-    /* 🟢 Allow inner lists & content blocks to scroll smoothly */
+    /* Allow inner lists & content blocks to scroll smoothly */
     #sidebar .sidebar-content,
     #sidebar #list {
         flex: 1 !important;
         overflow-y: auto !important;
         -webkit-overflow-scrolling: touch !important;
-        max-height: 100% !important; /* FIXED TYPO HERE */
+        max-height: 100% !important;
         pointer-events: auto !important;
     }
 
-    /* Form controls (Project Select dropdowns, buttons, input fields) */
+    /* Form controls */
     #sidebar select,
     #sidebar input,
     #sidebar button,
@@ -1090,7 +1093,7 @@ display:none;
         padding-bottom: 12px;
         position: relative;
         flex-shrink: 0;
-        z-index: 99996 !important;
+        z-index: 100001 !important;
     }
 
     .mobile-drawer-header::before {
@@ -1112,7 +1115,7 @@ display:none;
         line-height: 1;
         padding: 4px 8px;
         cursor: pointer;
-        z-index: 99997 !important;
+        z-index: 100002 !important;
         pointer-events: auto !important;
     }
 
@@ -1126,22 +1129,5 @@ display:none;
         max-width: 320px !important;
         z-index: 100010 !important;
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
-    }
-
-    /* Backdrop Overlay */
-    .mobile-overlay {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background: rgba(0, 0, 0, 0.4) !important;
-        z-index: 99990 !important;
-        transition: opacity 0.3s ease !important;
-    }
-
-    .mobile-overlay.hidden {
-        display: none !important;
-        pointer-events: none !important;
     }
 }
