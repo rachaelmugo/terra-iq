@@ -78,38 +78,3 @@ const setupLayerToggle = (elementId, layer) => {
         };
     }
 }; 
-
-// --------------------------------------------------------------------------
-// 7LAYERS MANAGER POPUP CONTROLLER
-// --------------------------------------------------------------------------
-document.addEventListener("DOMContentLoaded", () => {
-    const layersBtn = document.getElementById("layersBtn");
-    const layerPanel = document.getElementById("layerPanel");
-    const closeLayersBtn = document.getElementById("closeLayersBtn");
-
-    if (layersBtn && layerPanel) {
-      layersBtn.addEventListener("click", (e) => {
-    console.log("Toggle function running");
-            e.stopPropagation();
-            layerPanel.classList.toggle("hidden");
-            layersBtn.classList.toggle("active", !layerPanel.classList.contains("hidden"));
-        });
-    }
-
-    if (closeLayersBtn && layerPanel) {
-        closeLayersBtn.addEventListener("click", () => {
-            layerPanel.classList.add("hidden");
-            if (layersBtn) layersBtn.classList.remove("active");
-        });
-    }
-
-    // Close panel when clicking anywhere outside on the map
-    document.addEventListener("click", (e) => {
-        if (layerPanel && !layerPanel.classList.contains("hidden")) {
-            if (!layerPanel.contains(e.target) && !layersBtn.contains(e.target)) {
-                layerPanel.classList.add("hidden");
-                if (layersBtn) layersBtn.classList.remove("active");
-            }
-        }
-    });
-});

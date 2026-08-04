@@ -1350,11 +1350,21 @@ document.addEventListener("DOMContentLoaded", () => {
         layersBtn.title = "Layers Manager";
         layersBtn.setAttribute("aria-label", "Layers Manager");
 
-        layersBtn.onclick = function() {
-            if (layerPanel) {
-                layerPanel.classList.toggle("hidden");
-            }
-        };
+        layersBtn.onclick = function(e) {
+    e.stopPropagation();
+    layerPanel.classList.toggle("hidden");
+};
+
+document.addEventListener("click", function(e){
+
+    if(
+        !layerPanel.contains(e.target) &&
+        !layersBtn.contains(e.target)
+    ){
+        layerPanel.classList.add("hidden");
+    }
+
+});
     }
 
     if (closeLayersBtn && layerPanel) {
