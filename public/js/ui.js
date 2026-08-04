@@ -3,6 +3,29 @@
    ========================================================================== */
 
 function showDetails(p, metrics = null) {
+    // 📱 1. MOBILE DRAWER TRIGGER: Automatically open sidebar when parcel is clicked
+// 📱 1. Safely open mobile menu via your global helper
+    if (typeof window.openMobileMenu === "function" && window.innerWidth <= 768) {
+        window.openMobileMenu();
+    } else {
+        const sidebar = document.getElementById("sidebar");
+        const overlay = document.querySelector(".mobile-overlay");
+        if (sidebar) sidebar.classList.add("mobile-open", "open");
+        if (overlay) overlay.classList.remove("hidden");
+    }
+
+    // 📱 2. Disable Leaflet drag panning while drawer is open on mobile
+    if (typeof map !== "undefined" && map && map.dragging && window.innerWidth <= 768) {
+        map.dragging.disable();
+    }
+
+    // 📱 3. Reset scroll position to top of sidebar
+    const sidebar = document.getElementById("sidebar");
+    if (sidebar) sidebar.scrollTop = 0;
+
+    // -------------------------------------------------------------
+    // EXISTING LOGIC STARTS HERE
+    // -------------------------------------------------------------
     let statusColor = "#16a34a";
     const statusLower = (p.status || "").toLowerCase();
 
@@ -132,7 +155,7 @@ function showDetails(p, metrics = null) {
             this.style.display = "none";
         };
     }
-} 
+}
 
 function renderList(features) {
     const list = document.getElementById("list");

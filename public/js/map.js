@@ -1395,18 +1395,23 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     window.closeMobileMenu = function(e) {
-        if (e && e.stopPropagation) e.stopPropagation();
-        if (sidebar) {
-            sidebar.classList.remove("mobile-open", "open");
-        }
-        if (overlay) {
-            overlay.classList.add("hidden");
-        }
+    if (e && e.stopPropagation) e.stopPropagation();
+    if (sidebar) {
+        sidebar.classList.remove("mobile-open", "open");
+    }
+    if (overlay) {
+        overlay.classList.add("hidden");
+    }
 
-        setTimeout(() => {
-            if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
-        }, 300);
-    };
+    // 🟢 RE-ENABLE MAP DRAGGING WHEN DRAWER CLOSES
+    if (typeof map !== "undefined" && map && map.dragging) {
+        map.dragging.enable();
+    }
+
+    setTimeout(() => {
+        if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
+    }, 300);
+};
 
     // 1. Tapping hamburger button opens menu
     if (mobileMenuBtn) {
