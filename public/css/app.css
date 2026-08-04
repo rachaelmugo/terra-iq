@@ -102,24 +102,16 @@ margin:0;
     width: clamp(280px, 25vw, 420px);
     min-width: 280px;
     max-width: 420px;
-
     height: 100vh;
     overflow-y: auto;
-
     background: var(--bg-surface);
-
     border-right: 1px solid var(--border-subtle);
-
     flex-shrink: 1;
-
     display: flex;
     flex-direction: column;
-
     z-index: 10;
-
     box-shadow:
         6px 0 25px rgba(15, 23, 42, 0.08);
-
     transition:
         width 0.3s ease,
         transform 0.3s ease;
@@ -307,30 +299,21 @@ margin:0;
     padding:16px;
     box-shadow:
         0 4px 20px rgba(15,23,42,0.06);
-
     border:
         1px solid rgba(148,163,184,0.18);
-
     cursor:pointer;
-
     transition:
         transform 0.25s ease,
         box-shadow 0.25s ease,
         border-color 0.25s ease;
-
 }
 
-
 .card:hover {
-
     transform:translateY(-2px);
-
     box-shadow:
         0 12px 30px rgba(15,23,42,0.12);
-
     border-color:
         rgba(34,197,94,0.4);
-
 }
 .card.active, .card.selected {
     border-color: #2563EB;
@@ -383,39 +366,23 @@ margin:0;
    5. MAIN GIS MAP VIEWPORT & GLASS HUD OVERLAYS
    -------------------------------------------------------------------------- */
 #mapContainer {
-
     flex: 1;
-
     min-width: 0;
-
     display: flex;
-
     flex-direction: column;
-
     position: relative;
-
     height: 100vh;
-
     overflow: hidden;
-
     transition: width 0.3s ease;
-
 }
 
 #map {
-
     flex:1;
-
     width:100%;
-
     height:100%;
-
     min-height:300px;
-
     z-index:1;
-
     background:#020617 !important;
-
 }
 
 /* Floating Navigation Bar Header */
@@ -910,14 +877,15 @@ display:none;
    ========================================================================== */
 
 /* Hide mobile controls on desktop screens */
-@media (min-width: 769px) {
-    #mobileMenuBtn, 
+@media (min-width:769px){
+    #mobileMenuBtn,
+    #mobileLogo,
     .mobileBrand,
     .mobile-drawer-header,
-    .mobile-overlay {
-        display: none !important;
+    .mobile-overlay{
+        display:none !important;
     }
-} 
+}
 
 /* ==========================================================================
    📱 TERRA-IQ MOBILE DRAWER FINAL PATCH
@@ -1145,7 +1113,6 @@ display:none;
         text-transform:uppercase;
         letter-spacing:.08em;
     }
-
     /* Close Button */
     #closeMobileSidebar{
         width:46px !important;
@@ -1160,33 +1127,24 @@ display:none;
         height:46px;
     }
 }
-
 /* ==========================================================================
    📱 MOBILE GIS TOOLBAR
    ========================================================================== */
-
 @media (max-width:768px){
-
     #gisToolbar{
         position:fixed !important;
         top:82px !important;
         right:12px !important;
-
         display:flex !important;
         flex-direction:column !important;
         gap:8px !important;
-
         z-index:99998 !important;
-
         background:var(--glass-bg);
         backdrop-filter:var(--glass-blur);
         -webkit-backdrop-filter:var(--glass-blur);
-
         border:1px solid var(--glass-border);
         border-radius:var(--radius-lg);
-
         padding:8px;
-
         box-shadow:var(--shadow-lg);
     }
 
