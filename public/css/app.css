@@ -919,229 +919,229 @@ display:none;
     }
 } 
 
-/* Mobile Layout */
-@media (max-width: 768px) {
+/* ==========================================================================
+   📱 TERRA-IQ MOBILE DRAWER FINAL PATCH
+   Overrides desktop conflicts and fixes interaction
+   ========================================================================== */
 
-    /* Fullscreen Leaflet Map Base Layer */
-    html, body, #app, #mapContainer, #map {
-        width: 100vw !important;
-        height: 100vh !important;
-        position: absolute !important;
-        top: 0 !important;
-        left: 0 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow: hidden !important;
-        z-index: 1;
+@media (max-width:768px){
+
+    /* --------------------------------------------------
+       1. RESET MAIN APP STRUCTURE
+       Prevent stacking context problems
+    -------------------------------------------------- */
+
+    html,
+    body{
+        width:100%;
+        height:100%;
+        margin:0;
+        overflow:hidden;
     }
 
-    /* Reposition Leaflet Controls below header */
-    .leaflet-top {
-        top: 70px !important;
+
+    #app{
+        width:100%;
+        height:100%;
+        display:block !important;
+        position:relative !important;
+        overflow:hidden;
     }
 
-    /* Header Bar */
-    #mapHeader {
-        position: fixed !important;
-        top: 12px !important;
-        left: 12px !important;
-        right: 12px !important;
-        width: calc(100% - 24px) !important;
-        height: 50px !important;
-        background: rgba(255, 255, 255, 0.98) !important;
-        border-radius: 25px !important;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
-        z-index: 99999 !important;
-        display: flex !important;
-        align-items: center !important;
-        padding: 0 12px !important;
-        gap: 8px !important;
-        pointer-events: auto !important;
+
+    #mapContainer{
+        position:absolute !important;
+        inset:0;
+        width:100%;
+        height:100%;
+        z-index:1;
     }
 
-    /* Hide desktop controls on mobile */
-    .workspace-title,
-    .header-controls,
-    #coordinateBox,
-    #legend {
-        display: none !important;
+
+    #map{
+        width:100%;
+        height:100%;
     }
 
-    .mobileBrand {
-        display: flex !important;
-        flex-direction: column;
-        flex: 1;
+
+
+    /* --------------------------------------------------
+       2. MOBILE HEADER
+    -------------------------------------------------- */
+
+    #mapHeader{
+        position:fixed !important;
+        z-index:9000 !important;
     }
 
-    .mobileBrand h2 {
-        font-size: 14px !important;
-        font-weight: 800 !important;
-        color: #0F2D52 !important;
-        margin: 0 !important;
+
+
+    /* --------------------------------------------------
+       3. SIDEBAR DRAWER
+    -------------------------------------------------- */
+
+    #sidebar{
+
+        position:fixed !important;
+
+        left:0;
+        bottom:0;
+
+        width:100vw !important;
+        height:85vh !important;
+
+        max-height:85vh !important;
+
+        transform:translateY(100%);
+
+        transition:
+        transform .35s cubic-bezier(.4,0,.2,1) !important;
+
+
+        background:#fff;
+
+        border-radius:
+        22px 22px 0 0;
+
+
+        z-index:10000 !important;
+
+
+        display:flex !important;
+        flex-direction:column !important;
+
+
+        overflow-y:auto !important;
+
+
+        flex:none !important;
+
+
+        pointer-events:auto !important;
+
+        -webkit-overflow-scrolling:touch;
+
     }
 
-    .mobileBrand p {
-        font-size: 10px !important;
-        color: #64748B !important;
-        margin: 0 !important;
-    }
 
-    /* Hamburger Menu Button */
-    #mobileMenuBtn {
-        display: flex !important;
-        align-items: center;
-        justify-content: center;
-        width: 40px !important;
-        height: 40px !important;
-        border: none;
-        border-radius: 50%;
-        background: #0F2D52 !important;
-        color: #ffffff !important;
-        font-size: 18px !important;
-        cursor: pointer !important;
-        flex-shrink: 0;
-        pointer-events: auto !important;
-        touch-action: manipulation !important;
-        position: relative;
-        z-index: 100005 !important;
-    }
 
-    /* 🟢 BACKDROP OVERLAY - Clean dimming without full screen blur */
-    .mobile-overlay {
-        position: fixed !important;
-        top: 0 !important;
-        left: 0 !important;
-        width: 100vw !important;
-        height: 100vh !important;
-        background: rgba(15, 45, 82, 0.45) !important;
-        z-index: 99990 !important;
-        transition: opacity 0.3s ease !important;
-        pointer-events: auto !important;
-    }
-
-    .mobile-overlay.hidden {
-        display: none !important;
-        opacity: 0 !important;
-        pointer-events: none !important;
-    }
-
-    /* 🟢 BOTTOM SHEET DRAWER - Crisp, Scrollable, Fully Interactive */
-    #sidebar {
-        position: fixed !important;
-        bottom: 0 !important;
-        top: auto !important;
-        left: 0 !important;
-        width: 100vw !important;
-        max-width: 100% !important;
-        height: 85vh !important;
-        max-height: 85vh !important; 
-        background: #FFFFFF !important;
-        border-radius: 20px 20px 0 0 !important;
-        box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.25) !important;
-        
-        /* Must sit above overlay (99990) */
-        z-index: 100000 !important; 
-        
-        /* Off-screen by default */
-        transform: translateY(100%);
-        transition: transform 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) !important;
-        
-        /* Touch Scrolling Enabled */
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        touch-action: pan-y !important;
-        pointer-events: auto !important;
-        
-        display: flex !important;
-        flex-direction: column !important;
-        padding: 16px !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Open State - Slide Into View */
     #sidebar.open,
-    #sidebar.mobile-open {
-        transform: translateY(0) !important;
-        pointer-events: auto !important;
+    #sidebar.mobile-open{
+
+        transform:translateY(0) !important;
+
     }
 
-    /* Content & Controls inside Drawer */
-    #sidebar *,
-    #sidebar .sidebar-content,
-    #sidebar #list,
-    #sidebar .controlPanel,
-    #sidebar .section {
-        pointer-events: auto !important;
-        touch-action: pan-y manipulation !important;
+
+
+    /* --------------------------------------------------
+       4. REMOVE DOUBLE SCROLLING
+    -------------------------------------------------- */
+
+    #sidebar #list{
+
+        max-height:none !important;
+
+        height:auto !important;
+
+        overflow:visible !important;
+
     }
 
-    #sidebar .sidebar-content,
-    #sidebar #list {
-        flex: 1 !important;
-        overflow-y: auto !important;
-        -webkit-overflow-scrolling: touch !important;
-        max-height: 100% !important;
-        pointer-events: auto !important;
+
+
+    #sidebar .section{
+
+        flex-shrink:0;
+
     }
 
-    /* Inputs, Buttons, & Parcel Cards */
-    #sidebar select,
-    #sidebar input,
+
+
+    /* --------------------------------------------------
+       5. SIDEBAR CONTENT TOUCH FIX
+    -------------------------------------------------- */
+
+
     #sidebar button,
-    #sidebar option,
-    #sidebar .item,
-    #sidebar .parcel-card,
-    #sidebar .card {
-        pointer-events: auto !important;
-        touch-action: manipulation !important;
-        position: relative;
-        z-index: 100005 !important;
-        cursor: pointer !important;
+    #sidebar input,
+    #sidebar select,
+    #sidebar .card{
+
+        pointer-events:auto !important;
+
+        touch-action:manipulation !important;
+
     }
 
-    /* Top Drag Handle Header */
-    .mobile-drawer-header {
-        display: flex !important;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 12px;
-        position: relative;
-        flex-shrink: 0;
-        z-index: 100001 !important;
+
+
+    /* remove previous broad pointer rules */
+
+    #sidebar *{
+
+        pointer-events:auto;
+
     }
 
-    .mobile-drawer-header::before {
-        content: '';
-        width: 40px;
-        height: 4px;
-        background: #CBD5E1;
-        border-radius: 2px;
+
+
+    /* --------------------------------------------------
+       6. OVERLAY
+    -------------------------------------------------- */
+
+
+    .mobile-overlay{
+
+        position:fixed !important;
+
+        inset:0;
+
+        z-index:9999 !important;
+
+        background:
+        rgba(15,45,82,.45);
+
     }
 
-    #closeMobileSidebar {
-        position: absolute;
-        right: 0px;
-        top: 0px;
-        background: transparent;
-        border: none;
-        color: #64748B;
-        font-size: 24px;
-        line-height: 1;
-        padding: 4px 8px;
-        cursor: pointer;
-        z-index: 100002 !important;
-        pointer-events: auto !important;
+
+    .mobile-overlay.hidden{
+
+        display:none !important;
+
     }
 
-    /* Layer Manager Modal */
-    #layerPanel.gis-modal {
-        position: fixed !important;
-        top: 75px !important;
-        left: 50% !important;
-        transform: translateX(-50%) !important;
-        width: 88vw !important;
-        max-width: 320px !important;
-        z-index: 100010 !important;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3) !important;
+
+
+    /* --------------------------------------------------
+       7. MOBILE MENU BUTTON
+    -------------------------------------------------- */
+
+
+    #mobileMenuBtn{
+
+        display:flex !important;
+
+        position:relative;
+
+        z-index:20000 !important;
+
+        pointer-events:auto !important;
+
     }
+
+
+
+    /* --------------------------------------------------
+       8. LEAFLET TOUCH CONTROL
+    -------------------------------------------------- */
+
+
+    .leaflet-container{
+
+        z-index:1;
+
+    }
+
+
 }

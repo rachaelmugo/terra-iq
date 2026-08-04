@@ -1387,11 +1387,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             // 🟢 PREVENT LEAFLET MAP FROM HIJACKING SCROLL/TOUCHES INSIDE SIDEBAR
             if (typeof L !== "undefined") {
-                L.DomEvent.disableScrollPropagation(sidebar);
-                L.DomEvent.disableClickPropagation(sidebar);
+                //L.DomEvent.disableScrollPropagation(sidebar);
+                //L.DomEvent.disableClickPropagation(sidebar);
             }
             if (typeof map !== "undefined" && map && map.dragging) {
-                map.dragging.disable(); // Prevents map panning while scrolling drawer
+                //map.dragging.disable(); // Prevents map panning while scrolling drawer
             }
         }
         if (overlay) {
@@ -1412,10 +1412,20 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.classList.add("hidden");
     }
 
-    // 🟢 RE-ENABLE MAP DRAGGING WHEN DRAWER CLOSES
-    if (typeof map !== "undefined" && map && map.dragging) {
-        map.dragging.enable();
-    }
+    // 🟢 RE-ENABLE MAP INTERACTION WHEN DRAWER CLOSES
+if (typeof map !== "undefined" && map) {
+
+    if (map.dragging) map.dragging.enable();
+
+    if (map.touchZoom) map.touchZoom.enable();
+
+    if (map.doubleClickZoom) map.doubleClickZoom.enable();
+
+    if (map.scrollWheelZoom) map.scrollWheelZoom.enable();
+
+    if (map.boxZoom) map.boxZoom.enable();
+
+} 
 
     setTimeout(() => {
         if (typeof map !== "undefined" && map?.invalidateSize) map.invalidateSize();
