@@ -1088,41 +1088,45 @@ display:none;
 }
 
     /* Terra-IQ Mobile Branding */
-    .mobileBrand{
-        display:flex !important;
-        flex-direction:column;
-        justify-content:center;
-        line-height:1.1;
-    }
+.mobileBrand{
+    display:flex !important;
+    flex-direction:column;
+    justify-content:center;
+    margin-left:10px;
+    line-height:1;
+}
 
-    .mobileBrand h2{
-        font-size:18px !important;
-        font-weight:900 !important;
-        letter-spacing:-0.03em;
-        color:#0F2D52 !important;
-        margin:0 !important;
-    }
 
-    .mobileBrand p{
-        font-size:10px !important;
-        font-weight:600 !important;
-        color:#64748B !important;
-        margin-top:3px !important;
-        text-transform:uppercase;
-        letter-spacing:.05em;
-    }
+.mobileBrand h2{
+    font-size:17px !important;
+    font-weight:900 !important;
+    letter-spacing:-0.04em;
+    color:#0F2D52 !important;
+    margin:0 !important;
+}
+
+
+.mobileBrand p{
+    font-size:9px !important;
+    font-weight:700 !important;
+    color:#64748B !important;
+    margin-top:4px !important;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+}
 
     /* Bigger hamburger button */
     #mobileMenuBtn{
-        width:46px !important;
-        height:46px !important;
-        min-width:46px !important;
-        border-radius:50% !important;
-        font-size:22px !important;
-        display:flex !important;
-        align-items:center;
-        justify-content:center;
-    }
+    width:44px !important;
+    height:44px !important;
+    min-width:44px !important;
+    border-radius:14px !important;
+    font-size:21px !important;
+    display:flex !important;
+    align-items:center;
+    justify-content:center;
+    box-shadow:0 4px 12px rgba(15,45,82,.25);
+}
 
     /* Bigger close button inside drawer */
     #closeMobileSidebar{
@@ -1141,4 +1145,56 @@ display:none;
         height:42px;
         padding-bottom:10px !important;
     }
+} 
+
+/* ==========================================================================
+   📱 MOBILE GIS TOOLBAR RESTORE
+   ========================================================================== */
+
+@media(max-width:768px){
+
+    #gisToolbar,
+    .gis-toolbar,
+    #toolsContainer,
+    .tools-container{
+
+        display:flex !important;
+
+        position:fixed !important;
+
+        top:85px !important;
+
+        right:12px !important;
+
+        left:auto !important;
+
+        z-index:8000 !important;
+
+        flex-direction:column !important;
+
+    }
+
+
+    #gisToolbar button,
+    .gis-toolbar button,
+    .gis-btn{
+
+        width:42px !important;
+
+        height:42px !important;
+
+    }
+
+} 
+
+@media(max-width:768px){
+
+.leaflet-top.leaflet-right{
+
+    top:85px !important;
+
+    right:65px !important;
+
+}
+
 }
