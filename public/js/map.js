@@ -859,7 +859,9 @@ function drawMap(features, shouldZoom = false) {
                     map.closePopup(hoverLayer);
                     hoverLayer = null;
                 }
-            });
+            }); 
+
+            
 
             // 📍 PARCEL CLICK HANDLER
             layer.on('click', async () => {
@@ -1361,7 +1363,7 @@ document.addEventListener("DOMContentLoaded", () => {
         };
     }
 
-// =========================================================
+    // =========================================================
     // 📱 FIXED MOBILE MENU DRAWER LOGIC
     // =========================================================
     const mobileMenuBtn = document.getElementById("mobileMenuBtn");
@@ -1381,6 +1383,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (e && e.stopPropagation) e.stopPropagation();
         if (sidebar) {
             sidebar.classList.add("mobile-open", "open");
+            sidebar.scrollTop = 0; // Reset scroll to top
         }
         if (overlay) {
             overlay.classList.remove("hidden");
@@ -1420,14 +1423,17 @@ document.addEventListener("DOMContentLoaded", () => {
         overlay.onclick = window.closeMobileMenu;
     }
 
-    // 4. Close drawer ONLY when a specific parcel item card is clicked
+    // 4. Clicking a parcel in the list opens details inside sidebar (without closing drawer)
     const parcelList = document.getElementById("list");
     if (parcelList) {
         parcelList.addEventListener("click", (e) => {
-            // Target specific parcel cards or list items, NOT generic divs
             const clickedCard = e.target.closest(".item, .parcel-card, .list-item, [data-parcel-id]");
             if (clickedCard) {
-                window.closeMobileMenu(e);
+                // Ensure sidebar stays open and scrolls up to show details card
+                if (sidebar) {
+                    sidebar.classList.add("mobile-open", "open");
+                    sidebar.scrollTop = 0;
+                }
             }
         });
     } 
