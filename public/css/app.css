@@ -774,6 +774,41 @@ margin:0;
     margin:2px 0 0;
     font-size:11px;
     color:var(--text-muted);
+} 
+
+.layer-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin-top:12px;
+}
+
+.layer-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 12px;
+    border-radius:10px;
+    cursor:pointer;
+    transition:.2s ease;
+    font-size:14px;
+    font-weight:500;
+}
+
+.layer-item:hover{
+    background:#F3F6FA;
+}
+
+.layer-item input{
+    width:18px;
+    height:18px;
+    accent-color:#0F2D52;
+    cursor:pointer;
+    flex-shrink:0;
+}
+
+.layer-item span{
+    flex:1;
 }
 
 @keyframes spin {
