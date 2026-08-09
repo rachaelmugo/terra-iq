@@ -150,7 +150,9 @@ GROUP BY p.id;
 
 /* ==================================
    GET PROJECT PARCELS AS GEOJSON
+   WITH PROPERTY INTELLIGENCE
 ================================== */
+
 app.get('/projects/:id/parcels', async (req, res) => {
   try {
     const { id } = req.params;
@@ -158,92 +160,113 @@ app.get('/projects/:id/parcels', async (req, res) => {
     const result = await pool.query(`
       SELECT jsonb_build_object(
         'type', 'FeatureCollection',
-        'features', jsonb_agg(
-          jsonb_build_object(
-            'type', 'Feature',
-            'geometry', ST_AsGeoJSON(geom)::jsonb,
-            'properties', jsonb_build_object(
-              'id', id,
-              'parcel_no', parcel_no,
-              'price', price,
-              'status', status,
-              'size', size,
-              'area', area,
-              'property_id', property_id
+        'features', COALESCE(
+          jsonb_agg(
+            jsonb_build_object(
+              'type', 'Feature',
+
+              'geometry',
+              ST_AsGeoJSON(p.geom)::jsonb,
+
+              'properties',
+              jsonb_build_object(
+                'id', p.id,
+                'parcel_no', p.parcel_no,
+                'price', p.price,
+                'status', p.status,
+                'size', p.size,
+                'area', p.area,
+                'property_id', p.property_id,
+
+                'intelligence',
+                to_jsonb(pi)
+              )
             )
-          )
+          ),
+          '[]'::jsonb
         )
       ) AS geojson
-      FROM parcels
-      WHERE project_id = $1;
+
+      FROM public.parcels p
+
+      LEFT JOIN public.parcel_intelligence pi
+        ON pi.parcel_id = p.id
+
+      WHERE p.project_id = $1;
     `, [id]);
 
     res.json(result.rows[0].geojson);
 
   } catch (err) {
-    console.error(err);
-    res.status(500).send('Error generating GeoJSON');
+    console.error('Parcel GeoJSON error:', err);
+    res.status(500).json({
+      error: 'Error generating GeoJSON',
+      details: err.message
+    });
   }
 });
 
 app.get("/parcels/geojson", async (req, res) => {
 
-    try{
+  try {
 
-        const result = await pool.query(`
+    const result = await pool.query(`
 
-            SELECT
-                *,
-                ST_AsGeoJSON(geom)::json AS geometry
-            FROM parcels
+      SELECT
+        p.*,
+        ST_AsGeoJSON(p.geom)::json AS geometry,
+        to_jsonb(pi) AS intelligence
 
-        `);
+      FROM public.parcels p
 
-        const geojson = {
+      LEFT JOIN public.parcel_intelligence pi
+        ON pi.parcel_id = p.id
 
-            type:"FeatureCollection",
+    `);
 
-            features: result.rows.map(row=>({
+    const geojson = {
 
-                type:"Feature",
+      type: "FeatureCollection",
 
-                geometry:row.geometry,
+      features: result.rows.map(row => ({
 
-                properties:{
+        type: "Feature",
 
-                    id:row.id,
+        geometry: row.geometry,
 
-                    project_id:row.project_id,
+        properties: {
 
-                    property_id:row.property_id,
+          id: row.id,
+          project_id: row.project_id,
+          property_id: row.property_id,
+          parcel_no: row.parcel_no,
+          price: row.price,
+          status: row.status,
+          size: row.size,
+          area: row.area,
 
-                    parcel_no:row.parcel_no,
+          intelligence: row.intelligence
 
-                    price:row.price,
+        }
 
-                    status:row.status,
+      }))
 
-                    size:row.size,
+    };
 
-                    area:row.area
+    res.json(geojson);
 
-                }
+  }
 
-            }))
+  catch (err) {
 
-        };
+    console.error("Global parcel GeoJSON error:", err);
 
-        res.json(geojson);
+    res.status(500).json({
+      error: "Error generating parcel GeoJSON",
+      details: err.message
+    });
 
-    }
-
-    catch(err){
-
-        console.error(err);
-
-        res.status(500).json(err);
-
-    }
+  }
 
 });
 
