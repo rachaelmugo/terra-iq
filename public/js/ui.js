@@ -1,7 +1,22 @@
+
+function formatDistance(meters) {
+
+    if (meters === null || meters === undefined || isNaN(meters)) {
+        return "N/A";
+    }
+
+    meters = Number(meters);
+
+    if (meters < 1000) {
+        return `${Math.round(meters)} m`;
+    }
+
+    return `${(meters / 1000).toFixed(2)} km`;
+}
+
 /* ==========================================================================
    🏢 TERRA-IQ - UI RENDERER (ui.js)
    ========================================================================== */
-
 function showDetails(p, metrics = null) {
     // 📱 1. MOBILE DRAWER TRIGGER: Automatically open sidebar when parcel is clicked
 // 📱 1. Safely open mobile menu via your global helper
@@ -20,22 +35,16 @@ if(window.innerWidth <= 768){
     if(overlay){
         overlay.classList.remove("hidden");
     }
-
-
+    
     // Disable Leaflet gestures while drawer is active
     if(typeof map !== "undefined" && map){
-
         if(map.dragging) map.dragging.disable();
-
         if(map.touchZoom) map.touchZoom.disable();
         if(map.doubleClickZoom) map.doubleClickZoom.disable();
         if(map.scrollWheelZoom) map.scrollWheelZoom.disable();
         if(map.boxZoom) map.boxZoom.disable();
-
     }
-
 }
-
     // -------------------------------------------------------------
     // EXISTING LOGIC STARTS HERE
     // -------------------------------------------------------------
@@ -98,42 +107,245 @@ if(window.innerWidth <= 768){
         </div>
     </div>
 
-    <!-- 🌟 LIVE PROPERTY INTELLIGENCE CONTAINER -->
-    <div style="margin-top:20px;padding:18px;border-radius:14px;background:linear-gradient(135deg,#0F2D52,#1E4E8C);color:white;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-            <div style="font-size:16px;font-weight:bold;" id="intelParcelTitle">Plot #${p.parcel_no} Analysis</div>
-            <span id="intelRiskBadge" style="padding:4px 10px; border-radius:12px; font-size:11px; font-weight:bold; background:#6B7280; color:white;">
-                ANALYZING...
-            </span>
+    <!-- 🌟 LIVE PROPERTY INTELLIGENCE --> 
+    
+<div style="margin-top:20px;padding:18px;border-radius:14px;background:linear-gradient(135deg,#0F2D52,#1E4E8C);color:white;">
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+        <div>
+            <div style="font-size:16px;font-weight:bold;">
+                🧠 Parcel Intelligence
+            </div>
+            <div style="font-size:11px;color:#CBD5E1;margin-top:3px;">
+                Spatial analysis based on nearby infrastructure & amenities
+            </div>
         </div>
 
-        <div style="display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;">
-            <span style="font-size:13px; opacity:0.9;">Feasibility Score</span>
-            <strong id="intelScore" style="color:#FFD54A; font-size:20px; font-weight:800;">
-                -- /100
+        <div style="text-align:right;">
+            <div style="font-size:10px;color:#CBD5E1;">
+                OVERALL
+            </div>
+            <strong style="color:#FFD54A;font-size:24px;">
+                ${Number(p.overall_intelligence_score || 0).toFixed(1)}%
             </strong>
-        </div>
-
-        <div style="display:flex;justify-content:space-between;margin-bottom:10px;align-items:center;">
-            <span style="font-size:13px; opacity:0.9;">Road Access Rating</span>
-            <strong id="roadAccessStars" style="color:#FFD54A;">
-                ☆☆☆☆☆
-            </strong>
-        </div>
-
-        <hr style="border:none; border-top:1px solid rgba(255,255,255,0.15); margin:10px 0;">
-
-        <div style="display:flex; flex-direction:column; gap:6px; font-size:12px; color:#E2E8F0;">
-            <div id="intelHighwayDist">🛣️ Highway: <i>Calculating...</i></div>
-            <div id="intelAmenityDist">🏥 Amenities: <i>Calculating...</i></div>
-            <div id="intelRiparianStatus">🌊 Riparian: <i>Calculating...</i></div>
-            <div id="intelPowerStatus">⚡ Power Line: <i>Calculating...</i></div>
-        </div>
-
-        <div id="intelRecommendation" style="margin-top:14px; padding:10px 12px; border-radius:8px; font-size:12px; background:rgba(255,255,255,0.15); color:#ffffff; line-height:1.4;">
-            <b>⏳ Live GIS Feasibility:</b> Querying spatial metrics...
         </div>
     </div>
+
+
+    <!-- SCORE GRID -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+
+        <!-- ROAD -->
+        <div style="background:rgba(255,255,255,0.10);padding:12px;border-radius:10px;">
+            <div style="font-size:11px;color:#CBD5E1;">
+                🛣️ Road Accessibility
+            </div>
+            <div style="font-size:20px;font-weight:800;color:#FFD54A;margin-top:4px;">
+                ${Number(p.road_accessibility_score || 0).toFixed(1)}%
+            </div>
+        </div>
+
+
+        <!-- AMENITIES -->
+        <div style="background:rgba(255,255,255,0.10);padding:12px;border-radius:10px;">
+            <div style="font-size:11px;color:#CBD5E1;">
+                🏫 Amenity Access
+            </div>
+            <div style="font-size:20px;font-weight:800;color:#FFD54A;margin-top:4px;">
+                ${Number(p.amenity_access_score || 0).toFixed(1)}%
+            </div>
+        </div>
+
+
+        <!-- TRANSPORT -->
+        <div style="background:rgba(255,255,255,0.10);padding:12px;border-radius:10px;">
+            <div style="font-size:11px;color:#CBD5E1;">
+                🚌 Public Transport
+            </div>
+            <div style="font-size:20px;font-weight:800;color:#FFD54A;margin-top:4px;">
+                ${Number(p.public_transport_score || 0).toFixed(1)}%
+            </div>
+        </div>
+
+
+        <!-- DEVELOPMENT -->
+        <div style="background:rgba(255,255,255,0.10);padding:12px;border-radius:10px;">
+            <div style="font-size:11px;color:#CBD5E1;">
+                🏭 Development Context
+            </div>
+            <div style="font-size:20px;font-weight:800;color:#FFD54A;margin-top:4px;">
+                ${Number(p.development_context_score || 0).toFixed(1)}%
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- GREEN -->
+    <div style="margin-top:10px;background:rgba(255,255,255,0.10);padding:12px;border-radius:10px;">
+
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+
+            <div>
+                <div style="font-size:11px;color:#CBD5E1;">
+                    🌳 Green & Recreation
+                </div>
+
+                <div style="font-size:13px;margin-top:4px;">
+                    Nearest park:
+                    <strong>
+                        ${formatDistance(p.nearest_park_m)}
+                    </strong>
+                </div>
+            </div>
+
+            <strong style="font-size:20px;color:#FFD54A;">
+                ${Number(p.green_recreation_score || 0).toFixed(1)}%
+            </strong>
+
+        </div>
+
+    </div> 
+</div>
+
+
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+
+
+    <!-- ACCESSIBILITY EVIDENCE -->
+    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
+        📍 Accessibility Evidence
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#E2E8F0;">
+
+        <div>
+            🛣️ Nearest road:
+            <strong>
+                ${formatDistance(p.nearest_road_m)}
+            </strong>
+        </div>
+
+        <div>
+            🚌 Nearest bus stop:
+            <strong>
+                ${formatDistance(p.nearest_bus_stop_m)}
+            </strong>
+        </div>
+
+        <div>
+            🚆 Nearest railway:
+            <strong>
+                ${formatDistance(p.nearest_railway_m)}
+            </strong>
+        </div>
+
+        <div>
+            🌊 Nearest waterway:
+            <strong>
+                ${formatDistance(p.nearest_waterway_m)}
+            </strong>
+        </div>
+
+        <div>
+            🏙️ Nearest town:
+            <strong>
+                ${p.nearest_town || "N/A"}
+            </strong>
+            — ${formatDistance(p.town_distance_m)}
+        </div>
+
+    </div>
+
+
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+
+
+    <!-- AMENITIES -->
+    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
+        🏫 Nearby Amenities
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:12px;color:#E2E8F0;">
+
+        <div>
+            🏫 Schools:
+            <strong>${p.schools_within_1km || 0}</strong>
+        </div>
+
+        <div>
+            🧒 Kindergartens:
+            <strong>${p.kindergartens_within_1km || 0}</strong>
+        </div>
+
+        <div>
+            🏥 Hospitals:
+            <strong>${p.hospitals_within_5km || 0}</strong>
+        </div>
+
+        <div>
+            🛒 Marketplaces:
+            <strong>${p.marketplaces_within_3km || 0}</strong>
+        </div>
+
+        <div>
+            💳 Financial services:
+            <strong>${p.financial_services_within_3km || 0}</strong>
+        </div>
+
+        <div>
+            🍽️ Restaurants:
+            <strong>${p.restaurants_food_within_3km || 0}</strong>
+        </div>
+
+    </div>
+
+
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+
+
+    <!-- DEVELOPMENT CONTEXT -->
+    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
+        🏭 Development Context
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#E2E8F0;">
+
+        <div>
+            🏘️ Residential:
+            <strong>${formatDistance(p.nearest_residential_m)}</strong>
+        </div>
+
+        <div>
+            🏢 Commercial:
+            <strong>${formatDistance(p.nearest_commercial_m)}</strong>
+        </div>
+
+        <div>
+            🛍️ Retail:
+            <strong>${formatDistance(p.nearest_retail_m)}</strong>
+        </div>
+
+        <div>
+            🏭 Industrial:
+            <strong>${formatDistance(p.nearest_industrial_m)}</strong>
+        </div>
+
+    </div>
+
+
+    <!-- INTERPRETATION -->
+    <div style="margin-top:16px;padding:11px 12px;border-radius:8px;background:rgba(255,255,255,0.12);font-size:12px;line-height:1.5;">
+
+        <b>🧠 Terra-IQ Analysis</b><br>
+
+        This parcel's intelligence score is based on its
+        accessibility, nearby amenities, transportation,
+        development context and green-space proximity.
+
+    </div>
+
+</div>
 
     <h3 style="margin-top:25px;color:#0F2D52;">Reserve Parcel</h3>
 
@@ -219,7 +431,8 @@ function renderList(features) {
     }
     
     // 1. Render detail view template
-    showDetails(p);
+console.log("🧠 CLICKED PARCEL DATA:", p);
+showDetails(p);
 
     // 2. Perform spatial calculations
     let roadDist = null;
@@ -267,7 +480,7 @@ function renderList(features) {
 
     // 3. Update dynamic intelligence display
     if (typeof updateParcelIntelligenceCard === "function") {
-        updateParcelIntelligenceCard(p, roadDist, amenityDist, riparianDist, roadDist, ketracoDist);
+        updateParcelIntelligenceCard(p, roadDist, amenityDist, riparianDist, null, ketracoDist);
     }
 
     if (typeof drawMap === "function") {
