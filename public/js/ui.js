@@ -212,7 +212,10 @@ if(window.innerWidth <= 768){
 </div>
 
 
-    ```html
+    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+
+
+
 <!-- =========================================================
      PARCEL INTELLIGENCE — SUPPORTING EVIDENCE
 ========================================================= -->
@@ -704,9 +707,7 @@ if(window.innerWidth <= 768){
         </div>
 
     </div>
-
 </div>
-```
 
 
     <h3 style="margin-top:25px;color:#0F2D52;">Reserve Parcel</h3>
