@@ -212,143 +212,502 @@ if(window.innerWidth <= 768){
 </div>
 
 
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+    ```html
+<!-- =========================================================
+     PARCEL INTELLIGENCE — SUPPORTING EVIDENCE
+========================================================= -->
 
+<div style="
+    margin-top:18px;
+    padding:18px;
+    background:#FFFFFF;
+    border:1px solid #E2E8F0;
+    border-radius:14px;
+    box-shadow:0 4px 14px rgba(15,45,82,0.08);
+">
 
-    <!-- ACCESSIBILITY EVIDENCE -->
-    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
-        📍 Accessibility Evidence
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#E2E8F0;">
+    <!-- SECTION HEADER -->
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-bottom:18px;
+    ">
 
         <div>
-            🛣️ Nearest road:
-            <strong>
+            <div style="
+                font-size:14px;
+                font-weight:800;
+                color:#0F2D52;
+                letter-spacing:0.2px;
+            ">
+                Supporting Intelligence
+            </div>
+
+            <div style="
+                font-size:11px;
+                color:#64748B;
+                margin-top:4px;
+            ">
+                Location-based evidence surrounding this parcel
+            </div>
+        </div>
+
+        <div style="
+            font-size:9px;
+            font-weight:700;
+            color:#94A3B8;
+            letter-spacing:0.8px;
+            text-transform:uppercase;
+        ">
+            Spatial Evidence
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCESSIBILITY
+    ====================================================== -->
+
+    <div style="
+        font-size:11px;
+        font-weight:800;
+        color:#0F2D52;
+        text-transform:uppercase;
+        letter-spacing:0.6px;
+        margin-bottom:9px;
+    ">
+        📍 Accessibility
+    </div>
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    ">
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🛣️ Nearest Road
+            </div>
+
+            <div style="
+                font-size:14px;
+                font-weight:800;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
                 ${formatDistance(p.nearest_road_m)}
-            </strong>
+            </div>
         </div>
 
-        <div>
-            🚌 Nearest bus stop:
-            <strong>
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🚌 Bus Stop
+            </div>
+
+            <div style="
+                font-size:14px;
+                font-weight:800;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
                 ${formatDistance(p.nearest_bus_stop_m)}
-            </strong>
+            </div>
         </div>
 
-        <div>
-            🚆 Nearest railway:
-            <strong>
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🚆 Railway
+            </div>
+
+            <div style="
+                font-size:14px;
+                font-weight:800;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
                 ${formatDistance(p.nearest_railway_m)}
-            </strong>
+            </div>
         </div>
 
-        <div>
-            🌊 Nearest waterway:
-            <strong>
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🌊 Waterway
+            </div>
+
+            <div style="
+                font-size:14px;
+                font-weight:800;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
                 ${formatDistance(p.nearest_waterway_m)}
-            </strong>
+            </div>
         </div>
 
-        <div>
-            🏙️ Nearest town:
-            <strong>
-                ${p.nearest_town || "N/A"}
-            </strong>
-            — ${formatDistance(p.town_distance_m)}
+
+        <div style="
+            grid-column:1 / -1;
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+
+            <div style="font-size:10px;color:#64748B;">
+                🏙️ Nearest Town
+            </div>
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-top:4px;
+            ">
+
+                <strong style="
+                    font-size:13px;
+                    color:#0F2D52;
+                ">
+                    ${p.nearest_town || "N/A"}
+                </strong>
+
+                <span style="
+                    font-size:12px;
+                    font-weight:700;
+                    color:#475569;
+                ">
+                    ${formatDistance(p.town_distance_m)}
+                </span>
+
+            </div>
         </div>
 
     </div>
 
 
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+    <!-- DIVIDER -->
+    <div style="
+        height:1px;
+        background:#E2E8F0;
+        margin:18px 0;
+    "></div>
 
 
-    <!-- AMENITIES -->
-    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
+    <!-- =====================================================
+         AMENITIES
+    ====================================================== -->
+
+    <div style="
+        font-size:11px;
+        font-weight:800;
+        color:#0F2D52;
+        text-transform:uppercase;
+        letter-spacing:0.6px;
+        margin-bottom:9px;
+    ">
         🏫 Nearby Amenities
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:12px;color:#E2E8F0;">
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    ">
 
-        <div>
-            🏫 Schools:
-            <strong>${p.schools_within_1km || 0}</strong>
+        <div style="
+            padding:10px 11px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <span style="font-size:11px;color:#475569;">
+                🏫 Schools
+            </span>
+
+            <strong style="font-size:13px;color:#0F2D52;">
+                ${p.schools_within_1km || 0}
+            </strong>
         </div>
 
-        <div>
-            🧒 Kindergartens:
-            <strong>${p.kindergartens_within_1km || 0}</strong>
+
+        <div style="
+            padding:10px 11px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <span style="font-size:11px;color:#475569;">
+                🧒 Kindergartens
+            </span>
+
+            <strong style="font-size:13px;color:#0F2D52;">
+                ${p.kindergartens_within_1km || 0}
+            </strong>
         </div>
 
-        <div>
-            🏥 Hospitals:
-            <strong>${p.hospitals_within_5km || 0}</strong>
+
+        <div style="
+            padding:10px 11px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <span style="font-size:11px;color:#475569;">
+                🏥 Hospitals
+            </span>
+
+            <strong style="font-size:13px;color:#0F2D52;">
+                ${p.hospitals_within_5km || 0}
+            </strong>
         </div>
 
-        <div>
-            🛒 Marketplaces:
-            <strong>${p.marketplaces_within_3km || 0}</strong>
+
+        <div style="
+            padding:10px 11px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <span style="font-size:11px;color:#475569;">
+                🛒 Marketplaces
+            </span>
+
+            <strong style="font-size:13px;color:#0F2D52;">
+                ${p.marketplaces_within_3km || 0}
+            </strong>
         </div>
 
-        <div>
-            💳 Financial services:
-            <strong>${p.financial_services_within_3km || 0}</strong>
+
+        <div style="
+            padding:10px 11px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <span style="font-size:11px;color:#475569;">
+                💳 Financial Services
+            </span>
+
+            <strong style="font-size:13px;color:#0F2D52;">
+                ${p.financial_services_within_3km || 0}
+            </strong>
         </div>
 
-        <div>
-            🍽️ Restaurants:
-            <strong>${p.restaurants_food_within_3km || 0}</strong>
+
+        <div style="
+            padding:10px 11px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        ">
+            <span style="font-size:11px;color:#475569;">
+                🍽️ Restaurants
+            </span>
+
+            <strong style="font-size:13px;color:#0F2D52;">
+                ${p.restaurants_food_within_3km || 0}
+            </strong>
         </div>
 
     </div>
 
 
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+    <!-- DIVIDER -->
+    <div style="
+        height:1px;
+        background:#E2E8F0;
+        margin:18px 0;
+    "></div>
 
 
-    <!-- DEVELOPMENT CONTEXT -->
-    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
+    <!-- =====================================================
+         DEVELOPMENT CONTEXT
+    ====================================================== -->
+
+    <div style="
+        font-size:11px;
+        font-weight:800;
+        color:#0F2D52;
+        text-transform:uppercase;
+        letter-spacing:0.6px;
+        margin-bottom:9px;
+    ">
         🏭 Development Context
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#E2E8F0;">
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:8px;
+    ">
 
-        <div>
-            🏘️ Residential:
-            <strong>${formatDistance(p.nearest_residential_m)}</strong>
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🏘️ Residential
+            </div>
+
+            <strong style="
+                display:block;
+                font-size:13px;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
+                ${formatDistance(p.nearest_residential_m)}
+            </strong>
         </div>
 
-        <div>
-            🏢 Commercial:
-            <strong>${formatDistance(p.nearest_commercial_m)}</strong>
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🏢 Commercial
+            </div>
+
+            <strong style="
+                display:block;
+                font-size:13px;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
+                ${formatDistance(p.nearest_commercial_m)}
+            </strong>
         </div>
 
-        <div>
-            🛍️ Retail:
-            <strong>${formatDistance(p.nearest_retail_m)}</strong>
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🛍️ Retail
+            </div>
+
+            <strong style="
+                display:block;
+                font-size:13px;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
+                ${formatDistance(p.nearest_retail_m)}
+            </strong>
         </div>
 
-        <div>
-            🏭 Industrial:
-            <strong>${formatDistance(p.nearest_industrial_m)}</strong>
+
+        <div style="
+            padding:11px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:9px;
+        ">
+            <div style="font-size:10px;color:#64748B;">
+                🏭 Industrial
+            </div>
+
+            <strong style="
+                display:block;
+                font-size:13px;
+                color:#0F2D52;
+                margin-top:4px;
+            ">
+                ${formatDistance(p.nearest_industrial_m)}
+            </strong>
         </div>
 
     </div>
 
 
-    <!-- INTERPRETATION -->
-    <div style="margin-top:16px;padding:11px 12px;border-radius:8px;background:rgba(255,255,255,0.12);font-size:12px;line-height:1.5;">
+    <!-- =====================================================
+         ANALYSIS
+    ====================================================== -->
 
-        <b>🧠 Terra-IQ Analysis</b><br>
+    <div style="
+        margin-top:18px;
+        padding:13px 14px;
+        background:#F8FAFC;
+        border:1px solid #E2E8F0;
+        border-left:3px solid #D4A017;
+        border-radius:9px;
+    ">
 
-        This parcel's intelligence score is based on its
-        accessibility, nearby amenities, transportation,
-        development context and green-space proximity.
+        <div style="
+            font-size:11px;
+            font-weight:800;
+            color:#0F2D52;
+            margin-bottom:5px;
+        ">
+            🧠 Terra-IQ Analysis
+        </div>
+
+        <div style="
+            font-size:11px;
+            line-height:1.55;
+            color:#64748B;
+        ">
+            This parcel's intelligence score is based on
+            accessibility, nearby amenities, transportation,
+            development context and green-space proximity.
+        </div>
 
     </div>
-    </div>
+
 </div>
+```
+
 
     <h3 style="margin-top:25px;color:#0F2D52;">Reserve Parcel</h3>
 
