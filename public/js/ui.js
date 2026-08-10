@@ -107,11 +107,16 @@ if(window.innerWidth <= 768){
         </div>
     </div>
 
-    <!-- 🌟 LIVE PROPERTY INTELLIGENCE --> 
     
-<div style="margin-top:20px;padding:18px;border-radius:14px;background:linear-gradient(135deg,#0F2D52,#1E4E8C);color:white;">
+<!-- 🌟 LIVE PROPERTY INTELLIGENCE -->
 
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+<div style="
+    margin-top:20px;
+    padding:18px;
+    border-radius:14px;
+    background:linear-gradient(135deg,#0F2D52,#1E4E8C);
+    color:white;">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <div>
             <div style="font-size:16px;font-weight:bold;">
                 🧠 Parcel Intelligence
@@ -131,7 +136,6 @@ if(window.innerWidth <= 768){
         </div>
     </div>
 
-
     <!-- SCORE GRID -->
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
 
@@ -144,7 +148,6 @@ if(window.innerWidth <= 768){
                 ${Number(p.road_accessibility_score || 0).toFixed(1)}%
             </div>
         </div>
-
 
         <!-- AMENITIES -->
         <div style="background:rgba(255,255,255,0.10);padding:12px;border-radius:10px;">
@@ -344,7 +347,7 @@ if(window.innerWidth <= 768){
         development context and green-space proximity.
 
     </div>
-
+    </div>
 </div>
 
     <h3 style="margin-top:25px;color:#0F2D52;">Reserve Parcel</h3>
