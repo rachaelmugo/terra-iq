@@ -212,145 +212,130 @@ if(window.innerWidth <= 768){
 </div>
 
 
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
+   <!-- ACCESSIBILITY EVIDENCE -->
+<div class="intel-section-title">
+    📍 Accessibility Evidence
+</div>
 
+<div class="intel-evidence-list">
 
-    <!-- ACCESSIBILITY EVIDENCE -->
-    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
-        📍 Accessibility Evidence
+    <div>
+        🛣️ Nearest road:
+        <strong>${formatDistance(p.nearest_road_m)}</strong>
     </div>
 
-    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#E2E8F0;">
-
-        <div>
-            🛣️ Nearest road:
-            <strong>
-                ${formatDistance(p.nearest_road_m)}
-            </strong>
-        </div>
-
-        <div>
-            🚌 Nearest bus stop:
-            <strong>
-                ${formatDistance(p.nearest_bus_stop_m)}
-            </strong>
-        </div>
-
-        <div>
-            🚆 Nearest railway:
-            <strong>
-                ${formatDistance(p.nearest_railway_m)}
-            </strong>
-        </div>
-
-        <div>
-            🌊 Nearest waterway:
-            <strong>
-                ${formatDistance(p.nearest_waterway_m)}
-            </strong>
-        </div>
-
-        <div>
-            🏙️ Nearest town:
-            <strong>
-                ${p.nearest_town || "N/A"}
-            </strong>
-            — ${formatDistance(p.town_distance_m)}
-        </div>
-
+    <div>
+        🚌 Nearest bus stop:
+        <strong>${formatDistance(p.nearest_bus_stop_m)}</strong>
     </div>
 
-
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
-
-
-    <!-- AMENITIES -->
-    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
-        🏫 Nearby Amenities
+    <div>
+        🚆 Nearest railway:
+        <strong>${formatDistance(p.nearest_railway_m)}</strong>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;font-size:12px;color:#E2E8F0;">
-
-        <div>
-            🏫 Schools:
-            <strong>${p.schools_within_1km || 0}</strong>
-        </div>
-
-        <div>
-            🧒 Kindergartens:
-            <strong>${p.kindergartens_within_1km || 0}</strong>
-        </div>
-
-        <div>
-            🏥 Hospitals:
-            <strong>${p.hospitals_within_5km || 0}</strong>
-        </div>
-
-        <div>
-            🛒 Marketplaces:
-            <strong>${p.marketplaces_within_3km || 0}</strong>
-        </div>
-
-        <div>
-            💳 Financial services:
-            <strong>${p.financial_services_within_3km || 0}</strong>
-        </div>
-
-        <div>
-            🍽️ Restaurants:
-            <strong>${p.restaurants_food_within_3km || 0}</strong>
-        </div>
-
+    <div>
+        🌊 Nearest waterway:
+        <strong>${formatDistance(p.nearest_waterway_m)}</strong>
     </div>
 
-
-    <hr style="border:none;border-top:1px solid rgba(255,255,255,0.15);margin:16px 0;">
-
-
-    <!-- DEVELOPMENT CONTEXT -->
-    <div style="font-size:13px;font-weight:bold;margin-bottom:8px;">
-        🏭 Development Context
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:7px;font-size:12px;color:#E2E8F0;">
-
-        <div>
-            🏘️ Residential:
-            <strong>${formatDistance(p.nearest_residential_m)}</strong>
-        </div>
-
-        <div>
-            🏢 Commercial:
-            <strong>${formatDistance(p.nearest_commercial_m)}</strong>
-        </div>
-
-        <div>
-            🛍️ Retail:
-            <strong>${formatDistance(p.nearest_retail_m)}</strong>
-        </div>
-
-        <div>
-            🏭 Industrial:
-            <strong>${formatDistance(p.nearest_industrial_m)}</strong>
-        </div>
-
-    </div>
-
-
-    <!-- INTERPRETATION -->
-    <div style="margin-top:16px;padding:11px 12px;border-radius:8px;background:rgba(255,255,255,0.12);font-size:12px;line-height:1.5;">
-
-        <b>🧠 Terra-IQ Analysis</b><br>
-
-        This parcel's intelligence score is based on its
-        accessibility, nearby amenities, transportation,
-        development context and green-space proximity.
-
-    </div>
+    <div>
+        🏙️ Nearest town:
+        <strong>${p.nearest_town || "N/A"}</strong>
+        — ${formatDistance(p.town_distance_m)}
     </div>
 
 </div>
 
+
+<div class="intel-divider"></div>
+
+
+<!-- AMENITIES -->
+<div class="intel-section-title">
+    🏫 Nearby Amenities
+</div>
+
+<div class="intel-amenities-grid">
+
+    <div>
+        🏫 Schools:
+        <strong>${p.schools_within_1km || 0}</strong>
+    </div>
+
+    <div>
+        🧒 Kindergartens:
+        <strong>${p.kindergartens_within_1km || 0}</strong>
+    </div>
+
+    <div>
+        🏥 Hospitals:
+        <strong>${p.hospitals_within_5km || 0}</strong>
+    </div>
+
+    <div>
+        🛒 Marketplaces:
+        <strong>${p.marketplaces_within_3km || 0}</strong>
+    </div>
+
+    <div>
+        💳 Financial services:
+        <strong>${p.financial_services_within_3km || 0}</strong>
+    </div>
+
+    <div>
+        🍽️ Restaurants:
+        <strong>${p.restaurants_food_within_3km || 0}</strong>
+    </div>
+
+</div>
+
+
+<div class="intel-divider"></div>
+
+
+<!-- DEVELOPMENT CONTEXT -->
+<div class="intel-section-title">
+    🏭 Development Context
+</div>
+
+<div class="intel-evidence-list">
+
+    <div>
+        🏘️ Residential:
+        <strong>${formatDistance(p.nearest_residential_m)}</strong>
+    </div>
+
+    <div>
+        🏢 Commercial:
+        <strong>${formatDistance(p.nearest_commercial_m)}</strong>
+    </div>
+
+    <div>
+        🛍️ Retail:
+        <strong>${formatDistance(p.nearest_retail_m)}</strong>
+    </div>
+
+    <div>
+        🏭 Industrial:
+        <strong>${formatDistance(p.nearest_industrial_m)}</strong>
+    </div>
+
+</div>
+
+
+<!-- INTERPRETATION -->
+<div class="intel-analysis">
+
+    <div class="intel-analysis-title">
+        🧠 Terra-IQ Analysis
+    </div>
+
+    This parcel's intelligence score is based on
+    accessibility, nearby amenities, transportation,
+    development context and green-space proximity.
+
+</div>
     <h3 style="margin-top:25px;color:#0F2D52;">Reserve Parcel</h3>
 
     <button id="openReservationForm" style="width:100%;background:#D4A017;color:white;border:none;padding:14px;border-radius:12px;font-weight:bold;cursor:pointer;">
