@@ -150,9 +150,7 @@ GROUP BY p.id;
 
 /* ==================================
    GET PROJECT PARCELS AS GEOJSON
-   WITH PROPERTY INTELLIGENCE
 ================================== */
-
 app.get('/projects/:id/parcels', async (req, res) => {
   try {
     const { id } = req.params;
@@ -160,113 +158,124 @@ app.get('/projects/:id/parcels', async (req, res) => {
     const result = await pool.query(`
       SELECT jsonb_build_object(
         'type', 'FeatureCollection',
-        'features', COALESCE(
-          jsonb_agg(
-            jsonb_build_object(
-              'type', 'Feature',
+        'features', jsonb_agg(
+          jsonb_build_object(
+            'type', 'Feature',
+            'geometry', ST_AsGeoJSON(p.geom)::jsonb,
+            'properties', jsonb_build_object(
+              'id', p.id,
+'parcel_no', p.parcel_no,
+'price', p.price,
+'status', p.status,
+'size', p.size,
+'area', p.area,
+'property_id', p.property_id,
 
-              'geometry',
-              ST_AsGeoJSON(p.geom)::jsonb,
+'road_accessibility_score', i.road_accessibility_score,
+'amenity_access_score', i.amenity_access_score,
+'public_transport_score', i.public_transport_score,
+'development_context_score', i.development_context_score,
+'green_recreation_score', i.green_recreation_score,
+'overall_intelligence_score', i.overall_intelligence_score,
 
-              'properties',
-              jsonb_build_object(
-                'id', p.id,
-                'parcel_no', p.parcel_no,
-                'price', p.price,
-                'status', p.status,
-                'size', p.size,
-                'area', p.area,
-                'property_id', p.property_id,
+'nearest_road_m', i.nearest_road_m,
+'nearest_bus_stop_m', i.nearest_bus_stop_m,
+'nearest_railway_m', i.nearest_railway_m,
+'nearest_waterway_m', i.nearest_waterway_m,
 
-                'intelligence',
-                to_jsonb(pi)
-              )
+'nearest_village', i.nearest_village,
+'village_distance_m', i.village_distance_m,
+'nearest_town', i.nearest_town,
+'town_distance_m', i.town_distance_m,
+
+'schools_within_1km', i.schools_within_1km,
+'kindergartens_within_1km', i.kindergartens_within_1km,
+'hospitals_within_5km', i.hospitals_within_5km,
+'marketplaces_within_3km', i.marketplaces_within_3km,
+'financial_services_within_3km', i.financial_services_within_3km,
+'restaurants_food_within_3km', i.restaurants_food_within_3km,
+
+'nearest_residential_m', i.nearest_residential_m,
+'nearest_commercial_m', i.nearest_commercial_m,
+'nearest_retail_m', i.nearest_retail_m,
+'nearest_industrial_m', i.nearest_industrial_m,
+'nearest_park_m', i.nearest_park_m
             )
-          ),
-          '[]'::jsonb
+          )
         )
       ) AS geojson
-
-      FROM public.parcels p
-
-      LEFT JOIN public.parcel_intelligence pi
-        ON pi.parcel_id = p.id
-
-      WHERE p.project_id = $1;
+      FROM parcels p
+LEFT JOIN parcel_intelligence_data i
+    ON i.parcel_id = p.id
+WHERE p.project_id = $1;
     `, [id]);
 
     res.json(result.rows[0].geojson);
 
   } catch (err) {
-    console.error('Parcel GeoJSON error:', err);
-    res.status(500).json({
-      error: 'Error generating GeoJSON',
-      details: err.message
-    });
+    console.error(err);
+    res.status(500).send('Error generating GeoJSON');
   }
 });
 
 app.get("/parcels/geojson", async (req, res) => {
 
-  try {
+    try{
 
-    const result = await pool.query(`
+        const result = await pool.query(`
 
-      SELECT
-        p.*,
-        ST_AsGeoJSON(p.geom)::json AS geometry,
-        to_jsonb(pi) AS intelligence
+            SELECT
+                *,
+                ST_AsGeoJSON(geom)::json AS geometry
+            FROM parcels
 
-      FROM public.parcels p
+        `);
 
-      LEFT JOIN public.parcel_intelligence pi
-        ON pi.parcel_id = p.id
+        const geojson = {
 
-    `);
+            type:"FeatureCollection",
 
-    const geojson = {
+            features: result.rows.map(row=>({
 
-      type: "FeatureCollection",
+                type:"Feature",
 
-      features: result.rows.map(row => ({
+                geometry:row.geometry,
 
-        type: "Feature",
+                properties:{
 
-        geometry: row.geometry,
+                    id:row.id,
 
-        properties: {
+                    project_id:row.project_id,
 
-          id: row.id,
-          project_id: row.project_id,
-          property_id: row.property_id,
-          parcel_no: row.parcel_no,
-          price: row.price,
-          status: row.status,
-          size: row.size,
-          area: row.area,
+                    property_id:row.property_id,
 
-          intelligence: row.intelligence
+                    parcel_no:row.parcel_no,
 
-        }
+                    price:row.price,
 
-      }))
+                    status:row.status,
 
-    };
+                    size:row.size,
 
-    res.json(geojson);
+                    area:row.area
 
-  }
+                }
 
-  catch (err) {
+            }))
 
-    console.error("Global parcel GeoJSON error:", err);
+        };
 
-    res.status(500).json({
-      error: "Error generating parcel GeoJSON",
-      details: err.message
-    });
+        res.json(geojson);
 
-  }
+    }
+
+    catch(err){
+
+        console.error(err);
+
+        res.status(500).json(err);
+
+    }
 
 });
 
