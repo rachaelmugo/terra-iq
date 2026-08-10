@@ -213,16 +213,7 @@ if(window.innerWidth <= 768){
 
 
    <!-- ACCESSIBILITY EVIDENCE -->
-<div style="
-    font-size:12px;
-    font-weight:800;
-    color:#0F2D52;
-    letter-spacing:.5px;
-    text-transform:uppercase;
-    margin-bottom:10px;
-">
-    📍 Accessibility Evidence
-</div>
+<div style=" margin-top:20px; padding:14px; background:#F8FAFC; border:1px solid #E2E8F0; border-radius:12px; "> <div style=" font-size:14px; font-weight:800; color:#0F2D52; letter-spacing:.4px; margin-bottom:12px; "> 📍 Accessibility Evidence </div>
 
 <div style="
     display:flex;
