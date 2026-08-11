@@ -71,7 +71,6 @@ function openSurveyToolModal() {
     padding:14px;
     margin-bottom:16px;
 ">
-
     <div style="
         display:flex;
         justify-content:space-between;
@@ -107,9 +106,7 @@ function openSurveyToolModal() {
         </span>
     </div>
 
-
     <!-- TARGET PLOT SIZE -->
-
     <div style="
         display:grid;
         grid-template-columns:1fr 1fr;
@@ -118,7 +115,6 @@ function openSurveyToolModal() {
     ">
 
         <div>
-
             <label style="
                 display:block;
                 font-size:11px;
@@ -165,16 +161,11 @@ function openSurveyToolModal() {
                 <option value="custom">
                     Custom
                 </option>
-
             </select>
-
         </div>
 
-
         <!-- MIN FRONTAGE -->
-
         <div>
-
             <label style="
                 display:block;
                 font-size:11px;
@@ -200,11 +191,8 @@ function openSurveyToolModal() {
                     box-sizing:border-box;
                 "
             >
-
         </div>
-
     </div>
-
 
     <!-- CUSTOM AREA -->
 
@@ -241,7 +229,6 @@ function openSurveyToolModal() {
 
     </div>
 
-
     <!-- MIN DEPTH -->
 
     <div style="
@@ -252,7 +239,6 @@ function openSurveyToolModal() {
     ">
 
         <div>
-
             <label style="
                 display:block;
                 font-size:11px;
@@ -278,14 +264,10 @@ function openSurveyToolModal() {
                     box-sizing:border-box;
                 "
             >
-
         </div>
 
-
         <!-- ROAD TYPE -->
-
         <div>
-
             <label style="
                 display:block;
                 font-size:11px;
@@ -308,28 +290,20 @@ function openSurveyToolModal() {
                     box-sizing:border-box;
                 "
             >
-
                 <option value="public">
                     Public Through Road
                 </option>
-
                 <option value="local">
                     Local Access Road
                 </option>
-
                 <option value="private">
                     Private Estate Road
                 </option>
-
             </select>
-
         </div>
-
     </div>
 
-
     <!-- ROAD RESERVE -->
-
     <div style="
         display:grid;
         grid-template-columns:1fr 1fr;
@@ -364,21 +338,16 @@ function openSurveyToolModal() {
                     box-sizing:border-box;
                 "
             >
-
         </div>
 
-
         <!-- DESIGN PRIORITY -->
-
         <div>
-
             <label style="
                 display:block;
                 font-size:11px;
                 font-weight:700;
                 color:#475569;
-                margin-bottom:4px;
-            ">
+                margin-bottom:4px;">
                 Design Priority
             </label>
 
@@ -394,7 +363,6 @@ function openSurveyToolModal() {
                     box-sizing:border-box;
                 "
             >
-
                 <option value="balanced">
                     Balanced
                 </option>
@@ -410,16 +378,11 @@ function openSurveyToolModal() {
                 <option value="quality">
                     Best Plot Quality
                 </option>
-
             </select>
-
         </div>
-
     </div>
 
-
     <!-- RULE SUMMARY -->
-
     <div style="
         padding:9px 10px;
         background:#FFFFFF;
@@ -429,16 +392,13 @@ function openSurveyToolModal() {
         line-height:1.5;
         color:#64748B;
     ">
-
         <strong style="color:#0F2D52;">
             Design logic:
         </strong>
 
         Terra-IQ will use these parameters when generating
         roads, buildable areas and individual cadastral plots.
-
     </div>
-
 </div>
 
         <!-- SECTION 1: POINT LOCATOR (1 TO 4 POINTS) -->
@@ -483,7 +443,10 @@ function openSurveyToolModal() {
 
         <hr style="border:none; border-top:1px solid #E2E8F0; margin:16px 0;">
 
-      <!-- SECTION 3: CADASTRAL LAYOUT ENGINE -->
+      <!-- =========================================================
+     CADASTRAL LAYOUT ENGINE
+========================================================= -->
+
 <div style="
     margin-top:18px;
     padding:14px;
@@ -498,218 +461,99 @@ function openSurveyToolModal() {
         color:#0F2D52;
         margin-bottom:4px;
     ">
-        🏗️ Cadastral Layout Engine
+        🏗️ Smart Cadastral Layout Engine
     </div>
 
     <div style="
         font-size:11px;
         color:#64748B;
-        margin-bottom:14px;
         line-height:1.5;
+        margin-bottom:12px;
     ">
-        Generate multiple subdivision possibilities based on
-        plot size, road access and planning parameters.
+        Terra-IQ will generate multiple cadastral subdivision
+        possibilities using the planning rules defined above.
+        Each layout attempts to provide road access to every
+        plot while minimizing unnecessary road reserve.
     </div>
 
-
-    <!-- TARGET PLOT SIZE -->
     <div style="
         display:grid;
         grid-template-columns:1fr 1fr;
-        gap:10px;
-        margin-bottom:10px;
+        gap:8px;
+        margin-bottom:12px;
     ">
 
-        <div>
-            <label style="
-                font-size:11px;
-                font-weight:700;
-                color:#475569;
+        <div style="
+            padding:9px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:7px;
+        ">
+            <div style="
+                font-size:9px;
+                color:#64748B;
+                text-transform:uppercase;
+                font-weight:800;
             ">
-                Target Plot Size
-            </label>
+                Target Plot
+            </div>
 
-            <select id="subdivisionPlotSize" style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-                background:white;
+            <div style="
+                font-size:13px;
+                font-weight:800;
+                color:#0F2D52;
+                margin-top:3px;
             ">
-                <option value="450">450 m²</option>
-                <option value="505.86">1/8 Acre</option>
-                <option value="1011.71">1/4 Acre</option>
-                <option value="2023.43">1/2 Acre</option>
-                <option value="4046.86">1 Acre</option>
-                <option value="custom">Custom</option>
-            </select>
+                From Planning Rules
+            </div>
         </div>
 
-
-        <!-- ROAD WIDTH -->
-        <div>
-            <label style="
-                font-size:11px;
-                font-weight:700;
-                color:#475569;
+        <div style="
+            padding:9px;
+            background:#FFFFFF;
+            border:1px solid #E2E8F0;
+            border-radius:7px;
+        ">
+            <div style="
+                font-size:9px;
+                color:#64748B;
+                text-transform:uppercase;
+                font-weight:800;
             ">
                 Road Reserve
-            </label>
+            </div>
 
-            <select id="roadWidth" style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-                background:white;
+            <div style="
+                font-size:13px;
+                font-weight:800;
+                color:#0F2D52;
+                margin-top:3px;
             ">
-                <option value="6">6 m</option>
-                <option value="9">9 m</option>
-                <option value="12">12 m</option>
-            </select>
+                From Planning Rules
+            </div>
         </div>
 
     </div>
 
-
-    <!-- CUSTOM SIZE -->
-    <div id="customPlotSizeContainer" style="
-        display:none;
-        margin-bottom:10px;
-    ">
-
-        <label style="
-            font-size:11px;
-            font-weight:700;
-            color:#475569;
-        ">
-            Custom Plot Area (m²)
-        </label>
-
-        <input
-            type="number"
-            id="customPlotSize"
-            placeholder="e.g. 600"
-            min="100"
-            style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-            "
-        >
-
-    </div>
-
-
-    <!-- MINIMUM FRONTAGE -->
     <div style="
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:10px;
-        margin-bottom:10px;
+        padding:9px 10px;
+        background:#FFFFFF;
+        border:1px solid #E2E8F0;
+        border-radius:7px;
+        margin-bottom:12px;
+        font-size:10px;
+        line-height:1.5;
+        color:#64748B;
     ">
+        <strong style="color:#0F2D52;">
+            Smart design:
+        </strong>
 
-        <div>
-            <label style="
-                font-size:11px;
-                font-weight:700;
-                color:#475569;
-            ">
-                Minimum Frontage (m)
-            </label>
-
-            <input
-                type="number"
-                id="minimumFrontage"
-                value="15"
-                min="5"
-                style="
-                    width:100%;
-                    padding:8px;
-                    border:1px solid #CBD5E1;
-                    border-radius:6px;
-                    margin-top:4px;
-                    box-sizing:border-box;
-                "
-            >
-        </div>
-
-
-        <!-- MINIMUM DEPTH -->
-        <div>
-            <label style="
-                font-size:11px;
-                font-weight:700;
-                color:#475569;
-            ">
-                Minimum Depth (m)
-            </label>
-
-            <input
-                type="number"
-                id="minimumDepth"
-                value="25"
-                min="5"
-                style="
-                    width:100%;
-                    padding:8px;
-                    border:1px solid #CBD5E1;
-                    border-radius:6px;
-                    margin-top:4px;
-                    box-sizing:border-box;
-                "
-            >
-        </div>
-
+        The engine evaluates road access, plot frontage,
+        plot depth, usable land and plot yield before
+        producing layout alternatives.
     </div>
 
-
-    <!-- LAYOUT STRATEGY -->
-    <div style="margin-bottom:12px;">
-
-        <label style="
-            font-size:11px;
-            font-weight:700;
-            color:#475569;
-        ">
-            Layout Strategy
-        </label>
-
-        <select id="layoutStrategy" style="
-            width:100%;
-            padding:8px;
-            border:1px solid #CBD5E1;
-            border-radius:6px;
-            margin-top:4px;
-            box-sizing:border-box;
-            background:white;
-        ">
-
-            <option value="balanced">
-                Balanced — Recommended
-            </option>
-
-            <option value="yield">
-                Maximum Yield
-            </option>
-
-            <option value="frontage">
-                Premium Frontage
-            </option>
-
-        </select>
-
-    </div>
-
-
-    <!-- GENERATE -->
     <button
         onclick="generateCadastralPlans()"
         style="
@@ -1386,71 +1230,84 @@ function generateBuildableArea() {
  * ============================================================
  */
 
-function generateCadastralPlots() {
+function generateCadastralPlots(options = {}) {
 
     if (!window.activeMotherPolygon) {
         alert("Please plot the mother parcel first.");
-        return;
-    }
-
-    if (!window.activeRoadNetwork) {
-        alert("Please generate the road network first.");
-        return;
+        return null;
     }
 
     if (!window.activeBuildableArea) {
         alert("Please generate the buildable area first.");
-        return;
+        return null;
     }
 
     if (typeof turf === "undefined" || typeof map === "undefined") {
         alert("Mapping engine is not available.");
-        return;
+        return null;
     }
 
-    const rules = getPlanningRules();
+    // =========================================================
+    // 1. GET PLANNING RULES
+    // =========================================================
 
-    const targetArea = rules.targetPlotArea;
-    const minimumFrontage = rules.minimumFrontage;
-    const minimumDepth = rules.minimumDepth;
+    const rules =
+        options.rules || getPlanningRules();
 
-    const buildableArea = window.activeBuildableArea;
+    const targetArea =
+        Number(rules.targetPlotArea);
 
-    /*
-     * ---------------------------------------------------------
-     * 1. DETERMINE APPROXIMATE PLOT DIMENSIONS
-     * ---------------------------------------------------------
-     *
-     * width ≈ frontage
-     * depth ≈ area / frontage
-     */
+    const minimumFrontage =
+        Number(rules.minimumFrontage) || 15;
 
-    let plotWidth = minimumFrontage;
+    const minimumDepth =
+        Number(rules.minimumDepth) || 25;
+
+    const buildableArea =
+        window.activeBuildableArea;
+
+
+    if (!targetArea || targetArea <= 0) {
+
+        alert("Invalid target plot area.");
+
+        return null;
+    }
+
+
+    // =========================================================
+    // 2. DETERMINE INITIAL PLOT DIMENSIONS
+    // =========================================================
+
+    let plotWidth =
+        minimumFrontage;
 
     let plotDepth =
         targetArea / plotWidth;
 
+
     /*
-     * Make sure the calculated depth satisfies
-     * the minimum depth rule.
+     * If the calculated depth is below the
+     * minimum permitted depth, increase depth
+     * and recalculate frontage.
      */
 
     if (plotDepth < minimumDepth) {
 
-        plotDepth = minimumDepth;
+        plotDepth =
+            minimumDepth;
 
         plotWidth =
             targetArea / plotDepth;
     }
 
 
-    /*
-     * ---------------------------------------------------------
-     * 2. GET BUILDABLE AREA BOUNDING BOX
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 3. GET BUILDABLE AREA BOUNDING BOX
+    // =========================================================
 
-    const bbox = turf.bbox(buildableArea);
+    const bbox =
+        turf.bbox(buildableArea);
 
     const minLng = bbox[0];
     const minLat = bbox[1];
@@ -1458,48 +1315,42 @@ function generateCadastralPlots() {
     const maxLat = bbox[3];
 
 
-    /*
-     * ---------------------------------------------------------
-     * 3. APPROXIMATE METERS PER DEGREE
-     *
-     * Used only for the initial layout engine.
-     * Later we will move the geometry calculations into
-     * a projected coordinate system.
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 4. LOCAL METRIC APPROXIMATION
+    // =========================================================
 
     const centerLat =
         (minLat + maxLat) / 2;
 
-    const metersPerDegreeLat = 111320;
+    const metersPerDegreeLat =
+        111320;
 
     const metersPerDegreeLng =
         111320 *
-        Math.cos(centerLat * Math.PI / 180);
+        Math.cos(
+            centerLat * Math.PI / 180
+        );
 
-
-    /*
-     * Convert plot dimensions into degrees.
-     */
 
     const widthDegrees =
-        plotWidth / metersPerDegreeLng;
+        plotWidth /
+        metersPerDegreeLng;
 
     const depthDegrees =
-        plotDepth / metersPerDegreeLat;
+        plotDepth /
+        metersPerDegreeLat;
 
 
-    /*
-     * ---------------------------------------------------------
-     * 4. CREATE CANDIDATE PLOTS
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 5. GENERATE CANDIDATE PLOTS
+    // =========================================================
 
     const plots = [];
 
     let row = 0;
 
-    let currentLat = minLat;
+    let currentLat =
+        minLat;
 
 
     while (
@@ -1509,7 +1360,8 @@ function generateCadastralPlots() {
 
         let column = 0;
 
-        let currentLng = minLng;
+        let currentLng =
+            minLng;
 
 
         while (
@@ -1521,15 +1373,14 @@ function generateCadastralPlots() {
                 turf.bboxPolygon([
                     currentLng,
                     currentLat,
-                    currentLng + widthDegrees,
-                    currentLat + depthDegrees
+
+                    currentLng +
+                        widthDegrees,
+
+                    currentLat +
+                        depthDegrees
                 ]);
 
-
-            /*
-             * Intersect candidate plot with the
-             * buildable area.
-             */
 
             const intersection =
                 turf.intersect(
@@ -1541,23 +1392,23 @@ function generateCadastralPlots() {
             if (intersection) {
 
                 const area =
-                    turf.area(intersection);
+                    turf.area(
+                        intersection
+                    );
+
+
+                const areaRatio =
+                    area /
+                    targetArea;
 
 
                 /*
                  * Only accept reasonably complete plots.
-                 *
-                 * This prevents tiny fragments from being
-                 * treated as proper cadastral plots.
                  */
 
-                const areaRatio =
-                    area / targetArea;
-
-
                 if (
-                    areaRatio >= 0.75 &&
-                    areaRatio <= 1.35
+                    areaRatio >= 0.80 &&
+                    areaRatio <= 1.25
                 ) {
 
                     intersection.properties = {
@@ -1579,13 +1430,21 @@ function generateCadastralPlots() {
                             targetArea,
 
                         frontage_m:
-                            plotWidth,
+                            Number(
+                                plotWidth.toFixed(1)
+                            ),
 
                         depth_m:
-                            plotDepth,
+                            Number(
+                                plotDepth.toFixed(1)
+                            ),
 
                         accessible:
-                            true
+                            true,
+
+                        layout_type:
+                            options.layoutType ||
+                            "candidate"
 
                     };
 
@@ -1597,57 +1456,41 @@ function generateCadastralPlots() {
             }
 
 
-            currentLng += widthDegrees;
+            currentLng +=
+                widthDegrees;
 
             column++;
         }
 
 
-        currentLat += depthDegrees;
+        currentLat +=
+            depthDegrees;
 
         row++;
     }
 
 
-    /*
-     * ---------------------------------------------------------
-     * 5. CHECK RESULT
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 6. NO VALID PLOTS
+    // =========================================================
 
     if (plots.length === 0) {
 
-        alert(
-            "Terra-IQ could not generate suitable plots " +
-            "using the current planning rules.\n\n" +
+        if (!options.silent) {
 
-            "Try reducing the target plot size or " +
-            "minimum frontage."
-        );
+            alert(
+                "Terra-IQ could not generate suitable plots " +
+                "using the current planning parameters."
+            );
+        }
 
-        return;
+        return null;
     }
 
 
-    /*
-     * ---------------------------------------------------------
-     * 6. REMOVE PREVIOUS GENERATED PLOTS
-     * ---------------------------------------------------------
-     */
-
-    if (window.activePlotLayer) {
-
-        map.removeLayer(
-            window.activePlotLayer
-        );
-    }
-
-
-    /*
-     * ---------------------------------------------------------
-     * 7. CREATE FEATURE COLLECTION
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 7. CREATE COLLECTION
+    // =========================================================
 
     const plotCollection =
         turf.featureCollection(
@@ -1655,123 +1498,9 @@ function generateCadastralPlots() {
         );
 
 
-    /*
-     * ---------------------------------------------------------
-     * 8. DRAW CADASTRAL PLOTS
-     * ---------------------------------------------------------
-     */
-
-    window.activePlotLayer =
-        L.geoJSON(
-            plotCollection,
-            {
-
-                style: {
-
-                    color: "#0F2D52",
-
-                    weight: 1.5,
-
-                    fillColor: "#60A5FA",
-
-                    fillOpacity: 0.18
-
-                },
-
-
-                onEachFeature:
-                    function(feature, layer) {
-
-                        const p =
-                            feature.properties;
-
-
-                        layer.bindPopup(`
-
-                            <div style="
-                                font-family:system-ui;
-                                min-width:190px;
-                            ">
-
-                                <div style="
-                                    font-size:14px;
-                                    font-weight:800;
-                                    color:#0F2D52;
-                                    margin-bottom:8px;
-                                ">
-                                    ${p.parcel_no}
-                                </div>
-
-
-                                <div style="
-                                    font-size:12px;
-                                    color:#475569;
-                                    line-height:1.7;
-                                ">
-
-                                    <div>
-                                        Area:
-                                        <strong>
-                                            ${p.area_m2} m²
-                                        </strong>
-                                    </div>
-
-                                    <div>
-                                        Target:
-                                        <strong>
-                                            ${p.target_area_m2} m²
-                                        </strong>
-                                    </div>
-
-                                    <div>
-                                        Frontage:
-                                        <strong>
-                                            ${p.frontage_m.toFixed(1)} m
-                                        </strong>
-                                    </div>
-
-                                    <div>
-                                        Approx. Depth:
-                                        <strong>
-                                            ${p.depth_m.toFixed(1)} m
-                                        </strong>
-                                    </div>
-
-                                    <div style="
-                                        margin-top:6px;
-                                        color:#16A34A;
-                                        font-weight:700;
-                                    ">
-                                        ✓ Road Accessible
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        `);
-                    }
-
-            }
-
-        ).addTo(map);
-
-
-    /*
-     * ---------------------------------------------------------
-     * 9. SAVE GENERATED PLOTS
-     * ---------------------------------------------------------
-     */
-
-    window.activeGeneratedPlots =
-        plotCollection;
-
-
-    /*
-     * ---------------------------------------------------------
-     * 10. CALCULATE SUMMARY
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 8. CALCULATE LAYOUT METRICS
+    // =========================================================
 
     const totalPlotArea =
         plots.reduce(
@@ -1787,38 +1516,68 @@ function generateCadastralPlots() {
         );
 
 
-    const landUtilization =
+    const utilization =
         (
             totalPlotArea /
             motherArea
         ) * 100;
 
 
-    /*
-     * ---------------------------------------------------------
-     * 11. REPORT
-     * ---------------------------------------------------------
-     */
+    // =========================================================
+    // 9. RETURN CANDIDATE
+    // =========================================================
 
-    alert(
+    const layout = {
 
-        `Cadastral Plot Generation Complete!\n\n` +
+        type:
+            options.layoutType ||
+            "candidate",
 
-        `Plots Generated: ${plots.length}\n` +
+        plots:
+            plotCollection,
 
-        `Target Plot Size: ${targetArea.toFixed(0)} m²\n` +
+        plotCount:
+            plots.length,
 
-        `Minimum Frontage: ${minimumFrontage.toFixed(1)} m\n` +
+        totalPlotArea:
+            totalPlotArea,
 
-        `Minimum Depth: ${minimumDepth.toFixed(1)} m\n\n` +
+        motherArea:
+            motherArea,
 
-        `Total Plot Area: ` +
-        `${totalPlotArea.toFixed(1)} m²\n` +
+        utilization:
+            utilization,
 
-        `Land Utilization: ` +
-        `${landUtilization.toFixed(1)}%`
+        plotWidth:
+            plotWidth,
 
-    );
+        plotDepth:
+            plotDepth,
+
+        targetArea:
+            targetArea,
+
+        minimumFrontage:
+            minimumFrontage,
+
+        minimumDepth:
+            minimumDepth
+    };
+
+
+    // =========================================================
+    // 10. ONLY DRAW WHEN REQUESTED
+    // =========================================================
+
+    if (options.render !== false) {
+
+        renderCadastralLayout(
+            layout
+        );
+    }
+
+
+    return layout;
 }
 
 /**
@@ -1846,201 +1605,202 @@ function generateCadastralPlots() {
 
 function generateSubdivisions() {
 
+    /*
+     * =========================================================
+     * SMART CADASTRAL SUBDIVISION ENGINE
+     * =========================================================
+     */
+
     if (!window.activeMotherPolygon) {
-        alert("Please plot an RTK Mother Parcel boundary first.");
+        alert("Please plot the RTK Mother Parcel boundary first.");
         return;
     }
 
     if (typeof turf === "undefined") {
-        alert("Turf.js is required for subdivision generation.");
+        alert("Turf.js is required.");
         return;
     }
 
-    const mother = window.activeMotherPolygon;
+    /*
+     * ---------------------------------------------------------
+     * 1. READ PLANNING RULES
+     * ---------------------------------------------------------
+     */
 
-    const roadWidth =
-        parseFloat(document.getElementById("roadWidth")?.value) || 6;
+    const rules = getPlanningRules();
 
-    const selectedPlotSize =
-        document.getElementById("subdivisionPlotSize")?.value || "eighth";
-
-    const plotSize = getSelectedPlotSize(selectedPlotSize);
+    console.log("SMART SUBDIVISION RULES:", rules);
 
     /*
-     * Remove previous subdivision display
+     * ---------------------------------------------------------
+     * 2. REMOVE PREVIOUS GENERATED LAYOUTS
+     * ---------------------------------------------------------
      */
+
     if (window.subdivisionLayouts) {
+
         Object.values(window.subdivisionLayouts).forEach(layer => {
+
             if (layer && map.hasLayer(layer)) {
                 map.removeLayer(layer);
             }
+
         });
     }
 
     window.subdivisionLayouts = {};
 
     /*
-     * Generate the three planning alternatives
+     * ---------------------------------------------------------
+     * 3. GENERATE CANDIDATE LAYOUTS
+     * ---------------------------------------------------------
+     *
+     * For now we keep the three existing strategies.
+     *
+     * Later these functions will become much smarter:
+     *
+     *   spine  → central access strategy
+     *   grid   → efficient regular layout
+     *   compact → minimum-road strategy
+     *
      */
 
-    const layouts = {
+    const layouts = {};
 
-        spine: generateSpineLayout(
-            mother,
-            plotSize,
-            roadWidth
-        ),
+    const spine =
+        generateSpineLayout(
+            window.activeMotherPolygon,
+            rules
+        );
 
-        grid: generateGridLayout(
-            mother,
-            plotSize,
-            roadWidth
-        ),
+    if (spine && spine.plots && spine.plots.length) {
+        layouts.spine = spine;
+    }
 
-        compact: generateCompactLayout(
-            mother,
-            plotSize,
-            roadWidth
-        )
 
-    };
+    const grid =
+        generateGridLayout(
+            window.activeMotherPolygon,
+            rules
+        );
+
+    if (grid && grid.plots && grid.plots.length) {
+        layouts.grid = grid;
+    }
+
+
+    const compact =
+        generateCompactLayout(
+            window.activeMotherPolygon,
+            rules
+        );
+
+    if (compact && compact.plots && compact.plots.length) {
+        layouts.compact = compact;
+    }
+
 
     /*
-     * Display all layouts
+     * ---------------------------------------------------------
+     * 4. CHECK WHETHER ANY LAYOUT WAS GENERATED
+     * ---------------------------------------------------------
+     */
+
+    if (!Object.keys(layouts).length) {
+
+        alert(
+            "Terra-IQ could not generate a suitable cadastral " +
+            "layout using the current planning rules.\n\n" +
+
+            "Try:\n" +
+            "• reducing the target plot size\n" +
+            "• reducing the minimum frontage\n" +
+            "• increasing the available parcel area"
+        );
+
+        return;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 5. SCORE EACH LAYOUT
+     * ---------------------------------------------------------
      */
 
     Object.entries(layouts).forEach(([name, layout]) => {
 
-        if (!layout || !layout.plots.length) {
-            return;
-        }
+        layout.score =
+            scoreCadastralLayout(
+                layout,
+                window.activeMotherPolygon,
+                rules
+            );
 
-        const layer = L.layerGroup();
-
-        /*
-         * ROAD NETWORK
-         */
-
-        if (layout.roads) {
-
-            layout.roads.forEach(road => {
-
-                L.geoJSON(road, {
-                    style: {
-                        color: "#475569",
-                        weight: Math.max(3, roadWidth / 2),
-                        opacity: 0.95,
-                        fillColor: "#CBD5E1",
-                        fillOpacity: 0.85
-                    }
-                }).addTo(layer);
-
-            });
-
-        }
-
-        /*
-         * PLOTS
-         */
-
-        layout.plots.forEach((plot, index) => {
-
-            plot.properties = {
-                parcel_no: `${layout.code}-${String(index + 1).padStart(3, "0")}`,
-                status: "Available",
-                area_m2: turf.area(plot),
-                area_acres: turf.area(plot) / 4046.856
-            };
-
-            L.geoJSON(plot, {
-
-                style: {
-                    color: "#0F2D52",
-                    weight: 1.5,
-                    fillColor: "#FFFFFF",
-                    fillOpacity: 0.85
-                },
-
-                onEachFeature: function(feature, plotLayer) {
-
-                    const area =
-                        feature.properties.area_m2;
-
-                    const acres =
-                        feature.properties.area_acres;
-
-                    plotLayer.bindPopup(`
-                        <div style="
-                            font-family:system-ui;
-                            min-width:180px;
-                        ">
-
-                            <div style="
-                                font-size:13px;
-                                font-weight:800;
-                                color:#0F2D52;
-                                margin-bottom:6px;
-                            ">
-                                ${feature.properties.parcel_no}
-                            </div>
-
-                            <div style="
-                                font-size:11px;
-                                color:#64748B;
-                                line-height:1.6;
-                            ">
-
-                                <div>
-                                    <b>Area:</b>
-                                    ${area.toFixed(1)} m²
-                                </div>
-
-                                <div>
-                                    <b>Acres:</b>
-                                    ${acres.toFixed(3)}
-                                </div>
-
-                                <div>
-                                    <b>Status:</b>
-                                    Available
-                                </div>
-
-                            </div>
-
-                        </div>
-                    `);
-
-                }
-
-            }).addTo(layer);
-
-        });
-
-        /*
-         * Mother parcel outline
-         */
-        L.geoJSON(mother, {
-            style: {
-                color: "#0F2D52",
-                weight: 3,
-                fillOpacity: 0
-            }
-        }).addTo(layer);
-
-        /*
-         * Add to map
-         */
-        layer.addTo(map);
-
-        window.subdivisionLayouts[name] = layer;
+        layout.name = name;
 
     });
 
+
     /*
-     * Show layout selector
+     * ---------------------------------------------------------
+     * 6. SORT BEST → WORST
+     * ---------------------------------------------------------
      */
-    showSubdivisionLayoutSelector(layouts);
-} 
+    const rankedLayouts =
+        Object.entries(layouts)
+            .sort(
+                ([, a], [, b]) =>
+                    b.score.total - a.score.total
+            );
+    /*
+     * ---------------------------------------------------------
+     * 7. RENDER CANDIDATE LAYOUTS
+     * ---------------------------------------------------------
+     */
+    rankedLayouts.forEach(
+        ([name, layout]) => {
+            const layer =
+                renderCadastralLayout(
+                    layout,
+                    window.activeMotherPolygon,
+                    rules
+                );
+
+            if (layer) {
+                layer.addTo(map);
+                window.subdivisionLayouts[name] =
+                    layer;
+            }
+        }
+    );
+    /*
+     * ---------------------------------------------------------
+     * 8. STORE RESULTS
+     * ---------------------------------------------------------
+     */
+    window.generatedCadastralLayouts =
+        rankedLayouts.map(
+            ([name, layout]) => ({
+                name: name,
+                layout: layout
+            })
+        );
+    /*
+     * ---------------------------------------------------------
+     * 9. SHOW LAYOUT SELECTOR
+     * ---------------------------------------------------------
+     */
+    showSubdivisionLayoutSelector(
+        layouts
+    );
+
+
+    console.log(
+        "SMART CADASTRAL LAYOUTS:",
+        window.generatedCadastralLayouts
+    );
+}
 
 function getPlanningRules() {
 
@@ -2101,7 +1861,1316 @@ function getPlanningRules() {
         priority: priority
 
     };
+} 
+
+function scoreCadastralLayout(
+    layout,
+    mother,
+    rules
+) {
+
+    const plots =
+        layout.plots || [];
+
+    if (!plots.length) {
+
+        return {
+            total: 0,
+            yield: 0,
+            accessibility: 0,
+            quality: 0,
+            efficiency: 0
+        };
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * TOTAL PLOT AREA
+     * ---------------------------------------------------------
+     */
+
+    const totalPlotArea =
+        plots.reduce(
+            (sum, plot) =>
+                sum + turf.area(plot),
+            0
+        );
+
+
+    /*
+     * ---------------------------------------------------------
+     * MOTHER PARCEL AREA
+     * ---------------------------------------------------------
+     */
+
+    const motherArea =
+        turf.area(mother);
+
+
+    /*
+     * ---------------------------------------------------------
+     * LAND EFFICIENCY
+     * ---------------------------------------------------------
+     */
+
+    const efficiency =
+        motherArea > 0
+            ? totalPlotArea / motherArea
+            : 0;
+
+
+    /*
+     * ---------------------------------------------------------
+     * PLOT SIZE QUALITY
+     * ---------------------------------------------------------
+     */
+
+    let sizeScore = 0;
+
+    plots.forEach(plot => {
+
+        const area =
+            turf.area(plot);
+
+        const difference =
+            Math.abs(
+                area - rules.targetPlotArea
+            );
+
+        const tolerance =
+            rules.targetPlotArea * 0.20;
+
+        if (difference <= tolerance) {
+
+            sizeScore += 1;
+
+        }
+
+    });
+
+
+    const quality =
+        plots.length > 0
+            ? sizeScore / plots.length
+            : 0;
+
+
+    /*
+     * ---------------------------------------------------------
+     * ROAD ACCESS
+     * ---------------------------------------------------------
+     */
+
+    let accessiblePlots = 0;
+
+    plots.forEach(plot => {
+
+        if (
+            plot.properties &&
+            plot.properties.accessible === true
+        ) {
+
+            accessiblePlots++;
+
+        }
+
+    });
+
+
+    const accessibility =
+        plots.length > 0
+            ? accessiblePlots / plots.length
+            : 0;
+    /*
+     * ---------------------------------------------------------
+     * PLOT YIELD
+     * ---------------------------------------------------------
+     */
+    const theoreticalYield =
+        Math.floor(
+            motherArea /
+            rules.targetPlotArea
+        );
+
+    const yieldScore =
+        theoreticalYield > 0
+            ? Math.min(
+                plots.length /
+                theoreticalYield,
+                1
+            )
+            : 0;
+
+    /*
+     * ---------------------------------------------------------
+     * PRIORITY WEIGHTS
+     * ---------------------------------------------------------
+     */
+    let weights = {
+        yield: 0.30,
+        accessibility: 0.30,
+        quality: 0.25,
+        efficiency: 0.15
+    };
+
+    if (rules.priority === "yield") {
+        weights = {
+            yield: 0.50,
+            accessibility: 0.20,
+            quality: 0.15,
+            efficiency: 0.15
+        };
+    }
+
+    if (rules.priority === "access") {
+        weights = {
+            yield: 0.20,
+            accessibility: 0.50,
+            quality: 0.20,
+            efficiency: 0.10
+        };
+    }
+
+    if (rules.priority === "quality") {
+        weights = {
+            yield: 0.15,
+            accessibility: 0.25,
+            quality: 0.45,
+            efficiency: 0.15
+        };
+    }
+    /*
+     * ---------------------------------------------------------
+     * FINAL SCORE
+     * ---------------------------------------------------------
+     */
+    const total =
+        (
+            yieldScore *
+            weights.yield
+        ) +
+
+        (
+            accessibility *
+            weights.accessibility
+        ) +
+
+        (
+            quality *
+            weights.quality
+        ) +
+
+        (
+            efficiency *
+            weights.efficiency
+        );
+
+    return {
+        total: total,
+        yield:
+            yieldScore,
+        accessibility:
+            accessibility,
+        quality:
+            quality,
+        efficiency:
+            efficiency
+    };
+} 
+
+function renderCadastralLayout(
+    layout,
+    mother,
+    rules
+) {
+
+    if (
+        !layout ||
+        !layout.plots ||
+        !layout.plots.length
+    ) {
+        return null;
+    }
+
+    const layer =
+        L.layerGroup();
+
+    /*
+     * ---------------------------------------------------------
+     * DRAW ROADS
+     * ---------------------------------------------------------
+     */
+
+    if (layout.roads) {
+
+        layout.roads.forEach(
+            road => {
+
+                L.geoJSON(
+                    road,
+                    {
+                        style: {
+
+                            color: "#475569",
+
+                            weight:
+                                Math.max(
+                                    3,
+                                    rules.roadReserve / 2
+                                ),
+
+                            opacity: 0.95,
+
+                            fillColor:
+                                "#CBD5E1",
+
+                            fillOpacity:
+                                0.85
+
+                        }
+                    }
+                ).addTo(layer);
+
+            }
+        );
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * DRAW CADASTRAL PLOTS
+     * ---------------------------------------------------------
+     */
+
+    layout.plots.forEach(
+        (plot, index) => {
+
+            const area =
+                turf.area(plot);
+
+
+            plot.properties =
+                plot.properties || {};
+
+
+            plot.properties.parcel_no =
+                plot.properties.parcel_no ||
+                `${layout.code || "SUB"}-${String(
+                    index + 1
+                ).padStart(3, "0")}`;
+
+
+            plot.properties.area_m2 =
+                area;
+
+
+            plot.properties.area_acres =
+                area / 4046.856;
+
+
+            const plotLayer =
+                L.geoJSON(
+                    plot,
+                    {
+
+                        style: {
+
+                            color:
+                                "#0F2D52",
+
+                            weight:
+                                1.5,
+
+                            fillColor:
+                                "#FFFFFF",
+
+                            fillOpacity:
+                                0.85
+
+                        },
+
+                        onEachFeature:
+                            function(
+                                feature,
+                                layer
+                            ) {
+
+                                const p =
+                                    feature.properties;
+
+
+                                layer.bindPopup(`
+
+                                    <div style="
+                                        font-family:system-ui;
+                                        min-width:190px;
+                                    ">
+
+                                        <div style="
+                                            font-size:14px;
+                                            font-weight:800;
+                                            color:#0F2D52;
+                                            margin-bottom:8px;
+                                        ">
+                                            ${p.parcel_no}
+                                        </div>
+
+                                        <div style="
+                                            font-size:11px;
+                                            color:#475569;
+                                            line-height:1.7;
+                                        ">
+
+                                            <div>
+                                                Area:
+                                                <strong>
+                                                    ${p.area_m2.toFixed(1)}
+                                                    m²
+                                                </strong>
+                                            </div>
+
+                                            <div>
+                                                Target:
+                                                <strong>
+                                                    ${rules.targetPlotArea}
+                                                    m²
+                                                </strong>
+                                            </div>
+
+                                            <div>
+                                                Frontage:
+                                                <strong>
+                                                    ${p.frontage_m
+                                                        ? p.frontage_m.toFixed(1)
+                                                        : "—"}
+                                                    m
+                                                </strong>
+                                            </div>
+
+                                            <div>
+                                                Status:
+                                                <strong>
+                                                    Available
+                                                </strong>
+                                            </div>
+
+                                            <div style="
+                                                margin-top:6px;
+                                                color:#16A34A;
+                                                font-weight:700;
+                                            ">
+                                                ✓ Road Accessible
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                `);
+
+                            }
+
+                    }
+                );
+
+
+            plotLayer.addTo(layer);
+
+        }
+    );
+
+
+    /*
+     * ---------------------------------------------------------
+     * MOTHER PARCEL OUTLINE
+     * ---------------------------------------------------------
+     */
+
+    L.geoJSON(
+        mother,
+        {
+            style: {
+
+                color:
+                    "#0F2D52",
+
+                weight:
+                    3,
+
+                fillOpacity:
+                    0
+
+            }
+        }
+    ).addTo(layer);
+
+    return layer;
 }
+
+/**
+ * ============================================================
+ * SMART CADASTRAL ENGINE — ROAD CANDIDATES
+ * ============================================================
+ *
+ * Creates several possible access-road configurations.
+ *
+ * The engine will later:
+ * 1. Generate plots around these roads
+ * 2. Check frontage and accessibility
+ * 3. Score each complete layout
+ * 4. Rank the best options
+ *
+ * These are conceptual planning alternatives and are NOT
+ * legally approved subdivision plans.
+ */
+
+function generateRoadCandidates(mother, rules) {
+
+    if (!mother || typeof turf === "undefined") {
+        return [];
+    }
+
+    const roadWidth =
+        parseFloat(rules.roadReserve) || 12;
+
+    const bbox = turf.bbox(mother);
+
+    const minLng = bbox[0];
+    const minLat = bbox[1];
+    const maxLng = bbox[2];
+    const maxLat = bbox[3];
+
+    const centerLng =
+        (minLng + maxLng) / 2;
+
+    const centerLat =
+        (minLat + maxLat) / 2;
+
+    const candidates = [];
+
+    /*
+     * --------------------------------------------------------
+     * HELPER
+     * --------------------------------------------------------
+     */
+
+    function createRoad(points) {
+
+        const line =
+            turf.lineString(points);
+
+        return turf.buffer(
+            line,
+            roadWidth / 2000,
+            {
+                units: "kilometers"
+            }
+        );
+    }
+
+    /*
+     * ========================================================
+     * OPTION 1 — CENTRAL SPINE
+     * ========================================================
+     *
+     * One main road through the parcel.
+     *
+     * Good when:
+     * - parcel is relatively regular
+     * - maximum road efficiency is desired
+     */
+
+    const spineRoad =
+        createRoad([
+            [minLng, centerLat],
+            [maxLng, centerLat]
+        ]);
+
+    candidates.push({
+
+        id: "spine",
+
+        name: "Central Spine",
+
+        description:
+            "Single central access road with plots arranged on both sides.",
+
+        roads: [
+            spineRoad
+        ],
+
+        roadArea:
+            turf.area(spineRoad)
+
+    });
+
+    /*
+     * ========================================================
+     * OPTION 2 — EDGE ACCESS
+     * ========================================================
+     *
+     * Road follows one edge and serves plots from one side.
+     */
+
+    const edgeRoad =
+        createRoad([
+            [minLng, minLat],
+            [maxLng, minLat]
+        ]);
+
+    candidates.push({
+
+        id: "edge",
+
+        name: "Edge Access",
+
+        description:
+            "Road placed along the parcel edge to minimize internal road land.",
+
+        roads: [
+            edgeRoad
+        ],
+
+        roadArea:
+            turf.area(edgeRoad)
+
+    });
+
+    /*
+     * ========================================================
+     * OPTION 3 — L-SHAPED ACCESS
+     * ========================================================
+     *
+     * Useful for irregular parcels where a single road
+     * does not provide sufficient access.
+     */
+
+    const lRoad =
+        createRoad([
+            [minLng, centerLat],
+            [centerLng, centerLat],
+            [centerLng, maxLat]
+        ]);
+
+    candidates.push({
+
+        id: "l_access",
+
+        name: "L-Shaped Access",
+
+        description:
+            "Main access road with a secondary branch serving the upper parcel.",
+
+        roads: [
+            lRoad
+        ],
+
+        roadArea:
+            turf.area(lRoad)
+
+    });
+
+    /*
+     * ========================================================
+     * OPTION 4 — T ACCESS
+     * ========================================================
+     *
+     * A main spine with one branch.
+     *
+     * This can provide much better accessibility than a
+     * simple spine without creating a full road grid.
+     */
+
+    const tMain =
+        createRoad([
+            [minLng, centerLat],
+            [maxLng, centerLat]
+        ]);
+
+    const tBranch =
+        createRoad([
+            [centerLng, centerLat],
+            [centerLng, maxLat]
+        ]);
+
+    const tRoad =
+        turf.union(
+            tMain,
+            tBranch
+        );
+
+    candidates.push({
+
+        id: "t_access",
+
+        name: "T Access",
+
+        description:
+            "Central spine with one branch to improve parcel accessibility.",
+
+        roads: [
+            tMain,
+            tBranch
+        ],
+
+        roadArea:
+            tRoad
+                ? turf.area(tRoad)
+                : turf.area(tMain) + turf.area(tBranch)
+
+    });
+
+    /*
+     * ========================================================
+     * CLIP ROADS TO MOTHER PARCEL
+     * ========================================================
+     */
+
+    candidates.forEach(candidate => {
+
+        candidate.roads =
+            candidate.roads
+                .map(road => {
+
+                    const clipped =
+                        turf.intersect(
+                            mother,
+                            road
+                        );
+
+                    return clipped;
+
+                })
+                .filter(Boolean);
+
+    });
+
+    /*
+     * Remove candidates that have no usable roads.
+     */
+
+    return candidates.filter(
+        candidate =>
+            candidate.roads &&
+            candidate.roads.length > 0
+    );
+} 
+
+/**
+ * ============================================================
+ * SMART CADASTRAL ENGINE — BUILDABLE AREA
+ * ============================================================
+ *
+ * Takes:
+ *   - mother parcel
+ *   - candidate road network
+ *   - planning rules
+ *
+ * Returns:
+ *   - road reserve
+ *   - buildable area
+ *   - area statistics
+ *
+ * This function does NOT draw anything on the map.
+ * Rendering is handled separately.
+ */
+
+function calculateBuildableArea(mother, roads, rules) {
+
+    if (
+        !mother ||
+        !roads ||
+        !roads.length ||
+        typeof turf === "undefined"
+    ) {
+        return null;
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 1. COMBINE ALL ROAD CORRIDORS
+     * --------------------------------------------------------
+     */
+
+    let roadReserve = null;
+
+    roads.forEach(road => {
+
+        if (!road) return;
+
+        if (!roadReserve) {
+
+            roadReserve = road;
+
+        } else {
+
+            try {
+
+                roadReserve =
+                    turf.union(
+                        roadReserve,
+                        road
+                    );
+
+            } catch (error) {
+
+                console.warn(
+                    "Road union failed:",
+                    error
+                );
+
+            }
+
+        }
+
+    });
+
+    if (!roadReserve) {
+        return null;
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 2. CLIP ROAD RESERVE TO MOTHER PARCEL
+     * --------------------------------------------------------
+     */
+
+    try {
+
+        roadReserve =
+            turf.intersect(
+                mother,
+                roadReserve
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "Road clipping failed:",
+            error
+        );
+
+        return null;
+    }
+
+    if (!roadReserve) {
+        return null;
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 3. REMOVE ROAD RESERVE
+     * --------------------------------------------------------
+     */
+
+    let buildableArea = null;
+
+    try {
+
+        buildableArea =
+            turf.difference(
+                mother,
+                roadReserve
+            );
+
+    } catch (error) {
+
+        console.warn(
+            "Buildable area calculation failed:",
+            error
+        );
+
+        return null;
+    }
+
+    if (!buildableArea) {
+        return null;
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 4. CALCULATE AREAS
+     * --------------------------------------------------------
+     */
+
+    const motherArea =
+        turf.area(mother);
+
+    const roadArea =
+        turf.area(roadReserve);
+
+    const buildableAreaSqM =
+        turf.area(buildableArea);
+
+    const roadPercentage =
+        motherArea > 0
+            ? (roadArea / motherArea) * 100
+            : 0;
+
+    const buildablePercentage =
+        motherArea > 0
+            ? (buildableAreaSqM / motherArea) * 100
+            : 0;
+
+    /*
+     * --------------------------------------------------------
+     * 5. RETURN RESULT
+     * --------------------------------------------------------
+     */
+
+    return {
+
+        roadReserve: roadReserve,
+
+        buildableArea: buildableArea,
+
+        motherArea: motherArea,
+
+        roadArea: roadArea,
+
+        buildableAreaSqM: buildableAreaSqM,
+
+        roadPercentage: roadPercentage,
+
+        buildablePercentage: buildablePercentage,
+
+        rules: rules
+
+    };
+} 
+
+/**
+ * ============================================================
+ * SMART CADASTRAL ENGINE — PLOT GENERATION
+ * ============================================================
+ *
+ * Generates plot candidates from a buildable area.
+ *
+ * Goals:
+ * - Target approximately the requested plot area
+ * - Respect minimum frontage
+ * - Respect minimum depth
+ * - Prefer rectangular plots
+ * - Ensure plots touch/access a road
+ * - Avoid tiny leftover fragments
+ * - Keep plots inside the buildable area
+ *
+ * This is a conceptual planning engine and NOT a
+ * legally approved cadastral subdivision.
+ */
+
+function generateSmartCadastralPlots(
+    mother,
+    buildableArea,
+    roads,
+    rules
+) {
+
+    if (
+        !mother ||
+        !buildableArea ||
+        !roads ||
+        !roads.length ||
+        typeof turf === "undefined"
+    ) {
+        return [];
+    }
+
+    const targetArea =
+        parseFloat(rules.targetPlotArea) || 450;
+
+    const minimumFrontage =
+        parseFloat(rules.minimumFrontage) || 15;
+
+    const minimumDepth =
+        parseFloat(rules.minimumDepth) || 25;
+
+    /*
+     * --------------------------------------------------------
+     * 1. DETERMINE IDEAL PLOT DIMENSIONS
+     * --------------------------------------------------------
+     *
+     * frontage × depth ≈ target area
+     *
+     * Example:
+     *
+     * 15m × 30m = 450m²
+     */
+
+    let frontage =
+        minimumFrontage;
+
+    let depth =
+        targetArea / frontage;
+
+    /*
+     * If calculated depth is too small,
+     * increase depth and recalculate frontage.
+     */
+
+    if (depth < minimumDepth) {
+
+        depth = minimumDepth;
+
+        frontage =
+            targetArea / depth;
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 2. GET BUILDABLE AREA BOUNDING BOX
+     * --------------------------------------------------------
+     */
+
+    const bbox =
+        turf.bbox(buildableArea);
+
+    const minLng = bbox[0];
+    const minLat = bbox[1];
+    const maxLng = bbox[2];
+    const maxLat = bbox[3];
+
+    const centerLat =
+        (minLat + maxLat) / 2;
+
+    /*
+     * Approximate metres per degree.
+     *
+     * Temporary implementation.
+     * Later we will move the engine to UTM.
+     */
+
+    const metersPerDegreeLat =
+        111320;
+
+    const metersPerDegreeLng =
+        111320 *
+        Math.cos(
+            centerLat *
+            Math.PI /
+            180
+        );
+
+    const frontageDegrees =
+        frontage /
+        metersPerDegreeLng;
+
+    const depthDegrees =
+        depth /
+        metersPerDegreeLat;
+
+    /*
+     * --------------------------------------------------------
+     * 3. GENERATE TWO ORIENTATIONS
+     * --------------------------------------------------------
+     *
+     * We don't assume every parcel should be divided
+     * in the same direction.
+     *
+     * Orientation A:
+     *
+     * frontage → horizontal
+     *
+     * Orientation B:
+     *
+     * frontage → vertical
+     */
+
+    const orientations = [
+
+        {
+            name: "horizontal",
+
+            width:
+                frontageDegrees,
+
+            height:
+                depthDegrees
+        },
+
+        {
+            name: "vertical",
+
+            width:
+                depthDegrees,
+
+            height:
+                frontageDegrees
+        }
+
+    ];
+
+    /*
+     * --------------------------------------------------------
+     * 4. ROAD ACCESS TEST
+     * --------------------------------------------------------
+     *
+     * A plot is considered accessible when its boundary
+     * touches or comes sufficiently close to a road.
+     */
+
+    function hasRoadAccess(plot) {
+
+        if (!plot) {
+            return false;
+        }
+
+        const plotBoundary =
+            turf.polygonToLine(plot);
+
+        for (const road of roads) {
+
+            if (!road) continue;
+
+            try {
+
+                if (
+                    turf.booleanIntersects(
+                        plotBoundary,
+                        road
+                    )
+                ) {
+                    return true;
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Road access test failed:",
+                    error
+                );
+
+            }
+
+        }
+
+        return false;
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 5. CREATE CANDIDATE PLOTS
+     * --------------------------------------------------------
+     */
+
+    const orientationResults = [];
+
+    orientations.forEach(
+        orientation => {
+
+            const plots = [];
+
+            let currentLat =
+                minLat;
+
+            let row = 0;
+
+            /*
+             * Safety limit.
+             */
+
+            while (
+                currentLat +
+                orientation.height <=
+                maxLat &&
+                row < 200
+            ) {
+
+                let currentLng =
+                    minLng;
+
+                let column = 0;
+
+                while (
+                    currentLng +
+                    orientation.width <=
+                    maxLng &&
+                    column < 200
+                ) {
+
+                    const candidate =
+                        turf.bboxPolygon([
+                            currentLng,
+                            currentLat,
+                            currentLng +
+                                orientation.width,
+                            currentLat +
+                                orientation.height
+                        ]);
+
+                    /*
+                     * Candidate must actually intersect
+                     * the buildable area.
+                     */
+
+                    let plot = null;
+
+                    try {
+
+                        plot =
+                            turf.intersect(
+                                buildableArea,
+                                candidate
+                            );
+
+                    } catch (error) {
+
+                        plot = null;
+
+                    }
+
+                    if (plot) {
+
+                        const area =
+                            turf.area(plot);
+
+                        /*
+                         * ------------------------------------------------
+                         * AREA TOLERANCE
+                         * ------------------------------------------------
+                         *
+                         * We don't require exactly 450m² because
+                         * irregular parcel boundaries naturally create
+                         * slightly different areas.
+                         */
+
+                        const areaRatio =
+                            area /
+                            targetArea;
+
+                        const acceptableArea =
+                            areaRatio >= 0.85 &&
+                            areaRatio <= 1.20;
+
+                        /*
+                         * Road access.
+                         */
+
+                        const accessible =
+                            hasRoadAccess(plot);
+
+                        /*
+                         * Keep only useful plots.
+                         */
+
+                        if (
+                            acceptableArea &&
+                            accessible
+                        ) {
+
+                            plot.properties = {
+
+                                parcel_no:
+                                    `P-${String(
+                                        plots.length + 1
+                                    ).padStart(3, "0")}`,
+
+                                area_m2:
+                                    Number(
+                                        area.toFixed(1)
+                                    ),
+
+                                target_area_m2:
+                                    targetArea,
+
+                                frontage_m:
+                                    frontage,
+
+                                depth_m:
+                                    depth,
+
+                                orientation:
+                                    orientation.name,
+
+                                accessible:
+                                    true,
+
+                                status:
+                                    "Available"
+
+                            };
+
+                            plots.push(plot);
+                        }
+                    }
+
+                    currentLng +=
+                        orientation.width;
+
+                    column++;
+                }
+
+                currentLat +=
+                    orientation.height;
+
+                row++;
+            }
+
+            orientationResults.push({
+
+                orientation:
+                    orientation.name,
+
+                plots:
+                    plots
+
+            });
+
+        }
+    );
+
+    /*
+     * --------------------------------------------------------
+     * 6. SELECT BEST ORIENTATION
+     * --------------------------------------------------------
+     *
+     * For now we choose the orientation producing the
+     * highest number of usable plots.
+     *
+     * Later scoreCadastralLayout() will make this much
+     * more sophisticated.
+     */
+
+    orientationResults.sort(
+        (a, b) =>
+            b.plots.length -
+            a.plots.length
+    );
+
+    const best =
+        orientationResults[0];
+
+    /*
+     * --------------------------------------------------------
+     * 7. NUMBER PLOTS
+     * --------------------------------------------------------
+     */
+
+    if (best && best.plots) {
+
+        best.plots.forEach(
+            (plot, index) => {
+
+                plot.properties.parcel_no =
+                    `P-${String(
+                        index + 1
+                    ).padStart(3, "0")}`;
+
+            }
+        );
+    }
+
+    /*
+     * --------------------------------------------------------
+     * 8. RETURN RESULT
+     * --------------------------------------------------------
+     */
+
+    return best
+        ? best.plots
+        : [];
+} 
 
 function getSelectedPlotSize(value) {
     const sizes = {
@@ -2274,7 +3343,6 @@ function generateGridLayout(mother, plotSize, roadWidth) {
     /*
      * Secondary roads.
      */
-
     const secondaryRoads = [];
 
     const roadPositions = [
@@ -2284,7 +3352,6 @@ function generateGridLayout(mother, plotSize, roadWidth) {
     ];
 
     roadPositions.forEach(x => {
-
         const line = turf.lineString([
             [x, minLat],
             [x, maxLat]
@@ -2297,30 +3364,23 @@ function generateGridLayout(mother, plotSize, roadWidth) {
                 roadWidth / 2000,
                 { units: "kilometers" }
             )
-
         );
-
     });
 
     /*
      * Combine road corridors.
      */
-
     let roadNetwork = mainRoad;
-
     secondaryRoads.forEach(road => {
-
         roadNetwork = turf.union(
             roadNetwork,
             road
         );
-
     });
 
     /*
      * Remove road network from parcel.
      */
-
     let developable =
         turf.difference(
             mother,
@@ -2328,45 +3388,31 @@ function generateGridLayout(mother, plotSize, roadWidth) {
         );
 
     if (!developable) {
-
         return {
             code: "GR",
             plots: [],
             roads: []
         };
-
     }
-
     /*
      * Create rectangular cadastral blocks.
      */
-
     const cols = 4;
     const rows = 6;
-
     const cellWidth =
         (maxLng - minLng) / cols;
-
     const cellHeight =
         (maxLat - minLat) / rows;
 
     const plots = [];
-
     for (let r = 0; r < rows; r++) {
-
         for (let c = 0; c < cols; c++) {
-
             const cell =
                 turf.bboxPolygon([
-
                     minLng + c * cellWidth,
-
                     minLat + r * cellHeight,
-
                     minLng + (c + 1) * cellWidth,
-
                     minLat + (r + 1) * cellHeight
-
                 ]);
 
             const plot =
@@ -2374,33 +3420,22 @@ function generateGridLayout(mother, plotSize, roadWidth) {
                     developable,
                     cell
                 );
-
             if (
                 plot &&
                 turf.area(plot) > plotSize * 0.45
             ) {
-
                 plots.push(plot);
-
             }
-
         }
-
     }
-
     return {
-
         code: "GR",
-
         plots,
-
         roads: [
             mainRoad,
             ...secondaryRoads
         ]
-
     };
-
 } 
 
 function generateCompactLayout(
@@ -2453,37 +3488,26 @@ function generateCompactLayout(
         };
 
     }
-
     /*
      * Split into larger plot blocks.
      */
-
     const plots = [];
-
     const rows = 2;
     const cols = 5;
-
     const width =
         (maxLng - minLng) / cols;
 
     const height =
         (maxLat - minLat) / rows;
-
     for (let r = 0; r < rows; r++) {
-
         for (let c = 0; c < cols; c++) {
 
             const cell =
                 turf.bboxPolygon([
-
                     minLng + c * width,
-
                     minLat + r * height,
-
                     minLng + (c + 1) * width,
-
                     minLat + (r + 1) * height
-
                 ]);
 
             const plot =
@@ -2595,7 +3619,6 @@ function showSubdivisionLayoutSelector(layouts) {
             </div>
 
         </button>
-
 
         <button onclick="activateSubdivisionLayout('grid')"
             style="
