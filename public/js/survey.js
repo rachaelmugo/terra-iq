@@ -478,10 +478,25 @@ function plotRTKPoints(rtkCoordinates) {
 }
 
 /**
- * Generates standard-size cadastral sub-plots
- * from the active RTK mother polygon.
+ * ============================================================
+ * SMART CADASTRAL SUBDIVISION ENGINE
+ * ============================================================
+ *
+ * Creates:
+ *  - Access road corridor
+ *  - Rectangular development plots
+ *  - Target plot sizes
+ *  - Actual clipped plot areas
+ *
+ * The original mother polygon remains stored in:
+ * window.activeMotherPolygon
  */
+
 function generateSubdivisions() {
+
+    // ---------------------------------------------------------
+    // 1. VALIDATION
+    // ---------------------------------------------------------
 
     if (!window.activeMotherPolygon) {
         alert("Please plot an RTK Mother Parcel boundary first.");
@@ -489,140 +504,379 @@ function generateSubdivisions() {
     }
 
     if (typeof turf === "undefined") {
-        alert("Turf.js is required for subdivision.");
+        alert("Turf.js is required for subdivision generation.");
         return;
     }
 
+    if (typeof map === "undefined" || typeof L === "undefined") {
+        alert("Map is not available.");
+        return;
+    }
+
+
+    // ---------------------------------------------------------
+    // 2. READ USER SETTINGS
+    // ---------------------------------------------------------
+
+    const plotSizeSelect =
+        document.getElementById("subdivisionPlotSize");
+
+    const roadWidthInput =
+        document.getElementById("roadWidth");
+
+    const customPlotSizeInput =
+        document.getElementById("customPlotSize");
+
+
     const selectedSize =
-        document.getElementById("subdivisionPlotSize")?.value || "450";
+        plotSizeSelect ? plotSizeSelect.value : "450";
+
 
     const roadWidth =
-        parseFloat(document.getElementById("roadWidth")?.value) || 6;
+        roadWidthInput
+            ? parseFloat(roadWidthInput.value) || 6
+            : 6;
 
-    let targetArea;
+
+    let targetPlotArea;
+
 
     if (selectedSize === "custom") {
 
-        targetArea =
-            parseFloat(document.getElementById("customPlotSize")?.value);
-
-        if (!targetArea || targetArea <= 0) {
-            alert("Please enter a valid custom plot size.");
-            return;
-        }
+        targetPlotArea =
+            customPlotSizeInput
+                ? parseFloat(customPlotSizeInput.value)
+                : 450;
 
     } else {
 
-        targetArea = parseFloat(selectedSize);
+        targetPlotArea =
+            parseFloat(selectedSize);
 
     }
 
-    const motherPolygon = window.activeMotherPolygon;
 
-    const motherArea = turf.area(motherPolygon);
+    if (!targetPlotArea || targetPlotArea <= 0) {
+        alert("Please select a valid plot size.");
+        return;
+    }
 
-    if (motherArea < targetArea) {
+
+    if (roadWidth <= 0) {
+        alert("Please enter a valid road width.");
+        return;
+    }
+
+
+    // ---------------------------------------------------------
+    // 3. MOTHER PARCEL
+    // ---------------------------------------------------------
+
+    const motherPolygon =
+        window.activeMotherPolygon;
+
+
+    const motherArea =
+        turf.area(motherPolygon);
+
+
+    if (motherArea < targetPlotArea) {
+
         alert(
-            `The mother parcel is too small for the selected plot size.\n\n` +
-            `Mother parcel: ${motherArea.toFixed(1)} m²\n` +
-            `Selected plot: ${targetArea.toFixed(1)} m²`
+            "The mother parcel is smaller than the selected plot size.\n\n" +
+            "Mother Parcel: " +
+            motherArea.toFixed(1) +
+            " m²\n" +
+            "Selected Plot: " +
+            targetPlotArea.toFixed(1) +
+            " m²"
         );
+
         return;
     }
 
-    /*
-     * ---------------------------------------------------------
-     * APPROXIMATE NUMBER OF PLOTS
-     * ---------------------------------------------------------
-     */
 
-    const estimatedCount =
-        Math.floor(motherArea / targetArea);
+    // ---------------------------------------------------------
+    // 4. CLEAR PREVIOUS SUBDIVISION DISPLAY
+    // ---------------------------------------------------------
 
-    if (estimatedCount < 1) {
-        alert("The parcel cannot accommodate the selected plot size.");
-        return;
+    if (activeSurveyLayer) {
+
+        map.removeLayer(activeSurveyLayer);
+
+        activeSurveyLayer = null;
     }
 
-    /*
-     * ---------------------------------------------------------
-     * CREATE A GRID OVER THE MOTHER PARCEL
-     * ---------------------------------------------------------
-     */
 
-    const bbox = turf.bbox(motherPolygon);
+    if (window.activeSubdivisionLayer) {
+
+        map.removeLayer(window.activeSubdivisionLayer);
+
+        window.activeSubdivisionLayer = null;
+    }
+
+
+    if (window.activeRoadLayer) {
+
+        map.removeLayer(window.activeRoadLayer);
+
+        window.activeRoadLayer = null;
+    }
+
+
+    // ---------------------------------------------------------
+    // 5. CREATE ACCESS ROAD
+    // ---------------------------------------------------------
+    //
+    // The road is placed along the southern side of the
+    // mother parcel. This gives the plots a common frontage.
+    //
+    // Later we can allow:
+    // NORTH / SOUTH / EAST / WEST / INTERNAL
+    //
+    // ---------------------------------------------------------
+
+    const bbox =
+        turf.bbox(motherPolygon);
+
 
     const minLng = bbox[0];
     const minLat = bbox[1];
     const maxLng = bbox[2];
     const maxLat = bbox[3];
 
-    /*
-     * Convert target area into an approximate
-     * square plot dimension.
-     */
 
-    const plotSide = Math.sqrt(targetArea);
-
-    /*
-     * Create a grid using Turf.
-     *
-     * We use a slightly larger bounding box so that
-     * the mother polygon clips the grid.
-     */
-
-    const widthKm =
-        turf.distance(
+    const roadLine =
+        turf.lineString([
             [minLng, minLat],
-            [maxLng, minLat],
-            { units: "kilometers" }
+            [maxLng, minLat]
+        ]);
+
+
+    const roadBuffer =
+        turf.buffer(
+            roadLine,
+            roadWidth / 2,
+            {
+                units: "meters"
+            }
         );
 
-    const heightKm =
-        turf.distance(
-            [minLng, minLat],
-            [minLng, maxLat],
-            { units: "kilometers" }
+
+    // Make sure road stays inside mother parcel
+
+    const roadInside =
+        turf.intersect(
+            motherPolygon,
+            roadBuffer
         );
 
-    const plotWidthKm = plotSide / 1000;
-    const plotHeightKm = plotSide / 1000;
+
+    // ---------------------------------------------------------
+    // 6. REMOVE ROAD FROM DEVELOPABLE AREA
+    // ---------------------------------------------------------
+
+    let developableArea =
+        motherPolygon;
+
+
+    if (roadInside) {
+
+        try {
+
+            developableArea =
+                turf.difference(
+                    motherPolygon,
+                    roadInside
+                );
+
+        } catch (error) {
+
+            console.warn(
+                "Road difference failed. Continuing without road subtraction.",
+                error
+            );
+
+            developableArea =
+                motherPolygon;
+        }
+    }
+
+
+    // ---------------------------------------------------------
+    // 7. DRAW ROAD
+    // ---------------------------------------------------------
+
+    if (roadInside) {
+
+        window.activeRoadLayer =
+            L.geoJSON(
+                roadInside,
+                {
+                    style: {
+                        color: "#475569",
+                        weight: 2,
+                        fillColor: "#CBD5E1",
+                        fillOpacity: 0.75
+                    }
+                }
+            ).addTo(map);
+
+    }
+
+
+    // ---------------------------------------------------------
+    // 8. DETERMINE APPROXIMATE PLOT DIMENSIONS
+    // ---------------------------------------------------------
+    //
+    // We start with a square based on the selected area.
+    //
+    // Example:
+    //
+    // 450 m² ≈ 21.2m × 21.2m
+    // 1/8 acre ≈ 22.5m × 22.5m
+    // 1/4 acre ≈ 31.8m × 31.8m
+    //
+    // The actual shape is then clipped to the mother parcel.
+    //
+    // ---------------------------------------------------------
+
+    const plotSide =
+        Math.sqrt(targetPlotArea);
+
+
+    // ---------------------------------------------------------
+    // 9. GET DEVELOPABLE BOUNDING BOX
+    // ---------------------------------------------------------
+
+    const developableBbox =
+        turf.bbox(developableArea);
+
+
+    const dMinLng =
+        developableBbox[0];
+
+    const dMinLat =
+        developableBbox[1];
+
+    const dMaxLng =
+        developableBbox[2];
+
+    const dMaxLat =
+        developableBbox[3];
+
+
+    // ---------------------------------------------------------
+    // 10. CONVERT WIDTH / HEIGHT TO METRES
+    // ---------------------------------------------------------
+
+    const widthMeters =
+        turf.distance(
+            [dMinLng, dMinLat],
+            [dMaxLng, dMinLat],
+            {
+                units: "meters"
+            }
+        );
+
+
+    const heightMeters =
+        turf.distance(
+            [dMinLng, dMinLat],
+            [dMinLng, dMaxLat],
+            {
+                units: "meters"
+            }
+        );
+
+
+    // ---------------------------------------------------------
+    // 11. DETERMINE GRID
+    // ---------------------------------------------------------
 
     const columns =
-        Math.max(1, Math.ceil(widthKm / plotWidthKm));
+        Math.max(
+            1,
+            Math.floor(widthMeters / plotSide)
+        );
+
 
     const rows =
-        Math.max(1, Math.ceil(heightKm / plotHeightKm));
+        Math.max(
+            1,
+            Math.floor(heightMeters / plotSide)
+        );
 
-    /*
-     * Generate a rectangular grid.
-     */
 
-    const cellWidth =
-        (maxLng - minLng) / columns;
+    // Safety limit
 
-    const cellHeight =
-        (maxLat - minLat) / rows;
+    const totalCells =
+        columns * rows;
+
+
+    if (totalCells > 500) {
+
+        alert(
+            "The selected plot size would create too many cells.\n\n" +
+            "Please choose a larger plot size."
+        );
+
+        return;
+    }
+
+
+    // ---------------------------------------------------------
+    // 12. GRID SPACING
+    // ---------------------------------------------------------
+
+    const lngStep =
+        (dMaxLng - dMinLng) / columns;
+
+
+    const latStep =
+        (dMaxLat - dMinLat) / rows;
+
 
     const subPlots = [];
 
     let parcelIndex = 1;
 
-    for (let row = 0; row < rows; row++) {
 
-        for (let col = 0; col < columns; col++) {
+    // ---------------------------------------------------------
+    // 13. GENERATE PLOTS
+    // ---------------------------------------------------------
+
+    for (
+        let row = 0;
+        row < rows;
+        row++
+    ) {
+
+        for (
+            let col = 0;
+            col < columns;
+            col++
+        ) {
 
             const west =
-                minLng + (col * cellWidth);
+                dMinLng +
+                (col * lngStep);
+
 
             const east =
-                minLng + ((col + 1) * cellWidth);
+                dMinLng +
+                ((col + 1) * lngStep);
+
 
             const south =
-                minLat + (row * cellHeight);
+                dMinLat +
+                (row * latStep);
+
 
             const north =
-                minLat + ((row + 1) * cellHeight);
+                dMinLat +
+                ((row + 1) * latStep);
+
 
             const cell =
                 turf.bboxPolygon([
@@ -632,26 +886,53 @@ function generateSubdivisions() {
                     north
                 ]);
 
-            const intersection =
-                turf.intersect(
-                    motherPolygon,
-                    cell
+
+            let intersection;
+
+
+            try {
+
+                intersection =
+                    turf.intersect(
+                        developableArea,
+                        cell
+                    );
+
+            } catch (error) {
+
+                console.warn(
+                    "Intersection failed:",
+                    error
                 );
+
+                continue;
+            }
+
 
             if (!intersection) {
                 continue;
             }
 
-            const area =
+
+            const actualArea =
                 turf.area(intersection);
 
-            /*
-             * Ignore tiny sliver polygons.
-             */
 
-            if (area < targetArea * 0.45) {
+            // -------------------------------------------------
+            // IGNORE VERY SMALL EDGE SLIVERS
+            // -------------------------------------------------
+
+            if (
+                actualArea <
+                targetPlotArea * 0.55
+            ) {
                 continue;
             }
+
+
+            // -------------------------------------------------
+            // STORE PARCEL INFORMATION
+            // -------------------------------------------------
 
             intersection.properties = {
 
@@ -661,139 +942,283 @@ function generateSubdivisions() {
                 status:
                     "Available",
 
-                size_m2:
-                    area.toFixed(1),
+                target_area_m2:
+                    targetPlotArea,
 
-                size_acres:
-                    (area / 4046.856).toFixed(3),
+                actual_area_m2:
+                    actualArea,
 
-                target_size_m2:
-                    targetArea,
+                actual_area_acres:
+                    actualArea / 4046.856,
+
+                road_frontage:
+                    "Access Road",
 
                 road_width_m:
                     roadWidth
 
             };
 
-            subPlots.push(intersection);
+
+            subPlots.push(
+                intersection
+            );
+
 
             parcelIndex++;
+
         }
+
     }
 
-    /*
-     * ---------------------------------------------------------
-     * DRAW SUBDIVISIONS
-     * ---------------------------------------------------------
-     */
+
+    // ---------------------------------------------------------
+    // 14. CHECK RESULT
+    // ---------------------------------------------------------
 
     if (subPlots.length === 0) {
 
         alert(
-            "No suitable subdivisions could be generated " +
-            "inside the mother parcel."
+            "No suitable plots could be generated inside the mother parcel."
         );
 
         return;
     }
 
-    /*
-     * Remove the old mother polygon display
-     * but keep the actual mother polygon in memory.
-     */
 
-    if (activeSurveyLayer) {
-        map.removeLayer(activeSurveyLayer);
-        activeSurveyLayer = null;
-    }
+    // ---------------------------------------------------------
+    // 15. CREATE GEOJSON
+    // ---------------------------------------------------------
 
     const subPlotCollection =
-        turf.featureCollection(subPlots);
+        turf.featureCollection(
+            subPlots
+        );
 
-    activeSurveyLayer =
-        L.geoJSON(subPlotCollection, {
 
-            style: {
-                color: "#0F2D52",
-                weight: 2,
-                fillColor: "#3B82F6",
-                fillOpacity: 0.18
-            },
+    // ---------------------------------------------------------
+    // 16. DISPLAY SUBDIVISIONS
+    // ---------------------------------------------------------
 
-            onEachFeature: (feature, layer) => {
+    window.activeSubdivisionLayer =
+        L.geoJSON(
+            subPlotCollection,
+            {
 
-                const p =
-                    feature.properties;
+                style: {
 
-                layer.bindPopup(`
-                    <div style="
-                        font-family:system-ui,sans-serif;
-                        min-width:180px;
-                    ">
+                    color: "#0F2D52",
 
-                        <div style="
-                            font-size:13px;
-                            font-weight:800;
-                            color:#0F2D52;
-                            margin-bottom:8px;
-                        ">
-                            Parcel ${p.parcel_no}
-                        </div>
+                    weight: 2,
 
-                        <div style="
-                            font-size:12px;
-                            color:#475569;
-                            line-height:1.7;
-                        ">
+                    fillColor: "#3B82F6",
 
-                            <div>
-                                <strong>Plot Area:</strong>
-                                ${Number(p.size_m2).toLocaleString()} m²
+                    fillOpacity: 0.18
+
+                },
+
+
+                onEachFeature:
+                    function (
+                        feature,
+                        layer
+                    ) {
+
+                        const p =
+                            feature.properties;
+
+
+                        layer.bindPopup(`
+
+                            <div style="
+                                font-family:system-ui,-apple-system,sans-serif;
+                                min-width:190px;
+                            ">
+
+                                <div style="
+                                    font-size:14px;
+                                    font-weight:800;
+                                    color:#0F2D52;
+                                    margin-bottom:10px;
+                                ">
+                                    ${p.parcel_no}
+                                </div>
+
+
+                                <div style="
+                                    display:grid;
+                                    grid-template-columns:1fr 1fr;
+                                    gap:8px;
+                                    font-size:11px;
+                                ">
+
+                                    <div style="
+                                        padding:8px;
+                                        background:#F8FAFC;
+                                        border-radius:6px;
+                                    ">
+                                        <div style="color:#64748B;">
+                                            Target Area
+                                        </div>
+
+                                        <strong>
+                                            ${Number(p.target_area_m2).toLocaleString()}
+                                            m²
+                                        </strong>
+                                    </div>
+
+
+                                    <div style="
+                                        padding:8px;
+                                        background:#F8FAFC;
+                                        border-radius:6px;
+                                    ">
+                                        <div style="color:#64748B;">
+                                            Actual Area
+                                        </div>
+
+                                        <strong>
+                                            ${Number(p.actual_area_m2).toLocaleString(undefined,{
+                                                maximumFractionDigits:1
+                                            })}
+                                            m²
+                                        </strong>
+                                    </div>
+
+                                </div>
+
+
+                                <div style="
+                                    margin-top:9px;
+                                    font-size:11px;
+                                    color:#475569;
+                                ">
+
+                                    <strong>Status:</strong>
+                                    ${p.status}
+
+                                    <br>
+
+                                    <strong>Access:</strong>
+                                    ${p.road_frontage}
+
+                                    <br>
+
+                                    <strong>Road Width:</strong>
+                                    ${p.road_width_m} m
+
+                                </div>
+
                             </div>
 
-                            <div>
-                                <strong>Acres:</strong>
-                                ${p.size_acres}
-                            </div>
+                        `);
 
-                            <div>
-                                <strong>Status:</strong>
-                                ${p.status}
-                            </div>
 
-                        </div>
+                        // Hover effect
 
-                    </div>
-                `);
+                        layer.on({
+
+                            mouseover:
+                                function (e) {
+
+                                    e.target.setStyle({
+
+                                        weight: 3,
+
+                                        fillOpacity: 0.35
+
+                                    });
+
+                                },
+
+                            mouseout:
+                                function (e) {
+
+                                    window.activeSubdivisionLayer.resetStyle(
+                                        e.target
+                                    );
+
+                                }
+
+                        });
+
+                    }
 
             }
+        ).addTo(map);
 
-        }).addTo(map);
 
-    /*
-     * ---------------------------------------------------------
-     * REPORT
-     * ---------------------------------------------------------
-     */
+    // ---------------------------------------------------------
+    // 17. FIT MAP TO SUBDIVISIONS
+    // ---------------------------------------------------------
+
+    map.fitBounds(
+        window.activeSubdivisionLayer.getBounds(),
+        {
+            padding: [40, 40]
+        }
+    );
+
+
+    // ---------------------------------------------------------
+    // 18. CALCULATE SUMMARY
+    // ---------------------------------------------------------
 
     const totalSubdivisionArea =
         subPlots.reduce(
-            (sum, feature) =>
-                sum + turf.area(feature),
+            function (
+                total,
+                feature
+            ) {
+
+                return total +
+                    turf.area(feature);
+
+            },
             0
         );
 
+
     const remainingArea =
-        motherArea - totalSubdivisionArea;
+        Math.max(
+            0,
+            motherArea -
+            totalSubdivisionArea -
+            (roadInside
+                ? turf.area(roadInside)
+                : 0)
+        );
+
+
+    // ---------------------------------------------------------
+    // 19. REPORT
+    // ---------------------------------------------------------
 
     alert(
-        `Subdivision Complete!\n\n` +
-        `Mother Parcel: ${motherArea.toFixed(1)} m²\n` +
-        `Target Plot Size: ${targetArea.toFixed(1)} m²\n` +
-        `Generated Plots: ${subPlots.length}\n` +
-        `Subdivision Area: ${totalSubdivisionArea.toFixed(1)} m²\n` +
-        `Remaining Area: ${Math.max(0, remainingArea).toFixed(1)} m²`
+
+        `SUBDIVISION COMPLETE\n\n` +
+
+        `Mother Parcel:\n` +
+        `${motherArea.toFixed(1)} m²\n\n` +
+
+        `Target Plot Size:\n` +
+        `${targetPlotArea.toFixed(1)} m²\n\n` +
+
+        `Access Road:\n` +
+        `${roadWidth} m\n\n` +
+
+        `Plots Generated:\n` +
+        `${subPlots.length}\n\n` +
+
+        `Developable Area:\n` +
+        `${totalSubdivisionArea.toFixed(1)} m²\n\n` +
+
+        `Residual Area:\n` +
+        `${remainingArea.toFixed(1)} m²`
+
     );
+
+    closeSurveyModal();
 }
 
 /**
