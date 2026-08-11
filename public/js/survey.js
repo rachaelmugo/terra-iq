@@ -726,6 +726,20 @@ function openSurveyToolModal() {
     margin-bottom:8px;
 ">
     🛣️ Generate Road Network
+</button> 
+
+<button onclick="generateBuildableArea()" style="
+    width:100%;
+    background:#16A34A;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:8px;
+">
+    🌱 Generate Buildable Area
 </button>
 
 <button
@@ -761,7 +775,6 @@ if (plotSizeSelect && customPlotContainer) {
                 : "none";
 
     });
-
 }
 
     surveyModal.style.display = "block";
@@ -1284,6 +1297,115 @@ function generateRoadNetwork() {
         `Road Area: ${roadArea.toFixed(1)} m²\n\n` +
         `This road corridor will be used by the\n` +
         `next stage of the cadastral subdivision engine.`
+    );
+} 
+
+/**
+ * ============================================================
+ * TERRA-IQ BUILDABLE AREA ENGINE — STEP 3
+ * Removes the generated road reserve from the mother parcel.
+ * ============================================================
+ */
+
+function generateBuildableArea() {
+
+    if (!window.activeMotherPolygon) {
+        alert("Please plot the mother parcel first.");
+        return;
+    }
+
+    if (!window.activeRoadNetwork) {
+        alert("Please generate the road network first.");
+        return;
+    }
+
+    if (typeof turf === "undefined" || typeof map === "undefined") {
+        alert("Mapping engine is not available.");
+        return;
+    }
+
+    const motherParcel = window.activeMotherPolygon;
+    const roadReserve = window.activeRoadNetwork.reserve;
+
+    /*
+     * Remove the road reserve from the mother parcel.
+     */
+    const buildableArea = turf.difference(
+        motherParcel,
+        roadReserve
+    );
+
+    if (!buildableArea) {
+        alert(
+            "The road reserve consumes the available parcel area. " +
+            "Please reduce the road reserve or review the parcel geometry."
+        );
+        return;
+    }
+
+    /*
+     * Remove previous buildable-area layer.
+     */
+    if (window.activeBuildableLayer) {
+
+        map.removeLayer(
+            window.activeBuildableLayer
+        );
+
+        window.activeBuildableLayer = null;
+    }
+
+    /*
+     * Draw buildable area.
+     */
+    window.activeBuildableLayer =
+        L.geoJSON(
+            buildableArea,
+            {
+                style: {
+                    color: "#16A34A",
+                    weight: 2,
+                    fillColor: "#22C55E",
+                    fillOpacity: 0.18
+                }
+            }
+        ).addTo(map);
+
+    /*
+     * Save geometry for the next stage.
+     */
+    window.activeBuildableArea = buildableArea;
+
+    /*
+     * Calculate areas.
+     */
+    const motherArea =
+        turf.area(motherParcel);
+
+    const roadArea =
+        turf.area(roadReserve);
+
+    const buildableAreaSqM =
+        turf.area(buildableArea);
+
+    const roadPercentage =
+        (roadArea / motherArea) * 100;
+
+    /*
+     * Report results.
+     */
+    alert(
+        `Buildable Area Generated!\n\n` +
+
+        `Mother Parcel:\n` +
+        `${motherArea.toFixed(1)} m²\n\n` +
+
+        `Road Reserve:\n` +
+        `${roadArea.toFixed(1)} m² ` +
+        `(${roadPercentage.toFixed(1)}%)\n\n` +
+
+        `Available for Plots:\n` +
+        `${buildableAreaSqM.toFixed(1)} m²`
     );
 }
 
