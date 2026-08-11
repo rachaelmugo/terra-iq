@@ -740,6 +740,20 @@ function openSurveyToolModal() {
     margin-bottom:8px;
 ">
     🌱 Generate Buildable Area
+</button> 
+
+<button onclick="generateCadastralPlots()" style="
+    width:100%;
+    background:#2563EB;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:8px;
+">
+    🧭 Generate Cadastral Plots
 </button>
 
 <button
@@ -755,7 +769,7 @@ function openSurveyToolModal() {
         cursor:pointer;
     "
 >
-    ✂️ Generate Cadastral Layout
+    ✂️ Generate Sub_Plots
 </button>
     `; 
     // Show custom plot-size input when "Custom Size" is selected
@@ -1406,6 +1420,448 @@ function generateBuildableArea() {
 
         `Available for Plots:\n` +
         `${buildableAreaSqM.toFixed(1)} m²`
+    );
+} 
+
+/**
+ * ============================================================
+ * TERRA-IQ PLOT GENERATION ENGINE — STEP 4
+ * Generates cadastral-style plots from the buildable area.
+ * ============================================================
+ */
+
+function generateCadastralPlots() {
+
+    if (!window.activeMotherPolygon) {
+        alert("Please plot the mother parcel first.");
+        return;
+    }
+
+    if (!window.activeRoadNetwork) {
+        alert("Please generate the road network first.");
+        return;
+    }
+
+    if (!window.activeBuildableArea) {
+        alert("Please generate the buildable area first.");
+        return;
+    }
+
+    if (typeof turf === "undefined" || typeof map === "undefined") {
+        alert("Mapping engine is not available.");
+        return;
+    }
+
+    const rules = getPlanningRules();
+
+    const targetArea = rules.targetPlotArea;
+    const minimumFrontage = rules.minimumFrontage;
+    const minimumDepth = rules.minimumDepth;
+
+    const buildableArea = window.activeBuildableArea;
+
+    /*
+     * ---------------------------------------------------------
+     * 1. DETERMINE APPROXIMATE PLOT DIMENSIONS
+     * ---------------------------------------------------------
+     *
+     * width ≈ frontage
+     * depth ≈ area / frontage
+     */
+
+    let plotWidth = minimumFrontage;
+
+    let plotDepth =
+        targetArea / plotWidth;
+
+    /*
+     * Make sure the calculated depth satisfies
+     * the minimum depth rule.
+     */
+
+    if (plotDepth < minimumDepth) {
+
+        plotDepth = minimumDepth;
+
+        plotWidth =
+            targetArea / plotDepth;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 2. GET BUILDABLE AREA BOUNDING BOX
+     * ---------------------------------------------------------
+     */
+
+    const bbox = turf.bbox(buildableArea);
+
+    const minLng = bbox[0];
+    const minLat = bbox[1];
+    const maxLng = bbox[2];
+    const maxLat = bbox[3];
+
+
+    /*
+     * ---------------------------------------------------------
+     * 3. APPROXIMATE METERS PER DEGREE
+     *
+     * Used only for the initial layout engine.
+     * Later we will move the geometry calculations into
+     * a projected coordinate system.
+     * ---------------------------------------------------------
+     */
+
+    const centerLat =
+        (minLat + maxLat) / 2;
+
+    const metersPerDegreeLat = 111320;
+
+    const metersPerDegreeLng =
+        111320 *
+        Math.cos(centerLat * Math.PI / 180);
+
+
+    /*
+     * Convert plot dimensions into degrees.
+     */
+
+    const widthDegrees =
+        plotWidth / metersPerDegreeLng;
+
+    const depthDegrees =
+        plotDepth / metersPerDegreeLat;
+
+
+    /*
+     * ---------------------------------------------------------
+     * 4. CREATE CANDIDATE PLOTS
+     * ---------------------------------------------------------
+     */
+
+    const plots = [];
+
+    let row = 0;
+
+    let currentLat = minLat;
+
+
+    while (
+        currentLat + depthDegrees <= maxLat &&
+        row < 100
+    ) {
+
+        let column = 0;
+
+        let currentLng = minLng;
+
+
+        while (
+            currentLng + widthDegrees <= maxLng &&
+            column < 100
+        ) {
+
+            const plotBox =
+                turf.bboxPolygon([
+                    currentLng,
+                    currentLat,
+                    currentLng + widthDegrees,
+                    currentLat + depthDegrees
+                ]);
+
+
+            /*
+             * Intersect candidate plot with the
+             * buildable area.
+             */
+
+            const intersection =
+                turf.intersect(
+                    buildableArea,
+                    plotBox
+                );
+
+
+            if (intersection) {
+
+                const area =
+                    turf.area(intersection);
+
+
+                /*
+                 * Only accept reasonably complete plots.
+                 *
+                 * This prevents tiny fragments from being
+                 * treated as proper cadastral plots.
+                 */
+
+                const areaRatio =
+                    area / targetArea;
+
+
+                if (
+                    areaRatio >= 0.75 &&
+                    areaRatio <= 1.35
+                ) {
+
+                    intersection.properties = {
+
+                        parcel_no:
+                            `SUB-${String(
+                                plots.length + 1
+                            ).padStart(3, "0")}`,
+
+                        status:
+                            "Available",
+
+                        area_m2:
+                            Number(
+                                area.toFixed(1)
+                            ),
+
+                        target_area_m2:
+                            targetArea,
+
+                        frontage_m:
+                            plotWidth,
+
+                        depth_m:
+                            plotDepth,
+
+                        accessible:
+                            true
+
+                    };
+
+
+                    plots.push(
+                        intersection
+                    );
+                }
+            }
+
+
+            currentLng += widthDegrees;
+
+            column++;
+        }
+
+
+        currentLat += depthDegrees;
+
+        row++;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 5. CHECK RESULT
+     * ---------------------------------------------------------
+     */
+
+    if (plots.length === 0) {
+
+        alert(
+            "Terra-IQ could not generate suitable plots " +
+            "using the current planning rules.\n\n" +
+
+            "Try reducing the target plot size or " +
+            "minimum frontage."
+        );
+
+        return;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 6. REMOVE PREVIOUS GENERATED PLOTS
+     * ---------------------------------------------------------
+     */
+
+    if (window.activePlotLayer) {
+
+        map.removeLayer(
+            window.activePlotLayer
+        );
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 7. CREATE FEATURE COLLECTION
+     * ---------------------------------------------------------
+     */
+
+    const plotCollection =
+        turf.featureCollection(
+            plots
+        );
+
+
+    /*
+     * ---------------------------------------------------------
+     * 8. DRAW CADASTRAL PLOTS
+     * ---------------------------------------------------------
+     */
+
+    window.activePlotLayer =
+        L.geoJSON(
+            plotCollection,
+            {
+
+                style: {
+
+                    color: "#0F2D52",
+
+                    weight: 1.5,
+
+                    fillColor: "#60A5FA",
+
+                    fillOpacity: 0.18
+
+                },
+
+
+                onEachFeature:
+                    function(feature, layer) {
+
+                        const p =
+                            feature.properties;
+
+
+                        layer.bindPopup(`
+
+                            <div style="
+                                font-family:system-ui;
+                                min-width:190px;
+                            ">
+
+                                <div style="
+                                    font-size:14px;
+                                    font-weight:800;
+                                    color:#0F2D52;
+                                    margin-bottom:8px;
+                                ">
+                                    ${p.parcel_no}
+                                </div>
+
+
+                                <div style="
+                                    font-size:12px;
+                                    color:#475569;
+                                    line-height:1.7;
+                                ">
+
+                                    <div>
+                                        Area:
+                                        <strong>
+                                            ${p.area_m2} m²
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        Target:
+                                        <strong>
+                                            ${p.target_area_m2} m²
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        Frontage:
+                                        <strong>
+                                            ${p.frontage_m.toFixed(1)} m
+                                        </strong>
+                                    </div>
+
+                                    <div>
+                                        Approx. Depth:
+                                        <strong>
+                                            ${p.depth_m.toFixed(1)} m
+                                        </strong>
+                                    </div>
+
+                                    <div style="
+                                        margin-top:6px;
+                                        color:#16A34A;
+                                        font-weight:700;
+                                    ">
+                                        ✓ Road Accessible
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        `);
+                    }
+
+            }
+
+        ).addTo(map);
+
+
+    /*
+     * ---------------------------------------------------------
+     * 9. SAVE GENERATED PLOTS
+     * ---------------------------------------------------------
+     */
+
+    window.activeGeneratedPlots =
+        plotCollection;
+
+
+    /*
+     * ---------------------------------------------------------
+     * 10. CALCULATE SUMMARY
+     * ---------------------------------------------------------
+     */
+
+    const totalPlotArea =
+        plots.reduce(
+            (sum, plot) =>
+                sum + turf.area(plot),
+            0
+        );
+
+
+    const motherArea =
+        turf.area(
+            window.activeMotherPolygon
+        );
+
+
+    const landUtilization =
+        (
+            totalPlotArea /
+            motherArea
+        ) * 100;
+
+
+    /*
+     * ---------------------------------------------------------
+     * 11. REPORT
+     * ---------------------------------------------------------
+     */
+
+    alert(
+
+        `Cadastral Plot Generation Complete!\n\n` +
+
+        `Plots Generated: ${plots.length}\n` +
+
+        `Target Plot Size: ${targetArea.toFixed(0)} m²\n` +
+
+        `Minimum Frontage: ${minimumFrontage.toFixed(1)} m\n` +
+
+        `Minimum Depth: ${minimumDepth.toFixed(1)} m\n\n` +
+
+        `Total Plot Area: ` +
+        `${totalPlotArea.toFixed(1)} m²\n` +
+
+        `Land Utilization: ` +
+        `${landUtilization.toFixed(1)}%`
+
     );
 }
 
