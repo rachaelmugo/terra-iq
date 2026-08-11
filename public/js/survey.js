@@ -483,43 +483,53 @@ function openSurveyToolModal() {
 
         <hr style="border:none; border-top:1px solid #E2E8F0; margin:16px 0;">
 
-      <!-- SECTION 3: SMART SUBDIVISION ENGINE -->
-
-<h4 style="margin:0 0 10px 0; font-size:14px; color:#0F2D52;">
-    Smart Cadastral Subdivision
-</h4>
-
+      <!-- SECTION 3: CADASTRAL LAYOUT ENGINE -->
 <div style="
-    font-size:11px;
-    color:#64748B;
-    margin-bottom:12px;
-    line-height:1.5;
-">
-    Generate subdivision layouts using target plot size,
-    road access, frontage and minimum plot dimensions.
-</div>
-
-
-<div style="
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:10px;
+    margin-top:18px;
+    padding:14px;
+    background:#F8FAFC;
+    border:1px solid #E2E8F0;
+    border-radius:10px;
 ">
 
-    <!-- PLOT SIZE -->
-    <div>
-        <label style="
-            font-size:11px;
-            font-weight:700;
-            color:#64748B;
-        ">
-            Target Plot Size
-        </label>
+    <div style="
+        font-size:14px;
+        font-weight:800;
+        color:#0F2D52;
+        margin-bottom:4px;
+    ">
+        🏗️ Cadastral Layout Engine
+    </div>
 
-        <select
-            id="subdivisionPlotSize"
-            style="
+    <div style="
+        font-size:11px;
+        color:#64748B;
+        margin-bottom:14px;
+        line-height:1.5;
+    ">
+        Generate multiple subdivision possibilities based on
+        plot size, road access and planning parameters.
+    </div>
+
+
+    <!-- TARGET PLOT SIZE -->
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin-bottom:10px;
+    ">
+
+        <div>
+            <label style="
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+            ">
+                Target Plot Size
+            </label>
+
+            <select id="subdivisionPlotSize" style="
                 width:100%;
                 padding:8px;
                 border:1px solid #CBD5E1;
@@ -527,35 +537,63 @@ function openSurveyToolModal() {
                 margin-top:4px;
                 box-sizing:border-box;
                 background:white;
-            "
-        >
+            ">
+                <option value="450">450 m²</option>
+                <option value="505.86">1/8 Acre</option>
+                <option value="1011.71">1/4 Acre</option>
+                <option value="2023.43">1/2 Acre</option>
+                <option value="4046.86">1 Acre</option>
+                <option value="custom">Custom</option>
+            </select>
+        </div>
 
-            <option value="450">450 m²</option>
-            <option value="506">1/8 Acre</option>
-            <option value="1012">1/4 Acre</option>
-            <option value="2023">1/2 Acre</option>
-            <option value="4047">1 Acre</option>
-            <option value="custom">Custom</option>
 
-        </select>
+        <!-- ROAD WIDTH -->
+        <div>
+            <label style="
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+            ">
+                Road Reserve
+            </label>
+
+            <select id="roadWidth" style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+                background:white;
+            ">
+                <option value="6">6 m</option>
+                <option value="9">9 m</option>
+                <option value="12">12 m</option>
+            </select>
+        </div>
+
     </div>
 
 
-    <!-- CUSTOM AREA -->
-    <div id="customPlotSizeContainer" style="display:none;">
+    <!-- CUSTOM SIZE -->
+    <div id="customPlotSizeContainer" style="
+        display:none;
+        margin-bottom:10px;
+    ">
 
         <label style="
             font-size:11px;
             font-weight:700;
-            color:#64748B;
+            color:#475569;
         ">
-            Custom Area (m²)
+            Custom Plot Area (m²)
         </label>
 
         <input
             type="number"
             id="customPlotSize"
-            value="450"
+            placeholder="e.g. 600"
             min="100"
             style="
                 width:100%;
@@ -569,208 +607,126 @@ function openSurveyToolModal() {
 
     </div>
 
-</div>
+
+    <!-- MINIMUM FRONTAGE -->
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin-bottom:10px;
+    ">
+
+        <div>
+            <label style="
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+            ">
+                Minimum Frontage (m)
+            </label>
+
+            <input
+                type="number"
+                id="minimumFrontage"
+                value="15"
+                min="5"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    margin-top:4px;
+                    box-sizing:border-box;
+                "
+            >
+        </div>
 
 
-<div style="
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:10px;
-">
+        <!-- MINIMUM DEPTH -->
+        <div>
+            <label style="
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+            ">
+                Minimum Depth (m)
+            </label>
 
-    <!-- FRONTAGE -->
-    <div>
-
-        <label style="
-            font-size:11px;
-            font-weight:700;
-            color:#64748B;
-        ">
-            Minimum Frontage (m)
-        </label>
-
-        <input
-            type="number"
-            id="minimumFrontage"
-            value="15"
-            min="5"
-            style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-            "
-        >
-
-    </div>
-
-
-    <!-- DEPTH -->
-    <div>
-
-        <label style="
-            font-size:11px;
-            font-weight:700;
-            color:#64748B;
-        ">
-            Minimum Depth (m)
-        </label>
-
-        <input
-            type="number"
-            id="minimumDepth"
-            value="25"
-            min="10"
-            style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-            "
-        >
-
-    </div>
-
-</div>
-
-
-<div style="
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-bottom:14px;
-">
-
-    <!-- ROAD -->
-    <div>
-
-        <label style="
-            font-size:11px;
-            font-weight:700;
-            color:#64748B;
-        ">
-            Road Reserve (m)
-        </label>
-
-        <input
-            type="number"
-            id="roadWidth"
-            value="6"
-            min="3"
-            style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-            "
-        >
+            <input
+                type="number"
+                id="minimumDepth"
+                value="25"
+                min="5"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    margin-top:4px;
+                    box-sizing:border-box;
+                "
+            >
+        </div>
 
     </div>
 
 
-    <!-- LAYOUT -->
-    <div>
+    <!-- LAYOUT STRATEGY -->
+    <div style="margin-bottom:12px;">
 
         <label style="
             font-size:11px;
             font-weight:700;
-            color:#64748B;
+            color:#475569;
         ">
             Layout Strategy
         </label>
 
-        <select
-            id="subdivisionLayout"
-            style="
-                width:100%;
-                padding:8px;
-                border:1px solid #CBD5E1;
-                border-radius:6px;
-                margin-top:4px;
-                box-sizing:border-box;
-                background:white;
-            "
-        >
+        <select id="layoutStrategy" style="
+            width:100%;
+            padding:8px;
+            border:1px solid #CBD5E1;
+            border-radius:6px;
+            margin-top:4px;
+            box-sizing:border-box;
+            background:white;
+        ">
 
-            <option value="smart">
-                Smart Balanced
+            <option value="balanced">
+                Balanced — Recommended
             </option>
 
-            <option value="spine">
-                Central Spine Road
+            <option value="yield">
+                Maximum Yield
             </option>
 
-            <option value="edge">
-                Edge Access Road
+            <option value="frontage">
+                Premium Frontage
             </option>
+
         </select>
+
     </div>
-</div> 
 
-<button onclick="generateRoadNetwork()" style="
-    width:100%;
-    background:#0F2D52;
-    color:white;
-    border:none;
-    padding:10px;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:8px;
-">
-    🛣️ Generate Road Network
-</button> 
 
-<button onclick="generateBuildableArea()" style="
-    width:100%;
-    background:#16A34A;
-    color:white;
-    border:none;
-    padding:10px;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:8px;
-">
-    🌱 Generate Buildable Area
-</button> 
+    <!-- GENERATE -->
+    <button
+        onclick="generateCadastralPlans()"
+        style="
+            width:100%;
+            background:#0F2D52;
+            color:white;
+            border:none;
+            padding:11px;
+            border-radius:8px;
+            font-weight:800;
+            cursor:pointer;
+        "
+    >
+        ⚡ Generate Cadastral Plans
+    </button>
 
-<button onclick="generateCadastralPlots()" style="
-    width:100%;
-    background:#2563EB;
-    color:white;
-    border:none;
-    padding:10px;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-bottom:8px;
-">
-    🧭 Generate Cadastral Plots
-</button>
-
-<button
-    onclick="generateSubdivisions()"
-    style="
-        width:100%;
-        background:#D4A017;
-        color:white;
-        border:none;
-        padding:11px;
-        border-radius:8px;
-        font-weight:bold;
-        cursor:pointer;
-    "
->
-    ✂️ Generate Sub_Plots
-</button>
+</div>
     `; 
     // Show custom plot-size input when "Custom Size" is selected
     const plotSizeSelect =
