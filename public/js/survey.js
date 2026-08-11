@@ -58,7 +58,388 @@ function openSurveyToolModal() {
                     <option value="FEET">Feet (ft)</option>
                 </select>
             </div>
+        </div> 
+
+        <!-- =========================================================
+     PLANNING RULES
+========================================================= -->
+
+<div style="
+    background:#F8FAFC;
+    border:1px solid #E2E8F0;
+    border-radius:10px;
+    padding:14px;
+    margin-bottom:16px;
+">
+
+    <div style="
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:12px;
+    ">
+        <div>
+            <div style="
+                font-size:13px;
+                font-weight:800;
+                color:#0F2D52;
+            ">
+                📐 Planning Rules
+            </div>
+
+            <div style="
+                font-size:10px;
+                color:#64748B;
+                margin-top:3px;
+            ">
+                Define the design parameters before generating a subdivision
+            </div>
         </div>
+
+        <span style="
+            font-size:9px;
+            font-weight:800;
+            color:#64748B;
+            text-transform:uppercase;
+            letter-spacing:.5px;
+        ">
+            Rule Engine
+        </span>
+    </div>
+
+
+    <!-- TARGET PLOT SIZE -->
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin-bottom:10px;
+    ">
+
+        <div>
+
+            <label style="
+                display:block;
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:4px;
+            ">
+                Target Plot Size
+            </label>
+
+            <select
+                id="planningPlotSize"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    background:#FFFFFF;
+                    font-size:11px;
+                    box-sizing:border-box;
+                "
+            >
+
+                <option value="450">
+                    450 m²
+                </option>
+
+                <option value="506">
+                    1/8 Acre
+                </option>
+
+                <option value="1012">
+                    1/4 Acre
+                </option>
+
+                <option value="2023">
+                    1/2 Acre
+                </option>
+
+                <option value="4047">
+                    1 Acre
+                </option>
+
+                <option value="custom">
+                    Custom
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <!-- MIN FRONTAGE -->
+
+        <div>
+
+            <label style="
+                display:block;
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:4px;
+            ">
+                Minimum Frontage (m)
+            </label>
+
+            <input
+                id="planningFrontage"
+                type="number"
+                value="15"
+                min="5"
+                step="0.5"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    font-size:11px;
+                    box-sizing:border-box;
+                "
+            >
+
+        </div>
+
+    </div>
+
+
+    <!-- CUSTOM AREA -->
+
+    <div
+        id="customPlanningPlotContainer"
+        style="display:none;margin-bottom:10px;"
+    >
+
+        <label style="
+            display:block;
+            font-size:11px;
+            font-weight:700;
+            color:#475569;
+            margin-bottom:4px;
+        ">
+            Custom Plot Area (m²)
+        </label>
+
+        <input
+            id="customPlanningPlotSize"
+            type="number"
+            value="450"
+            min="50"
+            step="10"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                font-size:11px;
+                box-sizing:border-box;
+            "
+        >
+
+    </div>
+
+
+    <!-- MIN DEPTH -->
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin-bottom:10px;
+    ">
+
+        <div>
+
+            <label style="
+                display:block;
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:4px;
+            ">
+                Minimum Plot Depth (m)
+            </label>
+
+            <input
+                id="planningDepth"
+                type="number"
+                value="25"
+                min="5"
+                step="0.5"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    font-size:11px;
+                    box-sizing:border-box;
+                "
+            >
+
+        </div>
+
+
+        <!-- ROAD TYPE -->
+
+        <div>
+
+            <label style="
+                display:block;
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:4px;
+            ">
+                Road Type
+            </label>
+
+            <select
+                id="planningRoadType"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    background:#FFFFFF;
+                    font-size:11px;
+                    box-sizing:border-box;
+                "
+            >
+
+                <option value="public">
+                    Public Through Road
+                </option>
+
+                <option value="local">
+                    Local Access Road
+                </option>
+
+                <option value="private">
+                    Private Estate Road
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- ROAD RESERVE -->
+
+    <div style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+        margin-bottom:10px;
+    ">
+
+        <div>
+
+            <label style="
+                display:block;
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:4px;
+            ">
+                Road Reserve (m)
+            </label>
+
+            <input
+                id="planningRoadReserve"
+                type="number"
+                value="12"
+                min="4"
+                step="1"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    font-size:11px;
+                    box-sizing:border-box;
+                "
+            >
+
+        </div>
+
+
+        <!-- DESIGN PRIORITY -->
+
+        <div>
+
+            <label style="
+                display:block;
+                font-size:11px;
+                font-weight:700;
+                color:#475569;
+                margin-bottom:4px;
+            ">
+                Design Priority
+            </label>
+
+            <select
+                id="planningPriority"
+                style="
+                    width:100%;
+                    padding:8px;
+                    border:1px solid #CBD5E1;
+                    border-radius:6px;
+                    background:#FFFFFF;
+                    font-size:11px;
+                    box-sizing:border-box;
+                "
+            >
+
+                <option value="balanced">
+                    Balanced
+                </option>
+
+                <option value="yield">
+                    Maximum Plot Yield
+                </option>
+
+                <option value="access">
+                    Best Accessibility
+                </option>
+
+                <option value="quality">
+                    Best Plot Quality
+                </option>
+
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <!-- RULE SUMMARY -->
+
+    <div style="
+        padding:9px 10px;
+        background:#FFFFFF;
+        border:1px solid #E2E8F0;
+        border-radius:7px;
+        font-size:10px;
+        line-height:1.5;
+        color:#64748B;
+    ">
+
+        <strong style="color:#0F2D52;">
+            Design logic:
+        </strong>
+
+        Terra-IQ will use these parameters when generating
+        roads, buildable areas and individual cadastral plots.
+
+    </div>
+
+</div>
 
         <!-- SECTION 1: POINT LOCATOR (1 TO 4 POINTS) -->
         <div style="background:#F1F5F9; border:1px solid #E2E8F0; border-radius:10px; padding:12px; margin-bottom:16px;">
@@ -102,77 +483,286 @@ function openSurveyToolModal() {
 
         <hr style="border:none; border-top:1px solid #E2E8F0; margin:16px 0;">
 
-        <!-- SECTION 3: SUBDIVISION ENGINE -->
-        <h4 style="margin:0 0 10px 0; font-size:14px; color:#0F2D52;">Parcel Subdivision Generator</h4>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;">
+      <!-- SECTION 3: SMART SUBDIVISION ENGINE -->
 
+<h4 style="margin:0 0 10px 0; font-size:14px; color:#0F2D52;">
+    Smart Cadastral Subdivision
+</h4>
+
+<div style="
+    font-size:11px;
+    color:#64748B;
+    margin-bottom:12px;
+    line-height:1.5;
+">
+    Generate subdivision layouts using target plot size,
+    road access, frontage and minimum plot dimensions.
+</div>
+
+
+<div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+">
+
+    <!-- PLOT SIZE -->
     <div>
-        <label style="font-size:11px; font-weight:700; color:#64748B;">
-            Standard Plot Size
+        <label style="
+            font-size:11px;
+            font-weight:700;
+            color:#64748B;
+        ">
+            Target Plot Size
         </label>
 
-        <select id="subdivisionPlotSize"
-            style="width:100%; padding:8px; border:1px solid #CBD5E1; border-radius:6px; margin-top:4px; box-sizing:border-box; background:#F8FAFC;">
+        <select
+            id="subdivisionPlotSize"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+                background:white;
+            "
+        >
 
             <option value="450">450 m²</option>
             <option value="506">1/8 Acre</option>
             <option value="1012">1/4 Acre</option>
             <option value="2023">1/2 Acre</option>
             <option value="4047">1 Acre</option>
-            <option value="custom">Custom Size</option>
+            <option value="custom">Custom</option>
 
         </select>
     </div>
 
+
+    <!-- CUSTOM AREA -->
+    <div id="customPlotSizeContainer" style="display:none;">
+
+        <label style="
+            font-size:11px;
+            font-weight:700;
+            color:#64748B;
+        ">
+            Custom Area (m²)
+        </label>
+
+        <input
+            type="number"
+            id="customPlotSize"
+            value="450"
+            min="100"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+            "
+        >
+
+    </div>
+
+</div>
+
+
+<div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:10px;
+">
+
+    <!-- FRONTAGE -->
     <div>
-        <label style="font-size:11px; font-weight:700; color:#64748B;">
-            Access Road Width (Meters)
+
+        <label style="
+            font-size:11px;
+            font-weight:700;
+            color:#64748B;
+        ">
+            Minimum Frontage (m)
+        </label>
+
+        <input
+            type="number"
+            id="minimumFrontage"
+            value="15"
+            min="5"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+            "
+        >
+
+    </div>
+
+
+    <!-- DEPTH -->
+    <div>
+
+        <label style="
+            font-size:11px;
+            font-weight:700;
+            color:#64748B;
+        ">
+            Minimum Depth (m)
+        </label>
+
+        <input
+            type="number"
+            id="minimumDepth"
+            value="25"
+            min="10"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+            "
+        >
+
+    </div>
+
+</div>
+
+
+<div style="
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-bottom:14px;
+">
+
+    <!-- ROAD -->
+    <div>
+
+        <label style="
+            font-size:11px;
+            font-weight:700;
+            color:#64748B;
+        ">
+            Road Reserve (m)
         </label>
 
         <input
             type="number"
             id="roadWidth"
             value="6"
-            min="0"
-            step="0.5"
-            style="width:100%; padding:8px; border:1px solid #CBD5E1; border-radius:6px; margin-top:4px; box-sizing:border-box;"
+            min="3"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+            "
         >
+
     </div>
 
-</div>
 
-<div id="customPlotSizeContainer"
-    style="display:none; margin-bottom:14px;">
+    <!-- LAYOUT -->
+    <div>
 
-    <label style="font-size:11px; font-weight:700; color:#64748B;">
-        Custom Plot Size (m²)
-    </label>
+        <label style="
+            font-size:11px;
+            font-weight:700;
+            color:#64748B;
+        ">
+            Layout Strategy
+        </label>
 
-    <input
-        type="number"
-        id="customPlotSize"
-        value="450"
-        min="50"
-        step="10"
-        style="width:100%; padding:8px; border:1px solid #CBD5E1; border-radius:6px; margin-top:4px; box-sizing:border-box;"
-    >
+        <select
+            id="subdivisionLayout"
+            style="
+                width:100%;
+                padding:8px;
+                border:1px solid #CBD5E1;
+                border-radius:6px;
+                margin-top:4px;
+                box-sizing:border-box;
+                background:white;
+            "
+        >
 
-</div>
+            <option value="smart">
+                Smart Balanced
+            </option>
 
-        <button onclick="generateSubdivisions()" style="width:100%; background:#D4A017; color:white; border:none; padding:10px; border-radius:8px; font-weight:bold; cursor:pointer;">
-            ✂️ Generate Sub-Plots
-        </button>
+            <option value="spine">
+                Central Spine Road
+            </option>
+
+            <option value="edge">
+                Edge Access Road
+            </option>
+        </select>
+    </div>
+</div> 
+
+<button onclick="generateRoadNetwork()" style="
+    width:100%;
+    background:#0F2D52;
+    color:white;
+    border:none;
+    padding:10px;
+    border-radius:8px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:8px;
+">
+    🛣️ Generate Road Network
+</button>
+
+<button
+    onclick="generateSubdivisions()"
+    style="
+        width:100%;
+        background:#D4A017;
+        color:white;
+        border:none;
+        padding:11px;
+        border-radius:8px;
+        font-weight:bold;
+        cursor:pointer;
+    "
+>
+    ✂️ Generate Cadastral Layout
+</button>
     `; 
     // Show custom plot-size input when "Custom Size" is selected
-    const plotSizeSelect = document.getElementById("subdivisionPlotSize");
-    const customPlotSizeContainer = document.getElementById("customPlotSizeContainer");
+    const plotSizeSelect =
+    document.getElementById("planningPlotSize");
 
-    if (plotSizeSelect && customPlotSizeContainer) {
-        plotSizeSelect.addEventListener("change", function () {
-            customPlotSizeContainer.style.display =
-                this.value === "custom" ? "block" : "none";
-        });
-    }
+const customPlotContainer =
+    document.getElementById("customPlanningPlotContainer");
+
+if (plotSizeSelect && customPlotContainer) {
+
+    plotSizeSelect.addEventListener("change", function () {
+
+        customPlotContainer.style.display =
+            this.value === "custom"
+                ? "block"
+                : "none";
+
+    });
+
+}
 
     surveyModal.style.display = "block";
 }
@@ -475,21 +1065,249 @@ function plotRTKPoints(rtkCoordinates) {
         alert(`Boundary Plotted Successfully!\n\nCalculated Area:\n• ${areaSqMeters.toFixed(1)} m²\n• ${acres} Acres\n• ${hectares} Ha`);
         closeSurveyModal();
     }
-}
+} 
 
 /**
  * ============================================================
- * SMART CADASTRAL SUBDIVISION ENGINE
+ * TERRA-IQ ROAD NETWORK ENGINE — STEP 2
+ * Creates a strategic internal access road inside the
+ * active mother parcel.
  * ============================================================
+ */
+
+function generateRoadNetwork() {
+
+    if (!window.activeMotherPolygon) {
+        alert("Please plot the mother parcel boundary first.");
+        return;
+    }
+
+    if (typeof turf === "undefined" || typeof map === "undefined") {
+        alert("Mapping engine is not available.");
+        return;
+    }
+
+    const rules = getPlanningRules();
+
+    const motherParcel = window.activeMotherPolygon;
+
+    /*
+     * ---------------------------------------------------------
+     * 1. GET PARCEL BOUNDING BOX
+     * ---------------------------------------------------------
+     */
+
+    const bbox = turf.bbox(motherParcel);
+
+    const minLng = bbox[0];
+    const minLat = bbox[1];
+    const maxLng = bbox[2];
+    const maxLat = bbox[3];
+
+
+    /*
+     * ---------------------------------------------------------
+     * 2. CREATE A CENTRELINE
+     *
+     * This is deliberately simple for Step 2.
+     * Later we will make the road orientation intelligent.
+     * ---------------------------------------------------------
+     */
+
+    const centerLng = (minLng + maxLng) / 2;
+
+
+    const roadStart = [centerLng, minLat];
+    const roadEnd = [centerLng, maxLat];
+
+
+    const roadCenterline = turf.lineString([
+        roadStart,
+        roadEnd
+    ]);
+
+
+    /*
+     * ---------------------------------------------------------
+     * 3. CREATE ROAD RESERVE
+     *
+     * Turf buffer uses kilometres.
+     * ---------------------------------------------------------
+     */
+
+    const roadWidthKm =
+        rules.roadReserve / 2 / 1000;
+
+
+    let roadReserve = turf.buffer(
+        roadCenterline,
+        roadWidthKm,
+        {
+            units: "kilometers"
+        }
+    );
+
+
+    /*
+     * ---------------------------------------------------------
+     * 4. CLIP ROAD TO MOTHER PARCEL
+     * ---------------------------------------------------------
+     */
+
+    const clippedRoad =
+        turf.intersect(
+            motherParcel,
+            roadReserve
+        );
+
+
+    if (!clippedRoad) {
+
+        alert(
+            "Terra-IQ could not create a road inside this parcel."
+        );
+
+        return;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 5. REMOVE PREVIOUS ROAD
+     * ---------------------------------------------------------
+     */
+
+    if (window.activeRoadLayer) {
+
+        map.removeLayer(
+            window.activeRoadLayer
+        );
+
+        window.activeRoadLayer = null;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * 6. DRAW ROAD RESERVE
+     * ---------------------------------------------------------
+     */
+
+    window.activeRoadLayer =
+        L.geoJSON(
+            clippedRoad,
+            {
+
+                style: {
+
+                    color: "#D4A017",
+
+                    weight: 2,
+
+                    fillColor: "#FBBF24",
+
+                    fillOpacity: 0.35
+
+                }
+
+            }
+
+        ).addTo(map);
+
+
+    /*
+     * ---------------------------------------------------------
+     * 7. DRAW ROAD CENTRELINE
+     * ---------------------------------------------------------
+     */
+
+    if (window.activeRoadCenterline) {
+
+        map.removeLayer(
+            window.activeRoadCenterline
+        );
+    }
+
+
+    window.activeRoadCenterline =
+        L.geoJSON(
+            roadCenterline,
+            {
+
+                style: {
+
+                    color: "#0F2D52",
+
+                    weight: 3,
+
+                    dashArray: "6,6"
+
+                }
+
+            }
+
+        ).addTo(map);
+
+
+    /*
+     * ---------------------------------------------------------
+     * 8. SAVE ROAD GEOMETRY
+     *
+     * This becomes important later when plots are generated.
+     * ---------------------------------------------------------
+     */
+
+    window.activeRoadNetwork = {
+
+        centerline: roadCenterline,
+
+        reserve: clippedRoad,
+
+        width: rules.roadReserve
+
+    };
+
+
+    /*
+     * ---------------------------------------------------------
+     * 9. REPORT RESULT
+     * ---------------------------------------------------------
+     */
+
+    const roadArea =
+        turf.area(clippedRoad);
+
+
+    alert(
+        `Road Network Generated!\n\n` +
+        `Road Reserve: ${rules.roadReserve} m\n` +
+        `Road Area: ${roadArea.toFixed(1)} m²\n\n` +
+        `This road corridor will be used by the\n` +
+        `next stage of the cadastral subdivision engine.`
+    );
+}
+
+/**
+ * ================================================================
+ * SMART CADASTRAL SUBDIVISION ENGINE
+ * ================================================================
  *
- * Creates:
- *  - Access road corridor
- *  - Rectangular development plots
- *  - Target plot sizes
- *  - Actual clipped plot areas
+ * Generates multiple conceptual subdivision layouts:
  *
- * The original mother polygon remains stored in:
- * window.activeMotherPolygon
+ * 1. Central Spine
+ * 2. Estate Grid
+ * 3. Compact Access
+ *
+ * Each layout:
+ * - Creates access roads
+ * - Removes road corridors from developable land
+ * - Generates plot blocks
+ * - Gives plots road frontage
+ * - Clips plots to the mother parcel
+ *
+ * IMPORTANT:
+ * These are planning concepts, not legally approved
+ * cadastral subdivision plans.
  */
 
 function generateSubdivisions() {
@@ -504,522 +1322,850 @@ function generateSubdivisions() {
         return;
     }
 
-    const countInput = document.getElementById("subdivisionCount");
-    const roadInput = document.getElementById("roadWidth");
-    const plotSizeSelect = document.getElementById("subdivisionPlotSize");
+    const mother = window.activeMotherPolygon;
 
-    const count = parseInt(countInput?.value) || 4;
-    const roadWidth = parseFloat(roadInput?.value) || 6;
+    const roadWidth =
+        parseFloat(document.getElementById("roadWidth")?.value) || 6;
+
+    const selectedPlotSize =
+        document.getElementById("subdivisionPlotSize")?.value || "eighth";
+
+    const plotSize = getSelectedPlotSize(selectedPlotSize);
 
     /*
-     * ---------------------------------------------------------
-     * 1. DETERMINE TARGET PLOT SIZE
-     * ---------------------------------------------------------
+     * Remove previous subdivision display
      */
-
-    let targetPlotArea = null;
-
-    if (plotSizeSelect) {
-
-        switch (plotSizeSelect.value) {
-
-            case "450":
-                targetPlotArea = 450;
-                break;
-
-            case "eighth":
-                targetPlotArea = 0.125 * 4046.86;
-                break;
-
-            case "quarter":
-                targetPlotArea = 0.25 * 4046.86;
-                break;
-
-            case "half":
-                targetPlotArea = 0.5 * 4046.86;
-                break;
-
-            case "acre":
-                targetPlotArea = 4046.86;
-                break;
-
-            case "custom":
-
-                const customInput =
-                    document.getElementById("customPlotSize");
-
-                if (customInput) {
-                    targetPlotArea =
-                        parseFloat(customInput.value);
-                }
-
-                break;
-        }
+    if (window.subdivisionLayouts) {
+        Object.values(window.subdivisionLayouts).forEach(layer => {
+            if (layer && map.hasLayer(layer)) {
+                map.removeLayer(layer);
+            }
+        });
     }
 
+    window.subdivisionLayouts = {};
 
     /*
-     * ---------------------------------------------------------
-     * 2. GET MOTHER PARCEL BOUNDING BOX
-     * ---------------------------------------------------------
+     * Generate the three planning alternatives
      */
 
-    const bbox = turf.bbox(window.activeMotherPolygon);
+    const layouts = {
+
+        spine: generateSpineLayout(
+            mother,
+            plotSize,
+            roadWidth
+        ),
+
+        grid: generateGridLayout(
+            mother,
+            plotSize,
+            roadWidth
+        ),
+
+        compact: generateCompactLayout(
+            mother,
+            plotSize,
+            roadWidth
+        )
+
+    };
+
+    /*
+     * Display all layouts
+     */
+
+    Object.entries(layouts).forEach(([name, layout]) => {
+
+        if (!layout || !layout.plots.length) {
+            return;
+        }
+
+        const layer = L.layerGroup();
+
+        /*
+         * ROAD NETWORK
+         */
+
+        if (layout.roads) {
+
+            layout.roads.forEach(road => {
+
+                L.geoJSON(road, {
+                    style: {
+                        color: "#475569",
+                        weight: Math.max(3, roadWidth / 2),
+                        opacity: 0.95,
+                        fillColor: "#CBD5E1",
+                        fillOpacity: 0.85
+                    }
+                }).addTo(layer);
+
+            });
+
+        }
+
+        /*
+         * PLOTS
+         */
+
+        layout.plots.forEach((plot, index) => {
+
+            plot.properties = {
+                parcel_no: `${layout.code}-${String(index + 1).padStart(3, "0")}`,
+                status: "Available",
+                area_m2: turf.area(plot),
+                area_acres: turf.area(plot) / 4046.856
+            };
+
+            L.geoJSON(plot, {
+
+                style: {
+                    color: "#0F2D52",
+                    weight: 1.5,
+                    fillColor: "#FFFFFF",
+                    fillOpacity: 0.85
+                },
+
+                onEachFeature: function(feature, plotLayer) {
+
+                    const area =
+                        feature.properties.area_m2;
+
+                    const acres =
+                        feature.properties.area_acres;
+
+                    plotLayer.bindPopup(`
+                        <div style="
+                            font-family:system-ui;
+                            min-width:180px;
+                        ">
+
+                            <div style="
+                                font-size:13px;
+                                font-weight:800;
+                                color:#0F2D52;
+                                margin-bottom:6px;
+                            ">
+                                ${feature.properties.parcel_no}
+                            </div>
+
+                            <div style="
+                                font-size:11px;
+                                color:#64748B;
+                                line-height:1.6;
+                            ">
+
+                                <div>
+                                    <b>Area:</b>
+                                    ${area.toFixed(1)} m²
+                                </div>
+
+                                <div>
+                                    <b>Acres:</b>
+                                    ${acres.toFixed(3)}
+                                </div>
+
+                                <div>
+                                    <b>Status:</b>
+                                    Available
+                                </div>
+
+                            </div>
+
+                        </div>
+                    `);
+
+                }
+
+            }).addTo(layer);
+
+        });
+
+        /*
+         * Mother parcel outline
+         */
+        L.geoJSON(mother, {
+            style: {
+                color: "#0F2D52",
+                weight: 3,
+                fillOpacity: 0
+            }
+        }).addTo(layer);
+
+        /*
+         * Add to map
+         */
+        layer.addTo(map);
+
+        window.subdivisionLayouts[name] = layer;
+
+    });
+
+    /*
+     * Show layout selector
+     */
+    showSubdivisionLayoutSelector(layouts);
+} 
+
+function getPlanningRules() {
+
+    const plotSizeSelect =
+        document.getElementById("planningPlotSize");
+
+    const customPlotSize =
+        parseFloat(
+            document.getElementById("customPlanningPlotSize")?.value
+        ) || 450;
+
+    const targetArea =
+        plotSizeSelect?.value === "custom"
+            ? customPlotSize
+            : parseFloat(plotSizeSelect?.value) || 450;
+
+
+    const frontage =
+        parseFloat(
+            document.getElementById("planningFrontage")?.value
+        ) || 15;
+
+
+    const depth =
+        parseFloat(
+            document.getElementById("planningDepth")?.value
+        ) || 25;
+
+
+    const roadType =
+        document.getElementById("planningRoadType")?.value
+        || "public";
+
+
+    const roadReserve =
+        parseFloat(
+            document.getElementById("planningRoadReserve")?.value
+        ) || 12;
+
+
+    const priority =
+        document.getElementById("planningPriority")?.value
+        || "balanced";
+
+
+    return {
+
+        targetPlotArea: targetArea,
+
+        minimumFrontage: frontage,
+
+        minimumDepth: depth,
+
+        roadType: roadType,
+
+        roadReserve: roadReserve,
+
+        priority: priority
+
+    };
+}
+
+function getSelectedPlotSize(value) {
+    const sizes = {
+        "450": 450,
+        "eighth": 506,
+        "quarter": 1012,
+        "half": 2024,
+        "acre": 4047,
+        "two_acres": 8094
+    };
+
+    return sizes[value] || 506;
+} 
+
+function generateSpineLayout(mother, plotSize, roadWidth) {
+    const bbox = turf.bbox(mother);
+    const minLng = bbox[0];
+    const minLat = bbox[1];
+    const maxLng = bbox[2];
+    const maxLat = bbox[3];
+    const centerLng = (minLng + maxLng) / 2;
+
+    /*
+     * Main access road running through the parcel.
+     */
+
+    const roadLine = turf.lineString([
+        [minLng, centerLng > minLng ? (minLat + maxLat) / 2 : minLat],
+        [maxLng, (minLat + maxLat) / 2]
+    ]);
+
+    const road = turf.buffer(
+        roadLine,
+        roadWidth / 2000,
+        { units: "kilometers" }
+    );
+
+    /*
+     * Remove road land.
+     */
+
+    let developable = turf.difference(
+        mother,
+        road
+    );
+    if (!developable) {
+        return {
+            code: "SP",
+            plots: [],
+            roads: []
+        };
+    }
+
+    /*
+     * Generate rows above and below the road.
+     */
+
+    const rows = 4;
+
+    const plots = [];
+
+    const rowHeight =
+        (maxLat - minLat) / rows;
+
+    for (let r = 0; r < rows; r++) {
+
+        const y1 =
+            minLat + r * rowHeight;
+
+        const y2 =
+            minLat + (r + 1) * rowHeight;
+
+        const rowBox = turf.bboxPolygon([
+            minLng,
+            y1,
+            maxLng,
+            y2
+        ]);
+
+        const rowIntersection =
+            turf.intersect(
+                developable,
+                rowBox
+            );
+
+        if (!rowIntersection) continue;
+
+        /*
+         * Determine number of plots based
+         * on target area.
+         */
+
+        const rowArea =
+            turf.area(rowIntersection);
+
+        const plotCount =
+            Math.max(
+                1,
+                Math.round(rowArea / plotSize)
+            );
+
+        const width =
+            (maxLng - minLng) / plotCount;
+
+        for (let i = 0; i < plotCount; i++) {
+
+            const plotBox =
+                turf.bboxPolygon([
+                    minLng + i * width,
+                    y1,
+                    minLng + (i + 1) * width,
+                    y2
+                ]);
+
+            const plot =
+                turf.intersect(
+                    rowIntersection,
+                    plotBox
+                );
+
+            if (plot && turf.area(plot) > plotSize * 0.45) {
+                plots.push(plot);
+            }
+
+        }
+
+    }
+
+    return {
+
+        code: "SP",
+
+        plots,
+
+        roads: [road]
+
+    };
+} 
+
+function generateGridLayout(mother, plotSize, roadWidth) {
+
+    const bbox = turf.bbox(mother);
 
     const minLng = bbox[0];
     const minLat = bbox[1];
     const maxLng = bbox[2];
     const maxLat = bbox[3];
 
+    const centerLat =
+        (minLat + maxLat) / 2;
+
+    const centerLng =
+        (minLng + maxLng) / 2;
 
     /*
-     * ---------------------------------------------------------
-     * 3. CREATE ACCESS ROAD ALONG THE SOUTHERN EDGE
-     *
-     * This is intentionally placed INSIDE the mother parcel.
-     * Every generated plot will therefore face the road.
-     * ---------------------------------------------------------
+     * Main horizontal access road.
      */
 
-    const metersPerDegreeLat = 111320;
+    const mainRoadLine = turf.lineString([
+        [minLng, centerLat],
+        [maxLng, centerLat]
+    ]);
 
-    const roadLatOffset =
-        roadWidth / metersPerDegreeLat;
-
-    const roadPolygon = turf.polygon([[
-        [minLng, minLat],
-        [maxLng, minLat],
-        [maxLng, minLat + roadLatOffset],
-        [minLng, minLat + roadLatOffset],
-        [minLng, minLat]
-    ]]);
-
+    const mainRoad = turf.buffer(
+        mainRoadLine,
+        roadWidth / 2000,
+        { units: "kilometers" }
+    );
 
     /*
-     * ---------------------------------------------------------
-     * 4. REMOVE ROAD AREA FROM DEVELOPABLE LAND
-     * ---------------------------------------------------------
+     * Secondary roads.
      */
 
-    let developableArea =
+    const secondaryRoads = [];
+
+    const roadPositions = [
+        minLng + (maxLng - minLng) * 0.25,
+        minLng + (maxLng - minLng) * 0.50,
+        minLng + (maxLng - minLng) * 0.75
+    ];
+
+    roadPositions.forEach(x => {
+
+        const line = turf.lineString([
+            [x, minLat],
+            [x, maxLat]
+        ]);
+
+        secondaryRoads.push(
+
+            turf.buffer(
+                line,
+                roadWidth / 2000,
+                { units: "kilometers" }
+            )
+
+        );
+
+    });
+
+    /*
+     * Combine road corridors.
+     */
+
+    let roadNetwork = mainRoad;
+
+    secondaryRoads.forEach(road => {
+
+        roadNetwork = turf.union(
+            roadNetwork,
+            road
+        );
+
+    });
+
+    /*
+     * Remove road network from parcel.
+     */
+
+    let developable =
         turf.difference(
-            window.activeMotherPolygon,
-            roadPolygon
+            mother,
+            roadNetwork
         );
 
-    if (!developableArea) {
-        alert(
-            "The access road is too wide for this parcel."
+    if (!developable) {
+
+        return {
+            code: "GR",
+            plots: [],
+            roads: []
+        };
+
+    }
+
+    /*
+     * Create rectangular cadastral blocks.
+     */
+
+    const cols = 4;
+    const rows = 6;
+
+    const cellWidth =
+        (maxLng - minLng) / cols;
+
+    const cellHeight =
+        (maxLat - minLat) / rows;
+
+    const plots = [];
+
+    for (let r = 0; r < rows; r++) {
+
+        for (let c = 0; c < cols; c++) {
+
+            const cell =
+                turf.bboxPolygon([
+
+                    minLng + c * cellWidth,
+
+                    minLat + r * cellHeight,
+
+                    minLng + (c + 1) * cellWidth,
+
+                    minLat + (r + 1) * cellHeight
+
+                ]);
+
+            const plot =
+                turf.intersect(
+                    developable,
+                    cell
+                );
+
+            if (
+                plot &&
+                turf.area(plot) > plotSize * 0.45
+            ) {
+
+                plots.push(plot);
+
+            }
+
+        }
+
+    }
+
+    return {
+
+        code: "GR",
+
+        plots,
+
+        roads: [
+            mainRoad,
+            ...secondaryRoads
+        ]
+
+    };
+
+} 
+
+function generateCompactLayout(
+    mother,
+    plotSize,
+    roadWidth
+) {
+
+    const bbox = turf.bbox(mother);
+
+    const minLng = bbox[0];
+    const minLat = bbox[1];
+    const maxLng = bbox[2];
+    const maxLat = bbox[3];
+
+    const centerLat =
+        (minLat + maxLat) / 2;
+
+    /*
+     * One main access road.
+     */
+
+    const mainRoadLine = turf.lineString([
+        [minLng, centerLat],
+        [maxLng, centerLat]
+    ]);
+
+    const mainRoad = turf.buffer(
+        mainRoadLine,
+        roadWidth / 2000,
+        { units: "kilometers" }
+    );
+
+    /*
+     * Remove road.
+     */
+
+    const developable =
+        turf.difference(
+            mother,
+            mainRoad
         );
+
+    if (!developable) {
+
+        return {
+            code: "CP",
+            plots: [],
+            roads: []
+        };
+
+    }
+
+    /*
+     * Split into larger plot blocks.
+     */
+
+    const plots = [];
+
+    const rows = 2;
+    const cols = 5;
+
+    const width =
+        (maxLng - minLng) / cols;
+
+    const height =
+        (maxLat - minLat) / rows;
+
+    for (let r = 0; r < rows; r++) {
+
+        for (let c = 0; c < cols; c++) {
+
+            const cell =
+                turf.bboxPolygon([
+
+                    minLng + c * width,
+
+                    minLat + r * height,
+
+                    minLng + (c + 1) * width,
+
+                    minLat + (r + 1) * height
+
+                ]);
+
+            const plot =
+                turf.intersect(
+                    developable,
+                    cell
+                );
+
+            if (
+                plot &&
+                turf.area(plot) > plotSize * 0.45
+            ) {
+
+                plots.push(plot);
+
+            }
+
+        }
+
+    }
+
+    return {
+
+        code: "CP",
+
+        plots,
+
+        roads: [mainRoad]
+
+    };
+
+} 
+
+function showSubdivisionLayoutSelector(layouts) {
+
+    let existing =
+        document.getElementById(
+            "subdivisionLayoutSelector"
+        );
+
+    if (existing) {
+        existing.remove();
+    }
+
+    const selector =
+        document.createElement("div");
+
+    selector.id =
+        "subdivisionLayoutSelector";
+
+    selector.style.cssText = `
+        position:fixed;
+        right:20px;
+        top:90px;
+        width:260px;
+        background:#FFFFFF;
+        border:1px solid #CBD5E1;
+        border-radius:12px;
+        padding:14px;
+        box-shadow:0 15px 35px rgba(15,45,82,.20);
+        z-index:99998;
+        font-family:system-ui,-apple-system,sans-serif;
+    `;
+
+    selector.innerHTML = `
+
+        <div style="
+            font-size:13px;
+            font-weight:800;
+            color:#0F2D52;
+            margin-bottom:4px;
+        ">
+            Subdivision Layout Options
+        </div>
+
+        <div style="
+            font-size:10px;
+            color:#64748B;
+            margin-bottom:12px;
+            line-height:1.4;
+        ">
+            Compare alternative road and plot
+            arrangements before selecting a preferred
+            planning concept.
+        </div>
+
+        <button onclick="activateSubdivisionLayout('spine')"
+            style="
+                width:100%;
+                padding:10px;
+                margin-bottom:7px;
+                border:1px solid #CBD5E1;
+                background:#F8FAFC;
+                border-radius:8px;
+                text-align:left;
+                cursor:pointer;
+            ">
+
+            <b style="color:#0F2D52;">
+                01 — Central Spine
+            </b>
+
+            <div style="
+                font-size:10px;
+                color:#64748B;
+                margin-top:3px;
+            ">
+                Main road through the parcel.
+            </div>
+
+        </button>
+
+
+        <button onclick="activateSubdivisionLayout('grid')"
+            style="
+                width:100%;
+                padding:10px;
+                margin-bottom:7px;
+                border:1px solid #CBD5E1;
+                background:#F8FAFC;
+                border-radius:8px;
+                text-align:left;
+                cursor:pointer;
+            ">
+
+            <b style="color:#0F2D52;">
+                02 — Estate Grid
+            </b>
+
+            <div style="
+                font-size:10px;
+                color:#64748B;
+                margin-top:3px;
+            ">
+                Multiple access roads and
+                rectangular plot blocks.
+            </div>
+
+        </button>
+
+
+        <button onclick="activateSubdivisionLayout('compact')"
+            style="
+                width:100%;
+                padding:10px;
+                border:1px solid #CBD5E1;
+                background:#F8FAFC;
+                border-radius:8px;
+                text-align:left;
+                cursor:pointer;
+            ">
+
+            <b style="color:#0F2D52;">
+                03 — Compact Layout
+            </b>
+
+            <div style="
+                font-size:10px;
+                color:#64748B;
+                margin-top:3px;
+            ">
+                Reduced road area and tighter
+                land utilization.
+            </div>
+
+        </button>
+
+
+        <button onclick="
+            document.getElementById(
+                'subdivisionLayoutSelector'
+            ).remove();
+        "
+        style="
+            width:100%;
+            margin-top:12px;
+            padding:8px;
+            border:none;
+            background:#0F2D52;
+            color:white;
+            border-radius:7px;
+            cursor:pointer;
+            font-weight:700;
+        ">
+            Close
+        </button>
+    `;
+
+    document.body.appendChild(selector);
+
+} 
+
+function activateSubdivisionLayout(layoutName) {
+
+    if (!window.subdivisionLayouts) {
         return;
     }
 
+    Object.entries(
+        window.subdivisionLayouts
+    ).forEach(([name, layer]) => {
 
-    /*
-     * ---------------------------------------------------------
-     * 5. DETERMINE HOW MANY PLOTS TO CREATE
-     *
-     * If a standard plot size was selected, estimate the
-     * number automatically.
-     *
-     * Otherwise use the subdivision count.
-     * ---------------------------------------------------------
-     */
+        if (!layer) return;
 
-    const developableAreaSqM =
-        turf.area(developableArea);
+        if (name === layoutName) {
 
-    let plotCount = count;
-
-    if (targetPlotArea && targetPlotArea > 0) {
-
-        const estimatedCount =
-            Math.floor(
-                developableAreaSqM /
-                targetPlotArea
-            );
-
-        if (estimatedCount >= 2) {
-            plotCount = estimatedCount;
-        }
-    }
-
-    plotCount = Math.max(
-        2,
-        Math.min(plotCount, 50)
-    );
-
-
-    /*
-     * ---------------------------------------------------------
-     * 6. CREATE VERTICAL PLOT CORRIDORS
-     *
-     * Each strip runs from the access road toward the
-     * opposite boundary.
-     *
-     * This produces cadastral-style plots rather than
-     * arbitrary crossing lines.
-     * ---------------------------------------------------------
-     */
-
-    const lngStep =
-        (maxLng - minLng) / plotCount;
-
-    const subPlots = [];
-
-
-    for (let i = 0; i < plotCount; i++) {
-
-        const leftLng =
-            minLng + (i * lngStep);
-
-        const rightLng =
-            minLng + ((i + 1) * lngStep);
-
-
-        const plotBox = turf.polygon([[
-            [leftLng, minLat + roadLatOffset],
-            [rightLng, minLat + roadLatOffset],
-            [rightLng, maxLat],
-            [leftLng, maxLat],
-            [leftLng, minLat + roadLatOffset]
-        ]]);
-
-
-        /*
-         * Clip the rectangular plot to the actual
-         * mother parcel boundary.
-         */
-
-        const intersection =
-            turf.intersect(
-                window.activeMotherPolygon,
-                plotBox
-            );
-
-
-        if (intersection) {
-
-            const areaSqM =
-                turf.area(intersection);
-
-            /*
-             * Ignore extremely tiny slivers created
-             * by irregular parcel boundaries.
-             */
-
-            if (areaSqM < 50) {
-                continue;
+            if (!map.hasLayer(layer)) {
+                layer.addTo(map);
             }
 
-
-            intersection.properties = {
-
-                parcel_no:
-                    `SUB-${String(i + 1).padStart(3, "0")}`,
-
-                status:
-                    "Available",
-
-                area_m2:
-                    areaSqM.toFixed(1),
-
-                acres:
-                    (areaSqM / 4046.86).toFixed(3),
-
-                hectares:
-                    (areaSqM / 10000).toFixed(3),
-
-                frontage:
-                    `${roadWidth}m access road`,
-
-                plot_size:
-                    targetPlotArea
-                        ? `${targetPlotArea.toFixed(0)} m² target`
-                        : "Custom subdivision"
-            };
-
-
-            subPlots.push(intersection);
-        }
-    }
-
-
-    /*
-     * ---------------------------------------------------------
-     * 7. DRAW THE ACCESS ROAD
-     * ---------------------------------------------------------
-     */
-
-    const roadIntersection =
-        turf.intersect(
-            window.activeMotherPolygon,
-            roadPolygon
-        );
-
-
-    /*
-     * ---------------------------------------------------------
-     * 8. DRAW EVERYTHING
-     * ---------------------------------------------------------
-     */
-
-    if (
-        subPlots.length > 0 &&
-        typeof map !== "undefined" &&
-        typeof L !== "undefined"
-    ) {
-
-        /*
-         * Remove mother parcel display.
-         */
-
-        if (activeSurveyLayer) {
-            map.removeLayer(activeSurveyLayer);
-            activeSurveyLayer = null;
-        }
-
-
-        /*
-         * Plot subdivision parcels.
-         */
-
-        const subPlotCollection =
-            turf.featureCollection(subPlots);
-
-
-        activeSurveyLayer =
-            L.geoJSON(subPlotCollection, {
-
-                style: function(feature) {
-
-                    return {
-                        color: "#0F2D52",
-                        weight: 2,
-                        opacity: 0.95,
-                        fillColor: "#FFFFFF",
-                        fillOpacity: 0.55
-                    };
-
-                },
-
-
-                onEachFeature:
-                    function(feature, layer) {
-
-                        const p =
-                            feature.properties;
-
-
-                        layer.bindPopup(`
-
-                            <div style="
-                                min-width:190px;
-                                font-family:Arial,sans-serif;
-                            ">
-
-                                <div style="
-                                    font-size:14px;
-                                    font-weight:800;
-                                    color:#0F2D52;
-                                    margin-bottom:8px;
-                                ">
-                                    ${p.parcel_no}
-                                </div>
-
-                                <div style="
-                                    font-size:12px;
-                                    color:#475569;
-                                    line-height:1.7;
-                                ">
-
-                                    <div>
-                                        <strong>
-                                            Area:
-                                        </strong>
-                                        ${p.area_m2} m²
-                                    </div>
-
-                                    <div>
-                                        <strong>
-                                            Acres:
-                                        </strong>
-                                        ${p.acres}
-                                    </div>
-
-                                    <div>
-                                        <strong>
-                                            Status:
-                                        </strong>
-                                        ${p.status}
-                                    </div>
-
-                                    <div>
-                                        <strong>
-                                            Access:
-                                        </strong>
-                                        ${p.frontage}
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        `);
-
-                    }
-
-            }).addTo(map);
-
-
-        /*
-         * -----------------------------------------------------
-         * DRAW ACCESS ROAD ON TOP
-         * -----------------------------------------------------
-         */
-
-        if (roadIntersection) {
-
-            const roadLayer =
-                L.geoJSON(
-                    roadIntersection,
-                    {
-                        style: {
-                            color: "#475569",
-                            weight: 1,
-                            fillColor: "#94A3B8",
-                            fillOpacity: 0.75
-                        }
-                    }
-                ).addTo(map);
-
-
-            roadLayer.bindPopup(`
-                <div style="
-                    font-family:Arial,sans-serif;
-                    min-width:160px;
-                ">
-
-                    <strong style="
-                        color:#0F2D52;
-                    ">
-                        🛣️ Internal Access Road
-                    </strong>
-
-                    <br><br>
-
-                    Width:
-                    <strong>
-                        ${roadWidth} m
-                    </strong>
-
-                </div>
-            `);
-        }
-
-
-        /*
-         * -----------------------------------------------------
-         * ADD PLOT LABELS
-         * -----------------------------------------------------
-         */
-
-        subPlots.forEach(feature => {
-
-            const center =
-                turf.centroid(feature);
-
-            const p =
-                feature.properties;
-
-            L.marker(
-                [
-                    center.geometry.coordinates[1],
-                    center.geometry.coordinates[0]
-                ],
-                {
-                    icon: L.divIcon({
-                        className:
-                            "terra-iq-subdivision-label",
-
-                        html: `
-                            <div style="
-                                background:#FFFFFF;
-                                border:1px solid #0F2D52;
-                                border-radius:5px;
-                                padding:3px 6px;
-                                font-size:9px;
-                                font-weight:800;
-                                color:#0F2D52;
-                                white-space:nowrap;
-                                box-shadow:0 2px 5px rgba(0,0,0,.15);
-                            ">
-                                ${p.parcel_no}
-                            </div>
-                        `,
-
-                        iconSize: null
-                    })
-                }
-            ).addTo(map);
-
-        });
-
-
-        /*
-         * -----------------------------------------------------
-         * FIT MAP
-         * -----------------------------------------------------
-         */
-
-        map.fitBounds(
-            activeSurveyLayer.getBounds(),
-            {
-                padding: [40, 40]
+        } else {
+            if (map.hasLayer(layer)) {
+                map.removeLayer(layer);
             }
-        );
-
-
-        /*
-         * -----------------------------------------------------
-         * SUMMARY
-         * -----------------------------------------------------
-         */
-
-        const totalArea =
-            subPlots.reduce(
-                (sum, plot) =>
-                    sum + turf.area(plot),
-                0
-            );
-
-
-        const roadArea =
-            roadIntersection
-                ? turf.area(roadIntersection)
-                : 0;
-
-
-        const efficiency =
-            developableAreaSqM > 0
-                ? (
-                    (totalArea /
-                    (totalArea + roadArea)) * 100
-                ).toFixed(1)
-                : "0.0";
-
-
-        alert(
-            `Subdivision Complete!\n\n` +
-            `Plots Generated: ${subPlots.length}\n` +
-            `Total Plot Area: ${totalArea.toFixed(1)} m²\n` +
-            `Access Road: ${roadWidth} m\n` +
-            `Land Utilisation: ${efficiency}%`
-        );
-
-
-        closeSurveyModal();
-    }
+        }
+    });
 }
 
 /**
