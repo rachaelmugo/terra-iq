@@ -2308,6 +2308,177 @@ function renderCadastralLayout(
     return layer;
 }
 
+function generateSmartSubdivision() {
+
+    if (!window.activeMotherPolygon) {
+        alert("Please plot the mother parcel first.");
+        return;
+    }
+
+    if (typeof turf === "undefined") {
+        alert("Turf.js is required.");
+        return;
+    }
+
+    const mother = window.activeMotherPolygon;
+
+    const rules = getPlanningRules();
+
+    /*
+     * 1. Generate candidate road networks
+     */
+    const roadCandidates =
+        generateRoadCandidates(
+            mother,
+            rules
+        );
+
+    if (!roadCandidates.length) {
+        alert(
+            "Terra-IQ could not generate suitable road layouts."
+        );
+        return;
+    }
+
+    /*
+     * 2. Evaluate every road layout
+     */
+    const layoutResults = [];
+
+    roadCandidates.forEach(candidate => {
+
+        /*
+         * Calculate land remaining after roads
+         */
+        const buildable =
+            calculateBuildableArea(
+                mother,
+                candidate.roads,
+                rules
+            );
+
+        if (!buildable) {
+            return;
+        }
+
+        /*
+         * Generate cadastral plots
+         */
+        const plots =
+            generateSmartCadastralPlots(
+                mother,
+                buildable.buildableArea,
+                candidate.roads,
+                rules
+            );
+
+        if (!plots || !plots.length) {
+            return;
+        }
+
+        /*
+         * Score the complete layout
+         */
+        const score =
+            scoreCadastralLayout(
+                mother,
+                plots,
+                candidate.roads,
+                rules
+            );
+
+        if (!score) {
+            return;
+        }
+
+        layoutResults.push({
+
+            id: candidate.id,
+
+            name: candidate.name,
+
+            description:
+                candidate.description,
+
+            roads:
+                candidate.roads,
+
+            buildableArea:
+                buildable.buildableArea,
+
+            plots:
+                plots,
+
+            score:
+                score
+
+        });
+
+    });
+
+    /*
+     * 3. Make sure at least one layout worked
+     */
+    if (!layoutResults.length) {
+
+        alert(
+            "Terra-IQ could not generate a suitable cadastral layout.\n\n" +
+            "Try adjusting the planning rules."
+        );
+
+        return;
+    }
+
+    /*
+     * 4. Rank layouts
+     */
+    layoutResults.sort(
+        (a, b) =>
+            b.score.overallScore -
+            a.score.overallScore
+    );
+
+    /*
+     * 5. Select best layout
+     */
+    const best =
+        layoutResults[0];
+
+    /*
+     * 6. Render best layout
+     */
+    renderCadastralLayout(
+        best,
+        rules
+    );
+
+    /*
+     * 7. Save result
+     */
+    window.activeCadastralLayout =
+        best;
+
+    /*
+     * 8. Report
+     */
+    alert(
+        `Smart Cadastral Layout Generated!\n\n` +
+
+        `Recommended Layout: ${best.name}\n` +
+
+        `Planning Score: ` +
+        `${best.score.overallScore}/100\n\n` +
+
+        `Plots: ${best.score.plotCount}\n` +
+
+        `Land Utilization: ` +
+        `${best.score.landUtilization}%\n\n` +
+
+        `Road Area: ` +
+        `${best.score.roadPercentage}%`
+    );
+}
+
 /**
  * ============================================================
  * SMART CADASTRAL ENGINE — ROAD CANDIDATES
