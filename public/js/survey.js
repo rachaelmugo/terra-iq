@@ -2092,16 +2092,13 @@ function renderCadastralLayout(
     ) {
         return null;
     }
-
     const layer =
         L.layerGroup();
-
     /*
      * ---------------------------------------------------------
      * DRAW ROADS
      * ---------------------------------------------------------
      */
-
     if (layout.roads) {
 
         layout.roads.forEach(
@@ -2111,32 +2108,23 @@ function renderCadastralLayout(
                     road,
                     {
                         style: {
-
                             color: "#475569",
-
                             weight:
                                 Math.max(
                                     3,
                                     rules.roadReserve / 2
                                 ),
-
                             opacity: 0.95,
-
                             fillColor:
                                 "#CBD5E1",
-
                             fillOpacity:
                                 0.85
-
                         }
                     }
                 ).addTo(layer);
-
             }
         );
     }
-
-
     /*
      * ---------------------------------------------------------
      * DRAW CADASTRAL PLOTS
@@ -2360,7 +2348,6 @@ function generateSmartSubdivision() {
         if (!buildable) {
             return;
         }
-
         /*
          * Generate cadastral plots
          */
@@ -2375,7 +2362,6 @@ function generateSmartSubdivision() {
         if (!plots || !plots.length) {
             return;
         }
-
         /*
          * Score the complete layout
          */
@@ -2390,45 +2376,31 @@ function generateSmartSubdivision() {
         if (!score) {
             return;
         }
-
         layoutResults.push({
-
             id: candidate.id,
-
             name: candidate.name,
-
             description:
                 candidate.description,
-
             roads:
                 candidate.roads,
-
             buildableArea:
                 buildable.buildableArea,
-
             plots:
                 plots,
-
             score:
                 score
-
         });
-
     });
-
     /*
      * 3. Make sure at least one layout worked
      */
     if (!layoutResults.length) {
-
         alert(
             "Terra-IQ could not generate a suitable cadastral layout.\n\n" +
             "Try adjusting the planning rules."
         );
-
         return;
     }
-
     /*
      * 4. Rank layouts
      */
@@ -2437,27 +2409,24 @@ function generateSmartSubdivision() {
             b.score.overallScore -
             a.score.overallScore
     );
-
     /*
      * 5. Select best layout
      */
     const best =
         layoutResults[0];
-
     /*
      * 6. Render best layout
      */
     renderCadastralLayout(
-        best,
-        rules
-    );
-
+    best,
+    mother,
+    rules
+);
     /*
      * 7. Save result
      */
     window.activeCadastralLayout =
         best;
-
     /*
      * 8. Report
      */
@@ -3036,66 +3005,44 @@ function generateSmartCadastralPlots(
      * 3. GENERATE TWO ORIENTATIONS
      * --------------------------------------------------------
      *
-     * We don't assume every parcel should be divided
-     * in the same direction.
-     *
+     * We don't assume every parcel should be divide in the same direction.
      * Orientation A:
-     *
      * frontage → horizontal
-     *
      * Orientation B:
-     *
      * frontage → vertical
      */
-
     const orientations = [
-
         {
             name: "horizontal",
-
             width:
                 frontageDegrees,
-
             height:
                 depthDegrees
         },
-
         {
             name: "vertical",
-
             width:
                 depthDegrees,
-
             height:
                 frontageDegrees
         }
-
     ];
-
     /*
      * --------------------------------------------------------
      * 4. ROAD ACCESS TEST
      * --------------------------------------------------------
-     *
      * A plot is considered accessible when its boundary
      * touches or comes sufficiently close to a road.
      */
-
     function hasRoadAccess(plot) {
-
         if (!plot) {
             return false;
         }
-
         const plotBoundary =
             turf.polygonToLine(plot);
-
         for (const road of roads) {
-
             if (!road) continue;
-
             try {
-
                 if (
                     turf.booleanIntersects(
                         plotBoundary,
@@ -3104,62 +3051,45 @@ function generateSmartCadastralPlots(
                 ) {
                     return true;
                 }
-
             } catch (error) {
-
                 console.warn(
                     "Road access test failed:",
                     error
                 );
-
             }
-
         }
-
         return false;
     }
-
     /*
      * --------------------------------------------------------
      * 5. CREATE CANDIDATE PLOTS
      * --------------------------------------------------------
      */
-
     const orientationResults = [];
-
     orientations.forEach(
         orientation => {
-
             const plots = [];
-
             let currentLat =
-                minLat;
-
+                minLat
             let row = 0;
-
             /*
              * Safety limit.
              */
-
             while (
                 currentLat +
                 orientation.height <=
                 maxLat &&
                 row < 200
             ) {
-
                 let currentLng =
                     minLng;
-
                 let column = 0;
-
                 while (
                     currentLng +
                     orientation.width <=
                     maxLng &&
                     column < 200
                 ) {
-
                     const candidate =
                         turf.bboxPolygon([
                             currentLng,
@@ -3169,128 +3099,90 @@ function generateSmartCadastralPlots(
                             currentLat +
                                 orientation.height
                         ]);
-
                     /*
                      * Candidate must actually intersect
                      * the buildable area.
                      */
-
                     let plot = null;
-
                     try {
-
                         plot =
                             turf.intersect(
                                 buildableArea,
                                 candidate
                             );
-
                     } catch (error) {
-
                         plot = null;
-
                     }
-
                     if (plot) {
-
                         const area =
                             turf.area(plot);
-
                         /*
                          * ------------------------------------------------
                          * AREA TOLERANCE
                          * ------------------------------------------------
-                         *
                          * We don't require exactly 450m² because
                          * irregular parcel boundaries naturally create
                          * slightly different areas.
                          */
-
                         const areaRatio =
                             area /
                             targetArea;
-
                         const acceptableArea =
                             areaRatio >= 0.85 &&
                             areaRatio <= 1.20;
-
                         /*
                          * Road access.
                          */
-
                         const accessible =
                             hasRoadAccess(plot);
-
                         /*
                          * Keep only useful plots.
                          */
-
                         if (
                             acceptableArea &&
                             accessible
                         ) {
-
                             plot.properties = {
-
                                 parcel_no:
                                     `P-${String(
                                         plots.length + 1
                                     ).padStart(3, "0")}`,
-
                                 area_m2:
                                     Number(
                                         area.toFixed(1)
                                     ),
-
                                 target_area_m2:
                                     targetArea,
-
                                 frontage_m:
                                     frontage,
-
                                 depth_m:
                                     depth,
-
                                 orientation:
                                     orientation.name,
-
                                 accessible:
                                     true,
-
                                 status:
                                     "Available"
-
                             };
-
                             plots.push(plot);
                         }
                     }
-
                     currentLng +=
                         orientation.width;
-
                     column++;
                 }
-
                 currentLat +=
                     orientation.height;
-
                 row++;
             }
-
             orientationResults.push({
-
                 orientation:
                     orientation.name,
-
                 plots:
                     plots
-
             });
-
         }
     );
-
     /*
      * --------------------------------------------------------
      * 6. SELECT BEST ORIENTATION
@@ -3298,51 +3190,40 @@ function generateSmartCadastralPlots(
      *
      * For now we choose the orientation producing the
      * highest number of usable plots.
-     *
      * Later scoreCadastralLayout() will make this much
      * more sophisticated.
      */
-
     orientationResults.sort(
         (a, b) =>
             b.plots.length -
             a.plots.length
     );
-
     const best =
         orientationResults[0];
-
     /*
      * --------------------------------------------------------
      * 7. NUMBER PLOTS
      * --------------------------------------------------------
      */
-
     if (best && best.plots) {
-
         best.plots.forEach(
             (plot, index) => {
-
                 plot.properties.parcel_no =
                     `P-${String(
                         index + 1
                     ).padStart(3, "0")}`;
-
             }
         );
     }
-
     /*
      * --------------------------------------------------------
      * 8. RETURN RESULT
      * --------------------------------------------------------
      */
-
     return best
         ? best.plots
         : [];
 } 
-
 function getSelectedPlotSize(value) {
     const sizes = {
         "450": 450,
@@ -3352,10 +3233,8 @@ function getSelectedPlotSize(value) {
         "acre": 4047,
         "two_acres": 8094
     };
-
     return sizes[value] || 506;
 } 
-
 function generateSpineLayout(mother, plotSize, roadWidth) {
     const bbox = turf.bbox(mother);
     const minLng = bbox[0];
@@ -3363,26 +3242,21 @@ function generateSpineLayout(mother, plotSize, roadWidth) {
     const maxLng = bbox[2];
     const maxLat = bbox[3];
     const centerLng = (minLng + maxLng) / 2;
-
     /*
      * Main access road running through the parcel.
      */
-
     const roadLine = turf.lineString([
         [minLng, centerLng > minLng ? (minLat + maxLat) / 2 : minLat],
         [maxLng, (minLat + maxLat) / 2]
     ]);
-
     const road = turf.buffer(
         roadLine,
         roadWidth / 2000,
         { units: "kilometers" }
     );
-
     /*
      * Remove road land.
      */
-
     let developable = turf.difference(
         mother,
         road
@@ -3394,60 +3268,44 @@ function generateSpineLayout(mother, plotSize, roadWidth) {
             roads: []
         };
     }
-
     /*
      * Generate rows above and below the road.
      */
-
     const rows = 4;
-
     const plots = [];
-
     const rowHeight =
         (maxLat - minLat) / rows;
-
     for (let r = 0; r < rows; r++) {
-
         const y1 =
             minLat + r * rowHeight;
-
         const y2 =
             minLat + (r + 1) * rowHeight;
-
         const rowBox = turf.bboxPolygon([
             minLng,
             y1,
             maxLng,
             y2
         ]);
-
         const rowIntersection =
             turf.intersect(
                 developable,
                 rowBox
             );
-
         if (!rowIntersection) continue;
-
         /*
          * Determine number of plots based
          * on target area.
          */
-
         const rowArea =
             turf.area(rowIntersection);
-
         const plotCount =
             Math.max(
                 1,
                 Math.round(rowArea / plotSize)
             );
-
         const width =
             (maxLng - minLng) / plotCount;
-
         for (let i = 0; i < plotCount; i++) {
-
             const plotBox =
                 turf.bboxPolygon([
                     minLng + i * width,
@@ -3455,81 +3313,59 @@ function generateSpineLayout(mother, plotSize, roadWidth) {
                     minLng + (i + 1) * width,
                     y2
                 ]);
-
             const plot =
                 turf.intersect(
                     rowIntersection,
                     plotBox
                 );
-
             if (plot && turf.area(plot) > plotSize * 0.45) {
                 plots.push(plot);
             }
-
         }
-
     }
-
     return {
-
         code: "SP",
-
         plots,
-
         roads: [road]
-
     };
 } 
-
 function generateGridLayout(mother, plotSize, roadWidth) {
-
     const bbox = turf.bbox(mother);
-
     const minLng = bbox[0];
     const minLat = bbox[1];
     const maxLng = bbox[2];
     const maxLat = bbox[3];
-
     const centerLat =
         (minLat + maxLat) / 2;
-
     const centerLng =
         (minLng + maxLng) / 2;
-
     /*
      * Main horizontal access road.
      */
-
     const mainRoadLine = turf.lineString([
         [minLng, centerLat],
         [maxLng, centerLat]
     ]);
-
     const mainRoad = turf.buffer(
         mainRoadLine,
         roadWidth / 2000,
         { units: "kilometers" }
     );
-
     /*
      * Secondary roads.
      */
     const secondaryRoads = [];
-
     const roadPositions = [
         minLng + (maxLng - minLng) * 0.25,
         minLng + (maxLng - minLng) * 0.50,
         minLng + (maxLng - minLng) * 0.75
     ];
-
     roadPositions.forEach(x => {
         const line = turf.lineString([
             [x, minLat],
             [x, maxLat]
         ]);
-
         secondaryRoads.push(
-
             turf.buffer(
                 line,
                 roadWidth / 2000,
@@ -3537,7 +3373,6 @@ function generateGridLayout(mother, plotSize, roadWidth) {
             )
         );
     });
-
     /*
      * Combine road corridors.
      */
@@ -3548,7 +3383,6 @@ function generateGridLayout(mother, plotSize, roadWidth) {
             road
         );
     });
-
     /*
      * Remove road network from parcel.
      */
@@ -3574,7 +3408,6 @@ function generateGridLayout(mother, plotSize, roadWidth) {
         (maxLng - minLng) / cols;
     const cellHeight =
         (maxLat - minLat) / rows;
-
     const plots = [];
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
@@ -3585,7 +3418,6 @@ function generateGridLayout(mother, plotSize, roadWidth) {
                     minLng + (c + 1) * cellWidth,
                     minLat + (r + 1) * cellHeight
                 ]);
-
             const plot =
                 turf.intersect(
                     developable,
@@ -3608,56 +3440,44 @@ function generateGridLayout(mother, plotSize, roadWidth) {
         ]
     };
 } 
-
 function generateCompactLayout(
     mother,
     plotSize,
     roadWidth
 ) {
-
     const bbox = turf.bbox(mother);
-
     const minLng = bbox[0];
     const minLat = bbox[1];
     const maxLng = bbox[2];
     const maxLat = bbox[3];
-
     const centerLat =
         (minLat + maxLat) / 2;
-
     /*
      * One main access road.
      */
-
     const mainRoadLine = turf.lineString([
         [minLng, centerLat],
         [maxLng, centerLat]
     ]);
-
     const mainRoad = turf.buffer(
         mainRoadLine,
         roadWidth / 2000,
         { units: "kilometers" }
     );
-
     /*
      * Remove road.
      */
-
     const developable =
         turf.difference(
             mother,
             mainRoad
         );
-
     if (!developable) {
-
         return {
             code: "CP",
             plots: [],
             roads: []
         };
-
     }
     /*
      * Split into larger plot blocks.
@@ -3672,7 +3492,6 @@ function generateCompactLayout(
         (maxLat - minLat) / rows;
     for (let r = 0; r < rows; r++) {
         for (let c = 0; c < cols; c++) {
-
             const cell =
                 turf.bboxPolygon([
                     minLng + c * width,
@@ -3686,49 +3505,33 @@ function generateCompactLayout(
                     developable,
                     cell
                 );
-
             if (
                 plot &&
                 turf.area(plot) > plotSize * 0.45
             ) {
-
                 plots.push(plot);
-
             }
-
         }
-
     }
-
     return {
-
         code: "CP",
-
         plots,
-
         roads: [mainRoad]
-
     };
-
 } 
 
 function showSubdivisionLayoutSelector(layouts) {
-
     let existing =
         document.getElementById(
             "subdivisionLayoutSelector"
         );
-
     if (existing) {
         existing.remove();
     }
-
     const selector =
         document.createElement("div");
-
     selector.id =
         "subdivisionLayoutSelector";
-
     selector.style.cssText = `
         position:fixed;
         right:20px;
@@ -3742,9 +3545,7 @@ function showSubdivisionLayoutSelector(layouts) {
         z-index:99998;
         font-family:system-ui,-apple-system,sans-serif;
     `;
-
     selector.innerHTML = `
-
         <div style="
             font-size:13px;
             font-weight:800;
@@ -3753,7 +3554,6 @@ function showSubdivisionLayoutSelector(layouts) {
         ">
             Subdivision Layout Options
         </div>
-
         <div style="
             font-size:10px;
             color:#64748B;
@@ -3762,8 +3562,7 @@ function showSubdivisionLayoutSelector(layouts) {
         ">
             Compare alternative road and plot
             arrangements before selecting a preferred
-            planning concept.
-        </div>
+            planning concept. </div>
 
         <button onclick="activateSubdivisionLayout('spine')"
             style="
@@ -3788,9 +3587,7 @@ function showSubdivisionLayoutSelector(layouts) {
             ">
                 Main road through the parcel.
             </div>
-
         </button>
-
         <button onclick="activateSubdivisionLayout('grid')"
             style="
                 width:100%;
@@ -3806,7 +3603,6 @@ function showSubdivisionLayoutSelector(layouts) {
             <b style="color:#0F2D52;">
                 02 — Estate Grid
             </b>
-
             <div style="
                 font-size:10px;
                 color:#64748B;
@@ -3815,9 +3611,7 @@ function showSubdivisionLayoutSelector(layouts) {
                 Multiple access roads and
                 rectangular plot blocks.
             </div>
-
         </button>
-
 
         <button onclick="activateSubdivisionLayout('compact')"
             style="
@@ -3842,9 +3636,7 @@ function showSubdivisionLayoutSelector(layouts) {
                 Reduced road area and tighter
                 land utilization.
             </div>
-
         </button>
-
 
         <button onclick="
             document.getElementById(
@@ -3871,23 +3663,17 @@ function showSubdivisionLayoutSelector(layouts) {
 } 
 
 function activateSubdivisionLayout(layoutName) {
-
     if (!window.subdivisionLayouts) {
         return;
     }
-
     Object.entries(
         window.subdivisionLayouts
     ).forEach(([name, layer]) => {
-
         if (!layer) return;
-
         if (name === layoutName) {
-
             if (!map.hasLayer(layer)) {
                 layer.addTo(map);
             }
-
         } else {
             if (map.hasLayer(layer)) {
                 map.removeLayer(layer);
@@ -3895,7 +3681,6 @@ function activateSubdivisionLayout(layoutName) {
         }
     });
 }
-
 /**
  * Clears layers and markers from map (Can also be called on Home button click)
  */
@@ -3918,7 +3703,6 @@ document.addEventListener("DOMContentLoaded", () => {
         homeBtn.addEventListener("click", clearSurveyLayers);
     }
 }); 
-
 /* ==========================================================================
    ENVIRONMENTAL & SPATIAL RISK ANALYSIS ENGINE (js/survey.js)
    ========================================================================== */
@@ -3945,7 +3729,6 @@ function generateParcelBuffer(bufferDistanceMeters = 30) {
 
     // Convert meters to kilometers for Turf.js
     const buffered = turf.buffer(targetFeature, bufferDistanceMeters / 1000, { units: 'kilometers' });
-
     if (typeof map !== "undefined" && typeof L !== "undefined") {
         if (window.activeBufferLayer) {
             map.removeLayer(window.activeBufferLayer);
@@ -3968,7 +3751,6 @@ function generateParcelBuffer(bufferDistanceMeters = 30) {
         alert(`Environmental Buffer Plotted!\n• Setback Distance: ${bufferDistanceMeters}m\n• Restricted Buffer Zone: ${restrictedZone} Acres`);
     }
 }
-
 /**
  * Draws a 30m buffer around the active selected parcel
  */
