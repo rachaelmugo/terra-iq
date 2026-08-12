@@ -554,21 +554,21 @@ function openSurveyToolModal() {
         producing layout alternatives.
     </div>
 
-    <button
-        onclick="generateCadastralPlans()"
-        style="
-            width:100%;
-            background:#0F2D52;
-            color:white;
-            border:none;
-            padding:11px;
-            border-radius:8px;
-            font-weight:800;
-            cursor:pointer;
-        "
-    >
-        ⚡ Generate Cadastral Plans
-    </button>
+ <button
+    onclick="generateSmartSubdivision()"
+    style="
+        width:100%;
+        background:#0F2D52;
+        color:white;
+        border:none;
+        padding:11px;
+        border-radius:8px;
+        font-weight:800;
+        cursor:pointer;
+    "
+>
+    ⚡ Generate Cadastral Plans
+</button>
 
 </div>
     `; 
