@@ -2089,113 +2089,236 @@ function renderCadastralLayout(
 
 function generateSmartSubdivision() {
 
+    /*
+     * =========================================================
+     * 1. VALIDATE MOTHER PARCEL
+     * =========================================================
+     */
+
     if (!window.activeMotherPolygon) {
-        alert("Please plot the mother parcel first.");
+
+        alert(
+            "Please plot the mother parcel first."
+        );
+
         return;
     }
 
-    if (typeof turf === "undefined") {
-        alert("Turf.js is required.");
+
+    if (
+        typeof turf === "undefined"
+    ) {
+
+        alert(
+            "Turf.js is required."
+        );
+
         return;
     }
 
-    const mother = window.activeMotherPolygon;
-
-    const rules = getPlanningRules();
 
     /*
-     * 1. Generate candidate road networks
+     * =========================================================
+     * 2. GET INPUTS
+     * =========================================================
      */
+
+    const mother =
+        window.activeMotherPolygon;
+
+    const rules =
+        getPlanningRules();
+
+
+    /*
+     * =========================================================
+     * 3. GENERATE ROAD OPTIONS
+     * =========================================================
+     */
+
     const roadCandidates =
         generateRoadCandidates(
             mother,
             rules
         );
 
-    if (!roadCandidates.length) {
+
+    if (
+        !roadCandidates ||
+        !roadCandidates.length
+    ) {
+
         alert(
-            "Terra-IQ could not generate suitable road layouts."
+            "Terra-IQ could not generate any suitable road layouts."
         );
+
         return;
     }
 
+
     /*
-     * 2. Evaluate every road layout
+     * =========================================================
+     * 4. EVALUATE EVERY OPTION
+     * =========================================================
      */
+
     const layoutResults = [];
 
-    roadCandidates.forEach(candidate => {
 
-        /*
-         * Calculate land remaining after roads
-         */
-        const buildable =
-            calculateBuildableArea(
-                mother,
-                candidate.roads,
-                rules
-            );
+    roadCandidates.forEach(
+        candidate => {
 
-        if (!buildable) {
-            return;
+            /*
+             * -------------------------------------------------
+             * CALCULATE BUILDABLE LAND
+             * -------------------------------------------------
+             */
+
+            const buildable =
+                calculateBuildableArea(
+                    mother,
+                    candidate.roads,
+                    rules
+                );
+
+
+            if (!buildable) {
+
+                console.warn(
+                    "Skipping layout:",
+                    candidate.name,
+                    "because buildable area could not be calculated."
+                );
+
+                return;
+            }
+
+
+            /*
+             * -------------------------------------------------
+             * GENERATE PLOTS
+             * -------------------------------------------------
+             */
+
+            const plots =
+                generateSmartCadastralPlots(
+                    mother,
+                    buildable.buildableArea,
+                    candidate.roads,
+                    rules
+                );
+
+
+            if (
+                !plots ||
+                !plots.length
+            ) {
+
+                console.warn(
+                    "Skipping layout:",
+                    candidate.name,
+                    "because no usable plots were generated."
+                );
+
+                return;
+            }
+
+
+            /*
+             * -------------------------------------------------
+             * SCORE LAYOUT
+             * -------------------------------------------------
+             */
+
+            const score =
+                scoreCadastralLayout(
+                    {
+                        plots: plots
+                    },
+                    mother,
+                    candidate.roads,
+                    rules
+                );
+
+
+            if (!score) {
+
+                console.warn(
+                    "Skipping layout:",
+                    candidate.name,
+                    "because scoring failed."
+                );
+
+                return;
+            }
+
+
+            /*
+             * -------------------------------------------------
+             * SAVE COMPLETE LAYOUT
+             * -------------------------------------------------
+             */
+
+            layoutResults.push({
+
+                id:
+                    candidate.id,
+
+                name:
+                    candidate.name,
+
+                description:
+                    candidate.description,
+
+                roads:
+                    candidate.roads,
+
+                buildableArea:
+                    buildable.buildableArea,
+
+                buildableAreaSqM:
+                    buildable.buildableAreaSqM,
+
+                roadArea:
+                    buildable.roadArea,
+
+                plots:
+                    plots,
+
+                score:
+                    score
+
+            });
+
         }
-        /*
-         * Generate cadastral plots
-         */
-        const plots =
-            generateSmartCadastralPlots(
-                mother,
-                buildable.buildableArea,
-                candidate.roads,
-                rules
-            );
-
-        if (!plots || !plots.length) {
-            return;
-        }
-        /*
-         * Score the complete layout
-         */
-       const score =
-    scoreCadastralLayout(
-        {
-            plots: plots,
-            roads: candidate.roads
-        },
-        mother,
-        rules
     );
 
-        if (!score) {
-            return;
-        }
-        layoutResults.push({
-            id: candidate.id,
-            name: candidate.name,
-            description:
-                candidate.description,
-            roads:
-                candidate.roads,
-            buildableArea:
-                buildable.buildableArea,
-            plots:
-                plots,
-            score:
-                score
-        });
-    });
+
     /*
-     * 3. Make sure at least one layout worked
+     * =========================================================
+     * 5. CHECK RESULTS
+     * =========================================================
      */
-    if (!layoutResults.length) {
+
+    if (
+        !layoutResults.length
+    ) {
+
         alert(
-            "Terra-IQ could not generate a suitable cadastral layout.\n\n" +
-            "Try adjusting the planning rules."
+            "Terra-IQ could not generate any complete subdivision options.\n\n" +
+            "Try increasing the parcel size or adjusting the planning rules."
         );
+
         return;
     }
     /*
-     * 4. Rank layouts
+     * =========================================================
+     * 6. RANK OPTIONS
+     * =========================================================
+     *
+     * We rank them, but DO NOT automatically select one.
+     *
+     * The user will choose.
      */
     layoutResults.sort(
         (a, b) =>
@@ -2203,52 +2326,35 @@ function generateSmartSubdivision() {
             a.score.overallScore
     );
     /*
-     * 5. Select best layout
+     * =========================================================
+     * 7. MARK RECOMMENDED OPTION
+     * =========================================================
      */
-    const best =
-        layoutResults[0];
+    layoutResults.forEach(
+        (layout, index) => {
+            layout.rank =
+                index + 1;
+            layout.recommended =
+                index === 0;
+        }
+    );
     /*
-     * 6. Render best layout
+     * =========================================================
+     * 8. SAVE ALL OPTIONS
+     * =========================================================
      */
-    renderCadastralLayout(
-    best,
-    mother,
-    rules
-);
+    window.cadastralLayoutOptions =
+        layoutResults;
     /*
-     * 7. Save result
+     * =========================================================
+     * 9. SHOW OPTIONS TO USER
+     * =========================================================
      */
-    window.activeCadastralLayout =
-        best;
-    /*
-     * 8. Report
-     */
-    alert(
-
-`Smart Cadastral Layout Generated!\n\n` +
-
-`Recommended Layout: ${best.name}\n` +
-
-`Planning Score: ` +
-
-`${best.score.total * 100}/100\n\n` +
-
-`Plots: ${best.plots.length}\n` +
-
-`Land Utilization: ` +
-
-`${(best.score.efficiency * 100).toFixed(1)}%\n\n` +
-
-`Road Area: ` +
-
-`${best.score.efficiency !== undefined
-    ? ((best.roads.reduce((sum, road) => sum + turf.area(road), 0) /
-        turf.area(mother)) * 100).toFixed(1)
-    : "—"}%`
-
-); 
+    showSubdivisionLayoutSelector(
+        layoutResults,
+        rules
+    );
 }
-
 /**
  * ============================================================
  * SMART CADASTRAL ENGINE — ROAD CANDIDATES
@@ -3170,165 +3276,650 @@ function generateCompactLayout(
         roads: [mainRoad]
     };
 } 
-function showSubdivisionLayoutSelector(layouts) {
-    let existing =
+function showSubdivisionLayoutSelector(
+    layouts,
+    rules
+) {
+
+    /*
+     * ---------------------------------------------------------
+     * VALIDATE
+     * ---------------------------------------------------------
+     */
+
+    if (
+        !layouts ||
+        !layouts.length
+    ) {
+
+        alert(
+            "No subdivision layouts are available."
+        );
+
+        return;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * REMOVE OLD SELECTOR
+     * ---------------------------------------------------------
+     */
+
+    const oldSelector =
         document.getElementById(
             "subdivisionLayoutSelector"
         );
-    if (existing) {
-        existing.remove();
+
+    if (oldSelector) {
+
+        oldSelector.remove();
+
     }
-    const selector =
-        document.createElement("div");
-    selector.id =
+
+
+    /*
+     * ---------------------------------------------------------
+     * CREATE SELECTOR
+     * ---------------------------------------------------------
+     */
+
+    const container =
+        document.createElement(
+            "div"
+        );
+
+    container.id =
         "subdivisionLayoutSelector";
-    selector.style.cssText = `
-        position:fixed;
-        right:20px;
-        top:90px;
-        width:260px;
-        background:#FFFFFF;
-        border:1px solid #CBD5E1;
-        border-radius:12px;
-        padding:14px;
-        box-shadow:0 15px 35px rgba(15,45,82,.20);
-        z-index:99998;
-        font-family:system-ui,-apple-system,sans-serif;
+
+    container.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 760px;
+        max-width: 94vw;
+        max-height: 88vh;
+        overflow-y: auto;
+        background: #FFFFFF;
+        z-index: 100000;
+        border-radius: 14px;
+        box-shadow: 0 25px 60px rgba(15,45,82,0.35);
+        border: 1px solid #CBD5E1;
+        padding: 22px;
+        font-family: system-ui, -apple-system, sans-serif;
+        box-sizing: border-box;
     `;
-    selector.innerHTML = `
+
+
+    /*
+     * ---------------------------------------------------------
+     * HEADER
+     * ---------------------------------------------------------
+     */
+
+    let html = `
+
         <div style="
-            font-size:13px;
-            font-weight:800;
-            color:#0F2D52;
-            margin-bottom:4px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:6px;
         ">
-            Subdivision Layout Options
+
+            <div>
+
+                <div style="
+                    font-size:16px;
+                    font-weight:800;
+                    color:#0F2D52;
+                ">
+                    🏗️ Cadastral Layout Options
+                </div>
+
+                <div style="
+                    font-size:11px;
+                    color:#64748B;
+                    margin-top:4px;
+                ">
+                    Terra-IQ generated ${layouts.length}
+                    viable subdivision option${layouts.length === 1 ? "" : "s"}.
+                    Compare the scores and choose the layout
+                    that best fits your planning objective.
+                </div>
+
+            </div>
+
+            <button
+                onclick="
+                    document
+                        .getElementById('subdivisionLayoutSelector')
+                        .remove();
+                "
+                style="
+                    background:none;
+                    border:none;
+                    font-size:22px;
+                    color:#64748B;
+                    cursor:pointer;
+                "
+            >
+                &times;
+            </button>
+
         </div>
+
         <div style="
+            margin:14px 0;
+            padding:10px;
+            background:#F8FAFC;
+            border:1px solid #E2E8F0;
+            border-radius:8px;
             font-size:10px;
             color:#64748B;
-            margin-bottom:12px;
-            line-height:1.4;
+            line-height:1.5;
         ">
-            Compare alternative road and plot
-            arrangements before selecting a preferred
-            planning concept. </div>
 
-        <button onclick="activateSubdivisionLayout('spine')"
-            style="
-                width:100%;
-                padding:10px;
-                margin-bottom:7px;
-                border:1px solid #CBD5E1;
-                background:#F8FAFC;
-                border-radius:8px;
-                text-align:left;
-                cursor:pointer;
-            ">
+            <strong style="color:#0F2D52;">
+                Planning priority:
+            </strong>
 
-            <b style="color:#0F2D52;">
-                01 — Central Spine
-            </b>
+            ${rules.priority || "balanced"}
 
-            <div style="
-                font-size:10px;
-                color:#64748B;
-                margin-top:3px;
-            ">
-                Main road through the parcel.
-            </div>
-        </button>
-        <button onclick="activateSubdivisionLayout('grid')"
-            style="
-                width:100%;
-                padding:10px;
-                margin-bottom:7px;
-                border:1px solid #CBD5E1;
-                background:#F8FAFC;
-                border-radius:8px;
-                text-align:left;
-                cursor:pointer;
-            ">
+            &nbsp; • &nbsp;
 
-            <b style="color:#0F2D52;">
-                02 — Estate Grid
-            </b>
-            <div style="
-                font-size:10px;
-                color:#64748B;
-                margin-top:3px;
-            ">
-                Multiple access roads and
-                rectangular plot blocks.
-            </div>
-        </button>
+            Target plot:
+            <strong style="color:#0F2D52;">
+                ${rules.targetPlotArea || 450} m²
+            </strong>
 
-        <button onclick="activateSubdivisionLayout('compact')"
-            style="
-                width:100%;
-                padding:10px;
-                border:1px solid #CBD5E1;
-                background:#F8FAFC;
-                border-radius:8px;
-                text-align:left;
-                cursor:pointer;
-            ">
+            &nbsp; • &nbsp;
 
-            <b style="color:#0F2D52;">
-                03 — Compact Layout
-            </b>
+            Road reserve:
+            <strong style="color:#0F2D52;">
+                ${rules.roadReserve || 12} m
+            </strong>
 
-            <div style="
-                font-size:10px;
-                color:#64748B;
-                margin-top:3px;
-            ">
-                Reduced road area and tighter
-                land utilization.
-            </div>
-        </button>
+        </div>
 
-        <button onclick="
-            document.getElementById(
-                'subdivisionLayoutSelector'
-            ).remove();
-        "
-        style="
-            width:100%;
-            margin-top:12px;
-            padding:8px;
-            border:none;
-            background:#0F2D52;
-            color:white;
-            border-radius:7px;
-            cursor:pointer;
-            font-weight:700;
-        ">
-            Close
-        </button>
     `;
-    document.body.appendChild(selector);
-} 
-function activateSubdivisionLayout(layoutName) {
-    if (!window.subdivisionLayouts) {
+
+
+    /*
+     * ---------------------------------------------------------
+     * LAYOUT CARDS
+     * ---------------------------------------------------------
+     */
+
+    layouts.forEach(
+        (layout, index) => {
+
+            const score =
+                layout.score || {};
+
+            const isRecommended =
+                layout.recommended === true;
+
+
+            html += `
+
+                <div style="
+                    border:1px solid ${
+                        isRecommended
+                            ? "#2563EB"
+                            : "#E2E8F0"
+                    };
+                    border-radius:10px;
+                    padding:14px;
+                    margin-bottom:12px;
+                    background:${
+                        isRecommended
+                            ? "#EFF6FF"
+                            : "#FFFFFF"
+                    };
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:flex-start;
+                        gap:12px;
+                    ">
+
+                        <div>
+
+                            <div style="
+                                font-size:13px;
+                                font-weight:800;
+                                color:#0F2D52;
+                            ">
+
+                                ${index + 1}.
+                                ${layout.name}
+
+                                ${
+                                    isRecommended
+                                        ? `
+                                        <span style="
+                                            margin-left:6px;
+                                            padding:3px 7px;
+                                            border-radius:10px;
+                                            background:#DBEAFE;
+                                            color:#1D4ED8;
+                                            font-size:9px;
+                                            font-weight:800;
+                                        ">
+                                            RECOMMENDED
+                                        </span>
+                                        `
+                                        : ""
+                                }
+
+                            </div>
+
+                            <div style="
+                                margin-top:4px;
+                                font-size:10px;
+                                color:#64748B;
+                            ">
+                                ${layout.description || ""}
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            min-width:90px;
+                            text-align:center;
+                            padding:8px;
+                            border-radius:8px;
+                            background:#0F2D52;
+                            color:white;
+                        ">
+
+                            <div style="
+                                font-size:9px;
+                                text-transform:uppercase;
+                                opacity:.75;
+                            ">
+                                Overall Score
+                            </div>
+
+                            <div style="
+                                font-size:22px;
+                                font-weight:900;
+                                margin-top:2px;
+                            ">
+                                ${
+                                    Number.isFinite(
+                                        Number(
+                                            score.overallScore
+                                        )
+                                    )
+                                        ? Number(
+                                            score.overallScore
+                                        ).toFixed(1)
+                                        : "0.0"
+                                }
+                            </div>
+
+                            <div style="
+                                font-size:9px;
+                                opacity:.75;
+                            ">
+                                / 100
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- SCORE GRID -->
+
+                    <div style="
+                        display:grid;
+                        grid-template-columns:
+                            repeat(5, 1fr);
+                        gap:7px;
+                        margin-top:13px;
+                    ">
+
+
+                        <div style="
+                            background:#F8FAFC;
+                            padding:8px;
+                            border-radius:6px;
+                        ">
+
+                            <div style="
+                                font-size:8px;
+                                color:#64748B;
+                                text-transform:uppercase;
+                                font-weight:800;
+                            ">
+                                Plots
+                            </div>
+
+                            <div style="
+                                font-size:14px;
+                                font-weight:800;
+                                color:#0F2D52;
+                            ">
+                                ${score.plotCount || 0}
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            background:#F8FAFC;
+                            padding:8px;
+                            border-radius:6px;
+                        ">
+
+                            <div style="
+                                font-size:8px;
+                                color:#64748B;
+                                text-transform:uppercase;
+                                font-weight:800;
+                            ">
+                                Land Use
+                            </div>
+
+                            <div style="
+                                font-size:14px;
+                                font-weight:800;
+                                color:#0F2D52;
+                            ">
+                                ${score.landUtilization || 0}%
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            background:#F8FAFC;
+                            padding:8px;
+                            border-radius:6px;
+                        ">
+
+                            <div style="
+                                font-size:8px;
+                                color:#64748B;
+                                text-transform:uppercase;
+                                font-weight:800;
+                            ">
+                                Accessibility
+                            </div>
+
+                            <div style="
+                                font-size:14px;
+                                font-weight:800;
+                                color:#0F2D52;
+                            ">
+                                ${score.accessibility || 0}%
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            background:#F8FAFC;
+                            padding:8px;
+                            border-radius:6px;
+                        ">
+
+                            <div style="
+                                font-size:8px;
+                                color:#64748B;
+                                text-transform:uppercase;
+                                font-weight:800;
+                            ">
+                                Plot Quality
+                            </div>
+
+                            <div style="
+                                font-size:14px;
+                                font-weight:800;
+                                color:#0F2D52;
+                            ">
+                                ${score.quality || 0}%
+                            </div>
+
+                        </div>
+
+
+                        <div style="
+                            background:#F8FAFC;
+                            padding:8px;
+                            border-radius:6px;
+                        ">
+
+                            <div style="
+                                font-size:8px;
+                                color:#64748B;
+                                text-transform:uppercase;
+                                font-weight:800;
+                            ">
+                                Roads
+                            </div>
+
+                            <div style="
+                                font-size:14px;
+                                font-weight:800;
+                                color:#0F2D52;
+                            ">
+                                ${score.roadPercentage || 0}%
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+
+                    <div style="
+                        margin-top:10px;
+                        font-size:10px;
+                        color:#64748B;
+                    ">
+
+                        Total plot area:
+                        <strong>
+                            ${score.totalPlotArea || 0} m²
+                        </strong>
+
+                        &nbsp; • &nbsp;
+
+                        Road area:
+                        <strong>
+                            ${score.roadArea || 0} m²
+                        </strong>
+
+                    </div>
+
+                    <!-- SELECT BUTTON -->
+                    <button
+                        onclick="
+                            activateSubdivisionLayout(
+                                ${index}
+                            );
+                        "
+                        style="
+                            width:100%;
+                            margin-top:12px;
+                            padding:10px;
+                            border:none;
+                            border-radius:7px;
+                            background:#0F2D52;
+                            color:white;
+                            font-weight:800;
+                            cursor:pointer;
+                        "
+                    >
+                        ✓ Use This Layout
+                    </button>
+                </div>
+            `;
+        }
+    );
+    container.innerHTML =
+        html;
+    document.body.appendChild(
+        container
+    );
+}
+function activateSubdivisionLayout(
+    index
+) {
+
+    const layouts =
+        window.cadastralLayoutOptions;
+
+
+    if (
+        !layouts ||
+        !layouts.length
+    ) {
+
+        alert(
+            "No cadastral layouts are available."
+        );
+
         return;
     }
-    Object.entries(
-        window.subdivisionLayouts
-    ).forEach(([name, layer]) => {
-        if (!layer) return;
-        if (name === layoutName) {
-            if (!map.hasLayer(layer)) {
-                layer.addTo(map);
-            }
-        } else {
-            if (map.hasLayer(layer)) {
-                map.removeLayer(layer);
-            }
+
+
+    const selected =
+        layouts[index];
+
+
+    if (!selected) {
+
+        alert(
+            "The selected layout could not be found."
+        );
+
+        return;
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * SAVE SELECTED LAYOUT
+     * ---------------------------------------------------------
+     */
+
+    window.activeCadastralLayout =
+        selected;
+
+
+    /*
+     * ---------------------------------------------------------
+     * CLOSE OPTION WINDOW
+     * ---------------------------------------------------------
+ */
+
+    const selector =
+        document.getElementById(
+            "subdivisionLayoutSelector"
+        );
+
+    if (selector) {
+
+        selector.remove();
+
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * REMOVE PREVIOUS CADASTRAL DISPLAY
+     * ---------------------------------------------------------
+     */
+
+    if (
+        window.activeCadastralLayer
+    ) {
+
+        try {
+
+            map.removeLayer(
+                window.activeCadastralLayer
+            );
+
+        } catch (error) {
+
+            console.warn(
+                "Previous cadastral layer could not be removed:",
+                error
+            );
+
         }
-    });
-}
-/**
+
+        window.activeCadastralLayer =
+            null;
+
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * RENDER SELECTED LAYOUT
+     * ---------------------------------------------------------
+ */
+
+    const rules =
+        getPlanningRules();
+
+
+    const layer =
+        renderCadastralLayout(
+            selected,
+            window.activeMotherPolygon,
+            rules
+        );
+
+
+    if (layer) {
+
+        layer.addTo(map);
+
+        window.activeCadastralLayer =
+            layer;
+
+    }
+
+
+    /*
+     * ---------------------------------------------------------
+     * CONFIRM SELECTION
+     * ---------------------------------------------------------
+ */
+
+    alert(
+
+        `Cadastral Layout Selected!\n\n` +
+
+        `Layout: ${selected.name}\n` +
+
+        `Score: ` +
+        `${selected.score.overallScore}/100\n\n` +
+
+        `Plots: ` +
+        `${selected.score.plotCount}\n` +
+
+        `Land Utilization: ` +
+        `${selected.score.landUtilization}%\n` +
+
+        `Accessibility: ` +
+        `${selected.score.accessibility}%`
+
+    );
+
+}/**
  * Clears layers and markers from map (Can also be called on Home button click)
  */
 function clearSurveyLayers() {
