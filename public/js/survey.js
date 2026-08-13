@@ -2224,19 +2224,17 @@ function generateSmartSubdivision() {
      * 8. Report
      */
     alert(
-`Smart Cadastral Layout Generated!\n\n` +
-`Recommended Layout: ${best.name}\n` +
-`Planning Score: ` +
-`${best.score.total * 100}/100\n\n` +
-`Plots: ${best.plots.length}\n` +
-`Land Utilization: ` +
-`${(best.score.efficiency * 100).toFixed(1)}%\n\n` +
-`Road Area: ` +
-`${best.score.efficiency !== undefined
-    ? ((best.roads.reduce((sum, road) => sum + turf.area(road), 0) /
-        turf.area(mother)) * 100).toFixed(1)
-    : "—"}%`
-);
+        `Smart Cadastral Layout Generated!\n\n` +g
+        `Recommended Layout: ${best.name}\n` +
+        `Planning Score: ` +
+        `${best.score.overallScore}/100\n\n` +
+        `Plots: ${best.score.plotCount}\n` +
+        `Land Utilization: ` +
+        `${best.score.landUtilization}%\n\n` +
+        `Road Area: ` +
+        `${best.score.roadPercentage}%`
+    );
+}
 /**
  * ============================================================
  * SMART CADASTRAL ENGINE — ROAD CANDIDATES
