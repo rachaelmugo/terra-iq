@@ -1477,231 +1477,137 @@ function getPlanningRules() {
 function scoreCadastralLayout(
     layout,
     mother,
+    roads,
     rules
 ) {
+
+    /*
+     * =========================================================
+     * 1. VALIDATION
+     * =========================================================
+     */
+
     if (
         !layout ||
+        !layout.plots ||
+        !layout.plots.length ||
         !mother ||
+        !rules ||
         typeof turf === "undefined"
     ) {
-        return null;
-    }
-    const plots =
-        layout.plots || [];
-    if (!plots.length) {
+
         return {
             overallScore: 0,
             plotCount: 0,
-            totalPlotArea: 0,
-            motherArea: turf.area(mother),
             landUtilization: 0,
-            roadArea: 0,
+            accessibility: 0,
+            quality: 0,
             roadPercentage: 0,
-            yieldScore: 0,
-            plotSizeScore: 0,
-            accessibilityScore: 0,
-            frontageScore: 0,
-            roadEfficiencyScore: 0,
-            compliantPlots: 0
+            totalPlotArea: 0,
+            roadArea: 0,
+            yieldScore: 0
         };
+
     }
+
+
     /*
      * =========================================================
-     * 1. PLANNING RULES
+     * 2. BASIC VALUES
      * =========================================================
      */
-    const targetArea =
+
+    const plots =
+        layout.plots;
+
+    const targetPlotArea =
         parseFloat(
             rules.targetPlotArea
         ) || 450;
 
-    const minimumFrontage =
-        parseFloat(
-            rules.minimumFrontage
-        ) || 15;
-    /*
-     * =========================================================
-     * 2. MOTHER PARCEL AREA
-     * =========================================================
-     */
+
     const motherArea =
-        turf.area(mother);
+        turf.area(
+            mother
+        );
+
+
     /*
      * =========================================================
      * 3. TOTAL PLOT AREA
      * =========================================================
      */
+
     const totalPlotArea =
         plots.reduce(
-            (sum, plot) =>
-                sum + turf.area(plot),
+            (sum, plot) => {
+
+                if (!plot) {
+                    return sum;
+                }
+
+                return (
+                    sum +
+                    turf.area(plot)
+                );
+
+            },
             0
         );
+
+
     /*
      * =========================================================
-     * 4. LAND UTILIZATION
+     * 4. ROAD AREA
      * =========================================================
      */
-    const landUtilization =
-        motherArea > 0
-            ? (
-                totalPlotArea /
-                motherArea
-            ) * 100
-            : 0;
-    /*
-     * =========================================================
-     * 5. PLOT COUNT
-     * =========================================================
-     */
-    const plotCount =
-        plots.length;
-    /*
-     * =========================================================
-     * 6. PLOT YIELD SCORE
-     * =========================================================
-     */
-    const theoreticalYield =
-        targetArea > 0
-            ? Math.floor(
-                motherArea /
-                targetArea
-            )
-            : 0;
-    const yieldScore =
-        theoreticalYield > 0
-            ? Math.min(
-                100,
-                (
-                    plotCount /
-                    theoreticalYield
-                ) * 100
-            )
-            : 0;
-    /*
-     * =========================================================
-     * 7. PLOT SIZE QUALITY
-     * =========================================================
-     */
-    let sizeScoreTotal = 0;
-    plots.forEach(plot => {
-        const area =
-            turf.area(plot);
-        const deviation =
-            Math.abs(
-                area -
-                targetArea
-            ) /
-            targetArea;
-        /*
-         * 0% deviation = 100
-         * 50% deviation = 0
-         */
-        const score =
-            Math.max(
-                0,
-                100 -
-                (deviation * 200)
-            );
-        sizeScoreTotal += score;
-    });
-    const plotSizeScore =
-        plots.length > 0
-            ? sizeScoreTotal /
-              plots.length
-            : 0;
-    /*
-     * =========================================================
-     * 8. ACCESSIBILITY SCORE
-     * =========================================================
-     */
-    let accessiblePlots = 0;
-    plots.forEach(plot => {
-        if (
-            plot.properties &&
-            plot.properties.accessible === true
-        ) {
-            accessiblePlots++;
-        }
-    });
-    const accessibilityScore =
-        plots.length > 0
-            ? (
-                accessiblePlots /
-                plots.length
-            ) * 100
-            : 0;
-    /*
-     * =========================================================
-     * 9. FRONTAGE SCORE
-     * =========================================================
-     */
-    let frontageCompliant = 0;
-    plots.forEach(plot => {
-        const frontage =
-            parseFloat(
-                plot.properties?.frontage_m
-            ) || 0;
-        if (
-            frontage >=
-            minimumFrontage
-        ) {
-            frontageCompliant++;
-        }
-    });
-    const frontageScore =
-        plots.length > 0
-            ? (
-                frontageCompliant /
-                plots.length
-            ) * 100
-            : 0;
-    /*
-     * =========================================================
-     * 10. ROAD AREA
-     * =========================================================
-     */
+
     let roadArea = 0;
+
+
     if (
-        layout.roads &&
-        layout.roads.length
+        roads &&
+        roads.length
     ) {
-        /*
-         * We calculate the union rather than simply
-         * adding road areas because roads may overlap.
-         */
-        let combinedRoads = null;
-        layout.roads.forEach(road => {
-            if (!road) return;
-            if (!combinedRoads) {
-                combinedRoads = road;
-            } else {
+
+        roads.forEach(
+            road => {
+
+                if (!road) {
+                    return;
+                }
+
                 try {
-                    combinedRoads =
-                        turf.union(
-                            combinedRoads,
+
+                    roadArea +=
+                        turf.area(
                             road
                         );
+
                 } catch (error) {
+
                     console.warn(
-                        "Road union failed:",
+                        "Could not calculate road area:",
                         error
                     );
+
                 }
+
             }
-        });
-        if (combinedRoads) {
-            roadArea =
-                turf.area(
-                    combinedRoads
-                );
-        }
+        );
+
     }
+
+
     /*
      * =========================================================
-     * 11. ROAD PERCENTAGE
+     * 5. ROAD PERCENTAGE
      * =========================================================
+     *
+     * This tells us how much of the mother parcel is
+     * consumed by roads.
      */
+
     const roadPercentage =
         motherArea > 0
             ? (
@@ -1709,164 +1615,416 @@ function scoreCadastralLayout(
                 motherArea
             ) * 100
             : 0;
+
+
     /*
      * =========================================================
-     * 12. ROAD EFFICIENCY
+     * 6. LAND UTILISATION
      * =========================================================
+     *
+     * Percentage of the mother parcel converted into
+     * actual cadastral plots.
      */
-    let roadEfficiencyScore;
-    if (roadPercentage <= 10) {
-        roadEfficiencyScore = 100;
-    } else if (roadPercentage <= 15) {
-        roadEfficiencyScore =
-            100 -
-            (
-                (roadPercentage - 10) *
-                4
-            );
-    } else if (roadPercentage <= 20) {
-        roadEfficiencyScore =
-            80 -
-            (
-                (roadPercentage - 15) *
-                8
-            );
-    } else {
-        roadEfficiencyScore =
-            Math.max(
-                0,
-                40 -
+
+    const landUtilization =
+        motherArea > 0
+            ? (
+                totalPlotArea /
+                motherArea
+            ) * 100
+            : 0;
+
+
+    /*
+     * =========================================================
+     * 7. ACCESSIBILITY
+     * =========================================================
+     *
+     * Calculate this geometrically instead of relying only
+     * on plot.properties.accessible.
+     */
+
+    let accessiblePlots = 0;
+
+
+    plots.forEach(
+        plot => {
+
+            if (!plot) {
+                return;
+            }
+
+
+            try {
+
+                const boundary =
+                    turf.polygonToLine(
+                        plot
+                    );
+
+
+                let accessible =
+                    false;
+
+
+                if (
+                    roads &&
+                    roads.length
+                ) {
+
+                    for (
+                        const road of roads
+                    ) {
+
+                        if (!road) {
+                            continue;
+                        }
+
+
+                        if (
+                            turf.booleanIntersects(
+                                boundary,
+                                road
+                            )
+                        ) {
+
+                            accessible =
+                                true;
+
+                            break;
+
+                        }
+
+                    }
+
+                }
+
+
+                if (
+                    accessible
+                ) {
+
+                    accessiblePlots++;
+
+                }
+
+            } catch (error) {
+
+                console.warn(
+                    "Accessibility calculation failed:",
+                    error
+                );
+
+            }
+
+        }
+    );
+
+
+    const accessibility =
+        plots.length > 0
+            ? (
+                accessiblePlots /
+                plots.length
+            ) * 100
+            : 0;
+
+
+    /*
+     * =========================================================
+     * 8. PLOT QUALITY
+     * =========================================================
+     *
+     * Measures how close each plot is to the target area.
+     *
+     * 100 = exactly target size
+     * Lower score = greater deviation
+     */
+
+    let qualityTotal = 0;
+
+
+    plots.forEach(
+        plot => {
+
+            if (!plot) {
+                return;
+            }
+
+
+            const area =
+                turf.area(
+                    plot
+                );
+
+
+            const deviation =
+                Math.abs(
+                    area -
+                    targetPlotArea
+                );
+
+
+            const deviationPercentage =
+                targetPlotArea > 0
+                    ? (
+                        deviation /
+                        targetPlotArea
+                    ) * 100
+                    : 100;
+
+
+            /*
+             * Every 1% deviation reduces the score.
+             */
+
+            const plotQuality =
+                Math.max(
+                    0,
+                    100 -
+                    deviationPercentage
+                );
+
+
+            qualityTotal +=
+                plotQuality;
+
+        }
+    );
+
+
+    const quality =
+        plots.length > 0
+            ? qualityTotal /
+              plots.length
+            : 0;
+
+
+    /*
+     * =========================================================
+     * 9. PLOT YIELD
+     * =========================================================
+     *
+     * Estimate the theoretical number of plots possible
+     * before roads.
+     */
+
+    const theoreticalYield =
+        targetPlotArea > 0
+            ? Math.floor(
+                motherArea /
+                targetPlotArea
+            )
+            : 0;
+
+
+    const yieldScore =
+        theoreticalYield > 0
+            ? Math.min(
                 (
-                    (roadPercentage - 20) *
-                    4
-                )
-            );
-    }
+                    plots.length /
+                    theoreticalYield
+                ) * 100,
+                100
+            )
+            : 0;
+
+
     /*
      * =========================================================
-     * 13. PRIORITY WEIGHTS
+     * 10. ROAD EFFICIENCY
+     * =========================================================
+     *
+     * Less road land is generally better, provided plots
+     * remain accessible.
+     */
+
+    const roadEfficiency =
+        motherArea > 0
+            ? Math.max(
+                0,
+                100 -
+                roadPercentage
+            )
+            : 0;
+
+
+    /*
+     * =========================================================
+     * 11. PRIORITY WEIGHTS
      * =========================================================
      */
+
     let weights = {
-        yield: 0.20,
-        accessibility: 0.25,
-        quality: 0.20,
-        frontage: 0.15,
-        efficiency: 0.20
+
+        yield:
+            0.25,
+
+        accessibility:
+            0.30,
+
+        quality:
+            0.25,
+
+        efficiency:
+            0.20
+
     };
+
+
     if (
         rules.priority === "yield"
     ) {
+
         weights = {
-            yield: 0.50,
-            accessibility: 0.15,
-            quality: 0.15,
-            frontage: 0.05,
-            efficiency: 0.15
+
+            yield:
+                0.50,
+
+            accessibility:
+                0.20,
+
+            quality:
+                0.15,
+
+            efficiency:
+                0.15
+
         };
+
     }
+
+
     if (
         rules.priority === "access"
     ) {
+
         weights = {
-            yield: 0.15,
-            accessibility: 0.50,
-            quality: 0.15,
-            frontage: 0.10,
-            efficiency: 0.10
+
+            yield:
+                0.20,
+
+            accessibility:
+                0.50,
+
+            quality:
+                0.20,
+
+            efficiency:
+                0.10
+
         };
+
     }
+
+
     if (
         rules.priority === "quality"
     ) {
+
         weights = {
-            yield: 0.15,
-            accessibility: 0.15,
-            quality: 0.45,
-            frontage: 0.15,
-            efficiency: 0.10
+
+            yield:
+                0.15,
+
+            accessibility:
+                0.25,
+
+            quality:
+                0.45,
+
+            efficiency:
+                0.15
+
         };
+
     }
+
+
     /*
      * =========================================================
-     * 14. OVERALL PLANNING SCORE
+     * 12. FINAL SCORE
      * =========================================================
      */
+
     const overallScore =
+
         (
             yieldScore *
             weights.yield
         ) +
+
         (
-            accessibilityScore *
+            accessibility *
             weights.accessibility
         ) +
+
         (
-            plotSizeScore *
+            quality *
             weights.quality
         ) +
+
         (
-            frontageScore *
-            weights.frontage
-        ) +
-        (
-            roadEfficiencyScore *
+            roadEfficiency *
             weights.efficiency
         );
+
+
     /*
      * =========================================================
-     * 15. RETURN COMPLETE SCORE REPORT
+     * 13. RETURN COMPLETE SCORE OBJECT
      * =========================================================
      */
+
     return {
+
         overallScore:
             Number(
                 overallScore.toFixed(1)
             ),
+
         plotCount:
-            plotCount,
-        totalPlotArea:
-            Number(
-                totalPlotArea.toFixed(1)
-            ),
-        motherArea:
-            Number(
-                motherArea.toFixed(1)
-            ),
+            plots.length,
+
         landUtilization:
             Number(
                 landUtilization.toFixed(1)
             ),
-        roadArea:
+
+        accessibility:
             Number(
-                roadArea.toFixed(1)
+                accessibility.toFixed(1)
             ),
+
+        quality:
+            Number(
+                quality.toFixed(1)
+            ),
+
         roadPercentage:
             Number(
                 roadPercentage.toFixed(1)
             ),
+
+        totalPlotArea:
+            Number(
+                totalPlotArea.toFixed(1)
+            ),
+
+        roadArea:
+            Number(
+                roadArea.toFixed(1)
+            ),
+
         yieldScore:
             Number(
                 yieldScore.toFixed(1)
             ),
-        plotSizeScore:
+
+        roadEfficiency:
             Number(
-                plotSizeScore.toFixed(1)
-            ),
-        accessibilityScore:
-            Number(
-                accessibilityScore.toFixed(1)
-            ),
-        frontageScore:
-            Number(
-                frontageScore.toFixed(1)
-            ),
-        roadEfficiencyScore:
-            Number(
-                roadEfficiencyScore.toFixed(1)
-            ),
-        compliantPlots:
-            frontageCompliant
+                roadEfficiency.toFixed(1)
+            )
     };
 }
 
@@ -3792,89 +3950,61 @@ function activateSubdivisionLayout(
     }
 
 
-    const selected =
-        layouts[index];
-
+    const selected = layouts[index];
 
     if (!selected) {
-
         alert(
             "The selected layout could not be found."
         );
-
         return;
     }
-
-
     /*
      * ---------------------------------------------------------
      * SAVE SELECTED LAYOUT
      * ---------------------------------------------------------
      */
-
     window.activeCadastralLayout =
         selected;
-
-
     /*
      * ---------------------------------------------------------
      * CLOSE OPTION WINDOW
      * ---------------------------------------------------------
  */
-
     const selector =
         document.getElementById(
             "subdivisionLayoutSelector"
         );
-
     if (selector) {
 
         selector.remove();
-
     }
-
-
     /*
      * ---------------------------------------------------------
      * REMOVE PREVIOUS CADASTRAL DISPLAY
      * ---------------------------------------------------------
      */
-
     if (
         window.activeCadastralLayer
     ) {
-
         try {
-
             map.removeLayer(
                 window.activeCadastralLayer
             );
-
         } catch (error) {
-
             console.warn(
                 "Previous cadastral layer could not be removed:",
                 error
             );
-
         }
-
         window.activeCadastralLayer =
             null;
-
     }
-
-
     /*
      * ---------------------------------------------------------
      * RENDER SELECTED LAYOUT
      * ---------------------------------------------------------
  */
-
-    const rules =
-        getPlanningRules();
-
-
+    const rules = getPlanningRules();
     const layer =
         renderCadastralLayout(
             selected,
@@ -3882,41 +4012,27 @@ function activateSubdivisionLayout(
             rules
         );
 
-
     if (layer) {
-
         layer.addTo(map);
-
         window.activeCadastralLayer =
             layer;
-
     }
-
-
     /*
      * ---------------------------------------------------------
      * CONFIRM SELECTION
      * ---------------------------------------------------------
  */
-
     alert(
-
         `Cadastral Layout Selected!\n\n` +
-
         `Layout: ${selected.name}\n` +
-
         `Score: ` +
         `${selected.score.overallScore}/100\n\n` +
-
         `Plots: ` +
         `${selected.score.plotCount}\n` +
-
         `Land Utilization: ` +
         `${selected.score.landUtilization}%\n` +
-
         `Accessibility: ` +
         `${selected.score.accessibility}%`
-
     );
 
 }/**
